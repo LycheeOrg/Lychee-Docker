@@ -27,7 +27,7 @@ echo "**** Set Permissions ****" && \
 chown -R abc:abc /conf
 chown -R abc:abc /uploads
 chmod -R a+rw /uploads
-chown -R abc:abc /var/www/html/Lychee-Laravel/storage/logs
+chown -R www-data:www-data /var/www/html/Lychee-Laravel/storage/logs
 
 
 [[ ! -e /tmp/first_run ]] && \
