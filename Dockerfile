@@ -82,12 +82,12 @@ RUN \
 
 RUN \
     echo "**** Customize apache2.conf ****" && \
-    echo '
-<Directory /var/www/html/Lychee-Laravel>
-	Options Indexes FollowSymLinks
-	AllowOverride All
-	Require all granted
-</Directory>' >> /etc/apache2/apache2.conf
+    echo "\
+<Directory /var/www/html/Lychee-Laravel> \
+	Options Indexes FollowSymLinks \
+	AllowOverride All \
+	Require all granted \
+</Directory>" >> /etc/apache2/apache2.conf
 
 
 RUN \

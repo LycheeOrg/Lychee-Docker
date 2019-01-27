@@ -14,6 +14,16 @@ echo "Copy config"
 [[ ! -L /var/www/html/Lychee-Laravel/.env ]] && \
 	ln -s /conf/.env /var/www/html/Lychee-Laravel/.env
 
+# Customize apache2.conf
+#[[ ! -e /etc/apache2/apache2.conf.bak ]] && \
+#	cp /etc/apache2/apache2.conf /etc/apache2/apache2.conf.bak && \
+#	echo "
+#<Directory /var/www/html/Lychee-Laravel>
+#	Options Indexes FollowSymLinks
+#	AllowOverride All
+#	Require all granted
+#</Directory>" >> /etc/apache2/apache2.conf
+
 echo "Permissions"
 # permissions
 chown -R abc:abc \
