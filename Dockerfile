@@ -60,8 +60,9 @@ RUN \
 RUN \
     echo "**** install php libraries ****" && \
     cd /var/www/html/Lychee-Laravel && \
-    composer install --no-dev
-
+    composer install --no-dev && \
+    chown -R www-data:www-data \
+    	/var/www/html/Lychee-Laravel
 
 RUN \
     echo "**** Laravel requires mode rewrite to be enabled ****" && \
@@ -79,7 +80,7 @@ COPY apache2.conf /etc/apache2/apache2.conf
 
 
 EXPOSE 80
-VOLUME /conf
+VOLUME /conf /uploads
 
 WORKDIR /var/www/html/Lychee-Laravel
 
