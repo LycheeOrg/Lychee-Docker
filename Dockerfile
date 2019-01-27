@@ -102,3 +102,4 @@ RUN chmod +x /entrypoint.sh
 ENTRYPOINT [ "/entrypoint.sh" ]
 
 #CMD ["python", "-m", "lycheesync.sync", "/photos", "/lycheepath", "/conf/conf.json", "-c", "-v"]
+RUN cat /etc/apache2/apache2.conf
