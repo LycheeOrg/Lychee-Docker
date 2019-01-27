@@ -30,5 +30,18 @@ chown -R abc:abc \
 	/conf \
 	/var/www/html/Lychee-Laravel
 
+
+
+echo "**** generate the key (to make sure that cookies cannot be decrypted etc) ****" && \
+cd /var/www/html/Lychee-Laravel && \
+./artisan key:generate
+
+
+
+echo "**** migrate the database ****" && \
+cd /var/www/html/Lychee-Laravel && \
+./artisan migrate
+
+
 echo "Start it"
 systemctl restart apache2

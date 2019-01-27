@@ -26,7 +26,7 @@ RUN \
     php7.3-gd \
     php7.3-xml \
     php7.3-zip \
-    mariadb-server \
+    #mariadb-server \
     composer
 
 
@@ -61,18 +61,6 @@ RUN \
     echo "**** install php libraries ****" && \
     cd /var/www/html/Lychee-Laravel && \
     composer install --no-dev
-
-
-RUN \
-    echo "**** generate the key (to make sure that cookies cannot be decrypted etc) ****" && \
-    cd /var/www/html/Lychee-Laravel && \
-    ./artisan key:generate
-
-
-RUN \
-    echo "**** migrate the database ****" && \
-    cd /var/www/html/Lychee-Laravel && \
-    ./artisan migrate
 
 
 RUN \
