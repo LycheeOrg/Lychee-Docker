@@ -101,7 +101,7 @@ RUN \
 #systemctl restart apache2
 
 
-PORT 80
+EXPOSE 80
 VOLUME /conf
 
 WORKDIR /var/www/html/Lychee-Laravel
