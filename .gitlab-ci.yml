@@ -1,0 +1,37 @@
+image: docker:stable
+
+stages:
+- build
+- test
+- release
+
+variables:
+  TEST_IMAGE: bigrob8181/$CI_PROJECT_NAME:$CI_PIPELINE_IID
+  RELEASE_IMAGE: bigrob8181/$CI_PROJECT_NAME:latest
+
+before_script:
+  - docker login -u="$DOCKERHUB_USERNAME" -p="$DOCKERHUB_PASSWORD"
+
+build:
+  stage: build
+  script:
+    - docker build --pull -t $TEST_IMAGE .
+    - docker push $TEST_IMAGE
+
+test:
+  stage: test
+  script:
+    - docker pull $TEST_IMAGE
+    - docker run --name $CI_PROJECT_NAME -d $TEST_IMAGE
+    - docker ps -a | awk '{print $NF}' | grep -w "$CI_PROJECT_NAME" | cat
+    - docker stop $CI_PROJECT_NAME && docker rm $CI_PROJECT_NAME
+
+
+release:
+  stage: release
+  script:
+    - docker pull $TEST_IMAGE
+    - docker tag $TEST_IMAGE $RELEASE_IMAGE
+    - docker push $RELEASE_IMAGE
+  only:
+    - master
