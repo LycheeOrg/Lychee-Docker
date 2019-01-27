@@ -9,13 +9,13 @@ ARG PGID=1000
 RUN \
     echo "**** Add User and Group ****" && \
     addgroup --gid ${PGID} abc && \
-    adduser --uid ${PUID} --gid ${PGID} abc
+    adduser --uid ${PUID} --gid ${PGID} --disabled-password abc
 
 
 RUN \
  echo "**** install Base dependencies ****" && \
  apt update && \
- apt install --no-cache \
+ apt install \
     bash \
     libapache2-mod-php7.3 \
     git \
