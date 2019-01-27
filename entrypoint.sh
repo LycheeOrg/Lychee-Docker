@@ -22,14 +22,6 @@ echo "**** Copy the .env to /conf ****" && \
 [[ ! -L /var/www/html/Lychee-Laravel/.env ]] && \
 	ln -s /conf/.env /var/www/html/Lychee-Laravel/.env
 
-
-echo "**** Set Permissions ****" && \
-chown -R abc:abc /conf
-chown -R abc:abc /uploads
-chmod -R a+rw /uploads
-chown -R www-data:www-data /var/www/html/Lychee-Laravel/storage/logs
-
-
 [[ ! -e /tmp/first_run ]] && \
 	echo "**** generate the key (to make sure that cookies cannot be decrypted etc) ****" && \
 	cd /var/www/html/Lychee-Laravel && \
@@ -38,5 +30,11 @@ chown -R www-data:www-data /var/www/html/Lychee-Laravel/storage/logs
 	cd /var/www/html/Lychee-Laravel && \
 	./artisan migrate && \
 	touch /tmp/first_run
+
+echo "**** Set Permissions ****" && \
+chown -R abc:abc /conf
+chown -R abc:abc /uploads
+chmod -R a+rw /uploads
+chown -R www-data:www-data /var/www/html/Lychee-Laravel/storage/logs
 
 exec $@
