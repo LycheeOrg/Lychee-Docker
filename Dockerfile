@@ -15,7 +15,7 @@ RUN \
 RUN \
  echo "**** install Base dependencies ****" && \
  apt update && \
- apt install \
+ apt install -y \
     bash \
     libapache2-mod-php7.3 \
     git \
