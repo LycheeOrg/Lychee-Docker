@@ -30,7 +30,8 @@ chown -R abc:abc \
 	echo "**** migrate the database ****" && \
 	cd /var/www/html/Lychee-Laravel && \
 	./artisan migrate && \
-	touch /tmp/first_run && \
-	/etc/init.d/apache2 stop
+	touch /tmp/first_run# && \
+	#/etc/init.d/apache2 stop
 
-/etc/init.d/apache2 start
+#/etc/init.d/apache2 start
+exec $@
