@@ -8,8 +8,8 @@ ARG PGID=1000
 
 RUN \
     echo "**** Add User and Group ****" && \
-    addgroup -g ${PGID} abc && \
-    adduser -D -u ${PUID} -G abc abc
+    addgroup --gid ${PGID} abc && \
+    adduser --uid ${PUID} --gid ${PGID} abc
 
 
 RUN \
