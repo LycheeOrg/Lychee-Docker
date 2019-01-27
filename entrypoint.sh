@@ -44,4 +44,5 @@ cd /var/www/html/Lychee-Laravel && \
 
 
 echo "Start it"
-systemctl restart apache2
+#systemctl restart apache2
+/etc/init.d/apache2 restart
