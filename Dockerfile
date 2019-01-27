@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM debian:stretch
 
 # set version label
 LABEL maintainer="bigrob8181"
@@ -9,7 +9,7 @@ ARG PGID=1000
 RUN \
     echo "**** Add User and Group ****" && \
     addgroup --gid ${PGID} abc && \
-    adduser --uid ${PUID} --gid ${PGID} --disabled-password abc
+    adduser --system --no-create-home --uid ${PUID} --gid ${PGID} --disabled-password abc
 
 
 RUN \
