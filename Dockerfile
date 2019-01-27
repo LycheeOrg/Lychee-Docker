@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM debian:stable
 
 # set version label
 LABEL maintainer="bigrob8181"
