@@ -69,26 +69,12 @@ RUN \
 
 
 RUN \
-    echo "**** Customize apache2.conf ****" && \
-    cp /etc/apache2/apache2.conf /conf/apache2.conf && \
-    echo "\
-<Directory /var/www/html/Lychee-Laravel> \
-	Options Indexes FollowSymLinks \
-	AllowOverride All \
-	Require all granted \
-</Directory>" >> /etc/apache2/apache2.conf
-
-
-RUN \
     echo "**** Add custom Site to apache and enable it ****"
 COPY default.conf /etc/apache2/sites-available/default.conf
 RUN \
     ls -la /etc/apache2/sites-available/ && \
     a2ensite default.conf
-
-
-#Restart apache2:
-#systemctl restart apache2
+COPY apache2.conf /etc/apache2/apache2.conf
 
 
 EXPOSE 80
@@ -101,6 +87,3 @@ COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT [ "/entrypoint.sh" ]
-
-#CMD ["python", "-m", "lycheesync.sync", "/photos", "/lycheepath", "/conf/conf.json", "-c", "-v"]
-RUN cat /etc/apache2/apache2.conf
