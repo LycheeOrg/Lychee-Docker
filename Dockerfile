@@ -1,4 +1,4 @@
-FROM debian:stable
+FROM debian:buster-slim
 
 # set version label
 LABEL maintainer="bigrob8181"
