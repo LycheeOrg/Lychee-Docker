@@ -73,7 +73,8 @@ RUN \
 COPY default.conf /etc/apache2/sites-available/default.conf
 RUN \
     ls -la /etc/apache2/sites-available/ && \
-    a2ensite default.conf
+    a2ensite default.conf && \
+    a2dissite 000-default.conf
 COPY apache2.conf /etc/apache2/apache2.conf
 
 

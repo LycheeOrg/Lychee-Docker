@@ -19,8 +19,8 @@ echo "**** Copy the .env to /conf ****" && \
 
 echo "**** Set Permissions ****" && \
 chown -R abc:abc \
-	/conf \
-	/var/www/html/Lychee-Laravel
+	/conf #\
+#	/var/www/html/Lychee-Laravel
 
 
 [[ ! -e /tmp/first_run ]] && \
@@ -30,8 +30,6 @@ chown -R abc:abc \
 	echo "**** migrate the database ****" && \
 	cd /var/www/html/Lychee-Laravel && \
 	./artisan migrate && \
-	touch /tmp/first_run# && \
-	#/etc/init.d/apache2 stop
+	touch /tmp/first_run
 
-#/etc/init.d/apache2 start
 exec $@
