@@ -82,6 +82,7 @@ RUN \
     echo "**** Add custom Site to apache and enable it ****"
 COPY default.conf /etc/apache2/site-available/default.conf
 RUN \
+    ls -la /etc/apache2/site-available/ && \
     a2ensite default.conf
 
 
