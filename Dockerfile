@@ -1,4 +1,4 @@
-FROM debian:jessie-slim
+FROM debian:jessie
 
 # set version label
 LABEL maintainer="bigrob8181"
