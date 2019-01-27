@@ -23,7 +23,7 @@ test:
   script:
     - docker pull $TEST_IMAGE
     - docker run --name $CI_PROJECT_NAME'_test' -d $TEST_IMAGE
-    - docker ps -a | awk '{print $NF}' | grep -w "$CI_PROJECT_NAME'_test'" | cat
+    - docker ps -a | awk '{print $NF}' | grep -w $CI_PROJECT_NAME'_test' | cat
     - docker stop $CI_PROJECT_NAME'_test' && docker rm $CI_PROJECT_NAME'_test'
 
 
