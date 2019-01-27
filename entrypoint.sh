@@ -12,7 +12,7 @@ echo "**** Make sure the /conf and /uploads folders exist ****"
 
 echo "**** Create the symbolic link for the /uploads folder ****"
 [[ ! -L /var/www/html/Lychee-Laravel/public/uploads ]] && \
-	cp /var/www/html/Lychee-Laravel/public/uploads/* /uploads && \
+	cp -r /var/www/html/Lychee-Laravel/public/uploads/* /uploads && \
 	rm -r /var/www/html/Lychee-Laravel/public/uploads && \
 	ln -s /uploads /var/www/html/Lychee-Laravel/public/uploads
 
@@ -27,6 +27,8 @@ echo "**** Set Permissions ****" && \
 chown -R abc:abc /conf
 chown -R abc:abc /uploads
 chmod -R a+rw /uploads
+chown -R abc:abc /var/www/html/Lychee-Laravel/storage/logs
+
 
 [[ ! -e /tmp/first_run ]] && \
 	echo "**** generate the key (to make sure that cookies cannot be decrypted etc) ****" && \
