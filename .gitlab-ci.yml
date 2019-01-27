@@ -20,10 +20,12 @@ build:
 
 test:
   stage: test
-  script:
+  before_script:
     - docker pull $TEST_IMAGE
+  script:
     - docker run --name $CI_PROJECT_NAME'_test' -d $TEST_IMAGE
     - docker ps -a | awk '{print $NF}' | grep -w $CI_PROJECT_NAME'_test' | cat
+  after_script:
     - docker stop $CI_PROJECT_NAME'_test' && docker rm $CI_PROJECT_NAME'_test'
 
 
