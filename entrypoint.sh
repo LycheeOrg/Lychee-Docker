@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "**** Starting the Entrypoint Script ****"
-set -e
+#set -e
 
 
 echo "**** Make sure the /conf folder exists ****"
