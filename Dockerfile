@@ -70,6 +70,7 @@ RUN \
 
 RUN \
     echo "**** Customize apache2.conf ****" && \
+    cp /etc/apache2/apache2.conf /conf/apache2.conf && \
     echo "\
 <Directory /var/www/html/Lychee-Laravel> \
 	Options Indexes FollowSymLinks \
