@@ -7,7 +7,6 @@ stages:
 
 variables:
     DEV: bigrob8181/$CI_PROJECT_NAME:dev
-    #TEST: bigrob8181/$CI_PROJECT_NAME:$CI_PIPELINE_IID
     RELEASE: bigrob8181/$CI_PROJECT_NAME:$CI_COMMIT_TAG
     LATEST: bigrob8181/$CI_PROJECT_NAME:latest
 
@@ -19,14 +18,11 @@ build_prod:
     stage: build
     script:
         - docker build --pull -t $RELEASE .
-        #- docker push $RELEASE
     only:
         - tags
 
 test_prod:
     stage: test
-    #before_script:
-    #    - docker pull $TEST
     script:
         - docker run --name $CI_PROJECT_NAME'_test' -d $RELEASE
         - docker ps -a | awk '{print $NF}' | grep -w $CI_PROJECT_NAME'_test' | cat
@@ -37,11 +33,13 @@ test_prod:
 
 release_prod:
     stage: release
-    script:
+    before_script:
         - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
-        #- docker pull $TEST
+    script:
         - docker tag $RELEASE $LATEST
         - docker push bigrob8181/$CI_PROJECT_NAME
+    after_script:
+        - apt update && apt install python3-pip -y
         - pip3 install gitlab_release
         - python3 -m gitlab_release --zip "release-${CI_COMMIT_TAG}.zip" " $CI_PRIVATE_TOKEN *
 
@@ -59,8 +57,6 @@ build_dev:
 
 test_dev:
     stage: test
-    #before_script:
-    #    - docker pull $TEST
     script:
         - docker run --name $CI_PROJECT_NAME'_test' -d $DEV
         - docker ps -a | awk '{print $NF}' | grep -w $CI_PROJECT_NAME'_test' | cat
@@ -71,8 +67,9 @@ test_dev:
 
 release_dev:
     stage: release
-    script:
+    before_script:
         - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
+    script:
         - docker push $DEV
     only:
         - master
