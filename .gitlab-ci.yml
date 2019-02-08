@@ -6,11 +6,10 @@ stages:
 - release
 
 variables:
-    PROJECT_NAME: bigrob8181/$CI_PROJECT_NAME
-    DEV: $PROJECT_NAME:dev
-    #TEST: $PROJECT_NAME:$CI_PIPELINE_IID
-    RELEASE: $PROJECT_NAME:$CI_COMMIT_REF_NAME
-    LATEST: $PROJECT_NAME:latest
+    DEV: bigrob8181/$CI_PROJECT_NAME:dev
+    #TEST: bigrob8181/$CI_PROJECT_NAME:$CI_PIPELINE_IID
+    RELEASE: bigrob8181/$CI_PROJECT_NAME:$CI_COMMIT_REF_NAME
+    LATEST: bigrob8181/$CI_PROJECT_NAME:latest
     DOCKER_CONTAINER: $CI_PROJECT_NAME'_test'
 
 before_script:
@@ -42,7 +41,7 @@ release_prod:
     script:
         #- docker pull $TEST
         - docker tag $RELEASE $LATEST
-        - docker push $PROJECT_NAME
+        - docker push bigrob8181/$CI_PROJECT_NAME
     only:
         - tags
 
