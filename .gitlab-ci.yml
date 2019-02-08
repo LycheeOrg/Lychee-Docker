@@ -6,12 +6,12 @@ stages:
 - release
 
 variables:
-    NAME: "bigrob8181/$CI_PROJECT_NAME"
-    DEV: "$NAME:dev"
-    #TEST: "$NAME:$CI_PIPELINE_IID"
-    RELEASE: "$NAME:$CI_COMMIT_REF_NAME"
-    LATEST: "$NAME:latest"
-    DOCKER_CONTAINER: "$CI_PROJECT_NAME'_test'"
+    NAME: 'bigrob8181/'$CI_PROJECT_NAME
+    DEV: $NAME':dev'
+    #TEST: $NAME':'$CI_PIPELINE_IID
+    RELEASE: $NAME':'$CI_COMMIT_REF_NAME
+    LATEST: $NAME':latest'
+    DOCKER_CONTAINER: $CI_PROJECT_NAME'_test'
 
 before_script:
     - docker login -u="$DOCKERHUB_USERNAME" -p="$DOCKERHUB_PASSWORD"
