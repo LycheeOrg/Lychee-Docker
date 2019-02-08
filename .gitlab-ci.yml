@@ -10,7 +10,6 @@ variables:
     #TEST: bigrob8181/$CI_PROJECT_NAME:$CI_PIPELINE_IID
     RELEASE: bigrob8181/$CI_PROJECT_NAME:$CI_COMMIT_REF_NAME
     LATEST: bigrob8181/$CI_PROJECT_NAME:latest
-    DOCKER_CONTAINER: $CI_PROJECT_NAME'_test'
 
 before_script:
     - docker login -u="$DOCKERHUB_USERNAME" -p="$DOCKERHUB_PASSWORD"
@@ -29,10 +28,10 @@ test_prod:
     #before_script:
     #    - docker pull $TEST
     script:
-        - docker run --name $DOCKER_CONTAINER -d $RELEASE
-        - docker ps -a | awk '{print $NF}' | grep -w $DOCKER_CONTAINER | cat
+        - docker run --name $CI_PROJECT_NAME'_test' -d $RELEASE
+        - docker ps -a | awk '{print $NF}' | grep -w $CI_PROJECT_NAME'_test' | cat
     after_script:
-        - docker stop $DOCKER_CONTAINER && docker rm $DOCKER_CONTAINER
+        - docker stop $CI_PROJECT_NAME'_test' && docker rm $CI_PROJECT_NAME'_test'
     only:
         - tags
 
@@ -60,10 +59,10 @@ test_dev:
     #before_script:
     #    - docker pull $TEST
     script:
-        - docker run --name $DOCKER_CONTAINER -d $DEV
-        - docker ps -a | awk '{print $NF}' | grep -w $DOCKER_CONTAINER | cat
+        - docker run --name $CI_PROJECT_NAME'_test' -d $DEV
+        - docker ps -a | awk '{print $NF}' | grep -w $CI_PROJECT_NAME'_test' | cat
     after_script:
-        - docker stop $DOCKER_CONTAINER && docker rm $DOCKER_CONTAINER
+        - docker stop $CI_PROJECT_NAME'_test' && docker rm $CI_PROJECT_NAME'_test'
     only:
         - master
 
