@@ -21,6 +21,7 @@ echo "**** Copy the .env to /conf ****" && \
 	cp /var/www/html/Lychee-Laravel/.env.example /conf/.env
 [[ ! -L /var/www/html/Lychee-Laravel/.env ]] && \
 	ln -s /conf/.env /var/www/html/Lychee-Laravel/.env
+ls -la / && \
 echo "**** Inject .env values ****" && \
 	./inject.sh
 
