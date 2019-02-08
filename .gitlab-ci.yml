@@ -46,7 +46,7 @@ release_prod:
             pip3 install --upgrade pip setuptools && \
             rm -r /root/.cache && \
             pip3 install gitlab_release && \
-            /usr/bin/python3 -m gitlab_release \
+            /usr/bin/python -m gitlab_release \
                 --server "gitlab.landry.me" \
                 --project_id "74" \
                 --release_tag "$CI_COMMIT_TAG" \
