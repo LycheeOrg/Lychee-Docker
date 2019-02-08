@@ -23,9 +23,9 @@ echo "**** Copy the .env to /conf ****" && \
 	ln -s /conf/.env /var/www/html/Lychee-Laravel/.env
 
 [[ ! -e /tmp/first_run ]] && \
-    echo "**** install php libraries ****" && \
-    cd /var/www/html/Lychee-Laravel && \
-    composer install --no-dev && \
+	echo "**** install php libraries ****" && \
+	cd /var/www/html/Lychee-Laravel && \
+	composer install --no-dev && \
 	echo "**** generate the key (to make sure that cookies cannot be decrypted etc) ****" && \
 	cd /var/www/html/Lychee-Laravel && \
 	./artisan key:generate && \
