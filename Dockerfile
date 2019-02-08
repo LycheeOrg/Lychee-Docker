@@ -27,7 +27,8 @@ RUN \
     php7.3-xml \
     php7.3-zip \
     #mariadb-server \
-    composer
+    composer \
+    ffmpeg
 
 
 #access the server.
