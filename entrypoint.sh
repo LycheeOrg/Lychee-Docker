@@ -7,7 +7,7 @@ set -e
 echo "**** Make sure the /conf and /uploads folders exist ****"
 [[ ! -f /conf ]] && \
 	mkdir -p /conf
-[ ! -f /uploads ]] && \
+[[ ! -f /uploads ]] && \
 	mkdir -p /uploads
 
 echo "**** Create the symbolic link for the /uploads folder ****"
