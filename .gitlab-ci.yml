@@ -39,7 +39,8 @@ release_prod:
         - docker tag $RELEASE $LATEST
         - docker push bigrob8181/$CI_PROJECT_NAME
     after_script:
-        - apt-get update && apt-get install python3-pip -y
+        - apt update
+        - apt install -y python3-pip
         - pip3 install gitlab_release
         - python3 -m gitlab_release --zip "release-${CI_COMMIT_TAG}.zip" " $CI_PRIVATE_TOKEN *
 
