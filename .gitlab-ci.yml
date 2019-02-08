@@ -6,34 +6,67 @@ stages:
 - release
 
 variables:
-  TEST_IMAGE: bigrob8181/$CI_PROJECT_NAME:$CI_PIPELINE_IID
-  RELEASE_IMAGE: bigrob8181/$CI_PROJECT_NAME:latest
+    NAME: bigrob8181/$CI_PROJECT_NAME
+    DEV: $NAME:dev
+    #TEST: $NAME:$CI_PIPELINE_IID
+    RELEASE: $NAME:CI_COMMIT_REF_NAME
+    LATEST: $NAME:latest
+    DOCKER_CONTAINER: $DOCKER_CONTAINER
 
 before_script:
-  - docker login -u="$DOCKERHUB_USERNAME" -p="$DOCKERHUB_PASSWORD"
+    - docker login -u="$DOCKERHUB_USERNAME" -p="$DOCKERHUB_PASSWORD"
 
-build:
-  stage: build
-  script:
-    - docker build --pull -t $TEST_IMAGE .
-    - docker push $TEST_IMAGE
+# For Production
+build_prod:
+    stage: build
+    script:
+        - docker build --pull -t $RELEASE .
+        #- docker push $RELEASE
+    only:
+        - tags
 
-test:
-  stage: test
-  before_script:
-    - docker pull $TEST_IMAGE
-  script:
-    - docker run --name $CI_PROJECT_NAME'_test' -d $TEST_IMAGE
-    - docker ps -a | awk '{print $NF}' | grep -w $CI_PROJECT_NAME'_test' | cat
-  after_script:
-    - docker stop $CI_PROJECT_NAME'_test' && docker rm $CI_PROJECT_NAME'_test'
+test_prod:
+    stage: test
+    #before_script:
+    #    - docker pull $TEST
+    script:
+        - docker run --name $DOCKER_CONTAINER -d $RELEASE
+        - docker ps -a | awk '{print $NF}' | grep -w $DOCKER_CONTAINER | cat
+    after_script:
+        - docker stop $DOCKER_CONTAINER && docker rm $DOCKER_CONTAINER
+
+release_prod:
+    stage: release
+    script:
+        #- docker pull $TEST
+        - docker tag $RELEASE $LATEST
+        - docker push $NAME
+    only:
+        - master
 
 
-release:
-  stage: release
-  script:
-    - docker pull $TEST_IMAGE
-    - docker tag $TEST_IMAGE $RELEASE_IMAGE
-    - docker push $RELEASE_IMAGE
-  only:
-    - master
+# For Development
+build_dev:
+    stage: build
+    script:
+        - docker build --pull -t $DEV .
+        - docker push $DEV
+    only:
+        - dev
+
+test_dev:
+    stage: test
+    #before_script:
+    #    - docker pull $TEST
+    script:
+        - docker run --name $DOCKER_CONTAINER -d $DEV
+        - docker ps -a | awk '{print $NF}' | grep -w $DOCKER_CONTAINER | cat
+    after_script:
+        - docker stop $DOCKER_CONTAINER && docker rm $DOCKER_CONTAINER
+
+release_dev:
+    stage: release
+    script:
+        - docker push $DEV
+    only:
+        - dev

@@ -28,20 +28,7 @@ RUN \
     php7.3-zip \
     #mariadb-server \
     composer \
-    ffmpeg
-
-
-#access the server.
-
-#mysql
-
-#create the database and users:
-
-#create database lychee;
-#CREATE USER lychee@localhost IDENTIFIED BY 'password';
-#GRANT ALL ON *.* TO lychee@localhost WITH GRANT OPTION;
-#FLUSH PRIVILEGES;
-#exit;
+    && rm -rf /var/lib/apt/lists/*
 
 
 RUN \
@@ -50,20 +37,13 @@ RUN \
     git clone --recurse-submodules https://github.com/LycheeOrg/Lychee-Laravel.git
 
 
-#RUN \
-#    echo "**** Set things up ****" && \
-    #cd Lychee-Laravel && \
-    #cp .env.example .env
+RUN \
+    echo "**** install php libraries ****" && \
+    cd /var/www/html/Lychee-Laravel && \
+    composer install --no-dev && \
+    chown -R www-data:www-data \
+    	/var/www/html/Lychee-Laravel
 
-# edit .env to match the parameters
-
-
-#RUN \
-#    echo "**** install php libraries ****" && \
-#    cd /var/www/html/Lychee-Laravel && \
-#    composer install --no-dev && \
-#    chown -R www-data:www-data \
-#    	/var/www/html/Lychee-Laravel
 
 RUN \
     echo "**** Laravel requires mode rewrite to be enabled ****" && \

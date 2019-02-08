@@ -23,9 +23,6 @@ echo "**** Copy the .env to /conf ****" && \
 	ln -s /conf/.env /var/www/html/Lychee-Laravel/.env
 
 [[ ! -e /tmp/first_run ]] && \
-	echo "**** install php libraries ****" && \
-	cd /var/www/html/Lychee-Laravel && \
-	composer install --no-dev && \
 	echo "**** generate the key (to make sure that cookies cannot be decrypted etc) ****" && \
 	cd /var/www/html/Lychee-Laravel && \
 	./artisan key:generate && \
@@ -39,6 +36,5 @@ chown -R abc:abc /conf
 chown -R abc:abc /uploads
 chmod -R a+rw /uploads
 chown -R www-data:www-data /var/www/html/Lychee-Laravel/storage/logs
-chown -R www-data:www-data /var/www/html/Lychee-Laravel
 
 exec $@
