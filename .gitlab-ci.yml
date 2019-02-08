@@ -48,8 +48,7 @@ release_prod:
                 --server "gitlab.landry.me" \
                 --project_id "74" \
                 --release_tag "$CI_COMMIT_TAG" \
-                --zip "release-${CI_COMMIT_TAG}.zip" \
-                "$CI_PRIVATE_TOKEN" *
+                --zip "release-${CI_COMMIT_TAG}.zip" "$CI_PRIVATE_TOKEN" *
     only:
         - tags
 
