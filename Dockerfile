@@ -3,8 +3,45 @@ FROM debian:buster-slim
 # set version label
 LABEL maintainer="bigrob8181"
 
-ARG PUID=1000
-ARG PGID=1000
+# environment variables
+ENV PUID=1000
+ENV PGID=1000
+ENV PHP_TZ=America/New_York
+# taken from .env file
+ENV APP_NAME=Laravel
+ENV APP_ENV=local
+ENV APP_KEY=base64:WQQ0sZoM0aIDMOn9P6axFOCZvrm4F6dTVb5mqCS0DU0=
+ENV APP_DEBUG=true
+ENV APP_URL=http://localhost
+ENV LOG_CHANNEL=stack
+ENV DB_CONNECTION=mysql
+ENV DB_HOST=mariadb
+ENV DB_PORT=3306
+ENV DB_DATABASE=homestead
+ENV DB_USERNAME=homestead
+ENV DB_PASSWORD=secret
+ENV DB_DROP_CLEAR_TABLES_ON_ROLLBACK=false
+ENV DB_OLD_LYCHEE_PREFIX
+ENV BROADCAST_DRIVER=log
+ENV CACHE_DRIVER=file
+ENV SESSION_DRIVER=file
+ENV SESSION_LIFETIME=120
+ENV QUEUE_DRIVER=sync
+ENV SECURITY_HEADER_HSTS_ENABLE=false
+ENV REDIS_HOST=127.0.0.1
+ENV REDIS_PASSWORD=null
+ENV REDIS_PORT=6379
+ENV MAIL_DRIVER=smtp
+ENV MAIL_HOST=smtp.mailtrap.io
+ENV MAIL_PORT=2525
+ENV MAIL_USERNAME=null
+ENV MAIL_PASSWORD=null
+ENV MAIL_ENCRYPTION=null
+ENV PUSHER_APP_ID
+ENV PUSHER_APP_KEY
+ENV PUSHER_APP_SECRET
+ENV PUSHER_APP_CLUSTER=mt1
+
 
 RUN \
     echo "**** Add User and Group ****" && \
@@ -66,8 +103,10 @@ VOLUME /conf /uploads
 WORKDIR /var/www/html/Lychee-Laravel
 
 COPY entrypoint.sh /entrypoint.sh
+COPY inject.sh /inject.sh
 
 RUN chmod +x /entrypoint.sh
+RUN chmod +x /inject.sh
 
 ENTRYPOINT [ "/entrypoint.sh" ]
 

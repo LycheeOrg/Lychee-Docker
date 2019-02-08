@@ -21,12 +21,15 @@ echo "**** Copy the .env to /conf ****" && \
 	cp /var/www/html/Lychee-Laravel/.env.example /conf/.env
 [[ ! -L /var/www/html/Lychee-Laravel/.env ]] && \
 	ln -s /conf/.env /var/www/html/Lychee-Laravel/.env
+echo "**** Inject .env values ****" && \
+	./inject.sh
+
 
 [[ ! -e /tmp/first_run ]] && \
-	echo "**** generate the key (to make sure that cookies cannot be decrypted etc) ****" && \
+	echo "**** Generate the key (to make sure that cookies cannot be decrypted etc) ****" && \
 	cd /var/www/html/Lychee-Laravel && \
 	./artisan key:generate && \
-	echo "**** migrate the database ****" && \
+	echo "**** Migrate the database ****" && \
 	cd /var/www/html/Lychee-Laravel && \
 	./artisan migrate && \
 	touch /tmp/first_run
@@ -37,4 +40,5 @@ chown -R abc:abc /uploads
 chmod -R a+rw /uploads
 chown -R www-data:www-data /var/www/html/Lychee-Laravel/storage/logs
 
+echo "**** Setup complete, starting the server. ****"
 exec $@
