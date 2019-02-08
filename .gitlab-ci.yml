@@ -34,6 +34,8 @@ test_prod:
         - docker ps -a | awk '{print $NF}' | grep -w $DOCKER_CONTAINER | cat
     after_script:
         - docker stop $DOCKER_CONTAINER && docker rm $DOCKER_CONTAINER
+    only:
+        - tags
 
 release_prod:
     stage: release
@@ -42,7 +44,7 @@ release_prod:
         - docker tag $RELEASE $LATEST
         - docker push $NAME
     only:
-        - master
+        - tags
 
 
 # For Development
@@ -52,7 +54,7 @@ build_dev:
         - docker build --pull -t $DEV .
         - docker push $DEV
     only:
-        - dev
+        - master
 
 test_dev:
     stage: test
@@ -63,10 +65,12 @@ test_dev:
         - docker ps -a | awk '{print $NF}' | grep -w $DOCKER_CONTAINER | cat
     after_script:
         - docker stop $DOCKER_CONTAINER && docker rm $DOCKER_CONTAINER
+    only:
+        - master
 
 release_dev:
     stage: release
     script:
         - docker push $DEV
     only:
-        - dev
+        - master
