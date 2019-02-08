@@ -11,8 +11,8 @@ variables:
     RELEASE: bigrob8181/$CI_PROJECT_NAME:$CI_COMMIT_TAG
     LATEST: bigrob8181/$CI_PROJECT_NAME:latest
 
-before_script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
+#before_script:
+#    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
 
 # For Production
 build_prod:
@@ -38,10 +38,10 @@ test_prod:
 release_prod:
     stage: release
     script:
+        - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
         #- docker pull $TEST
         - docker tag $RELEASE $LATEST
         - docker push bigrob8181/$CI_PROJECT_NAME
-        #- curl --header 'Content-Type: application/json' --header "PRIVATE-TOKEN: $PRIVATE_TOKEN" --data '{ "name": "$CI_COMMIT_REF_NAME", "tag_name": "$CI_COMMIT_REF_NAME", "description": "Lychee-Laravel Docker Image" }' --request POST http://gitlab.landry.me/api/v4/projects/46/releases
         - pip3 install gitlab_release
         - python3 -m gitlab_release --zip "release-${CI_COMMIT_TAG}.zip" " $CI_PRIVATE_TOKEN *
 
@@ -73,6 +73,7 @@ test_dev:
 release_dev:
     stage: release
     script:
+        - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
         - docker push $DEV
     only:
         - master
