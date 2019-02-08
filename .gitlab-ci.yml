@@ -40,8 +40,8 @@ release_prod:
         - docker push $RELEASE
         - docker push $LATEST
     after_script:
-        - apk add python3 py3-pip3 && \
-            pip3 install --upgrade pip3 && \
+        - apk add --upgrade python3 && \
+            python3 -m ensurepip && \
             rm -rf /var/cache/apk/* && \
             pip3 install gitlab_release && \
             python3 -m gitlab_release \
