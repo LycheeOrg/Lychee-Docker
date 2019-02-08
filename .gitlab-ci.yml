@@ -54,7 +54,6 @@ build_dev:
     stage: build
     script:
         - docker build --pull -t $DEV .
-        - docker push $DEV
     only:
         - master
 
