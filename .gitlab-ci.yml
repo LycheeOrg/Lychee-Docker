@@ -10,10 +10,10 @@ variables:
     #TEST: bigrob8181/$CI_PROJECT_NAME:$CI_PIPELINE_IID
     RELEASE: bigrob8181/$CI_PROJECT_NAME:$CI_COMMIT_TAG
     LATEST: bigrob8181/$CI_PROJECT_NAME:latest
-    DOCKERHUB_REGISTRY: index.docker.io/bigrob8181/$CI_PROJECT_NAME
+    CI_REGISTRY: index.docker.io/bigrob8181/$CI_PROJECT_NAME
 
 before_script:
-    - docker login -u "$DOCKERHUB_USERNAME" -p "$DOCKERHUB_PASSWORD" $DOCKERHUB_REGISTRY
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
 
 # For Production
 build_prod:
@@ -44,7 +44,7 @@ release_prod:
         - docker push bigrob8181/$CI_PROJECT_NAME
         #- curl --header 'Content-Type: application/json' --header "PRIVATE-TOKEN: $PRIVATE_TOKEN" --data '{ "name": "$CI_COMMIT_REF_NAME", "tag_name": "$CI_COMMIT_REF_NAME", "description": "Lychee-Laravel Docker Image" }' --request POST http://gitlab.landry.me/api/v4/projects/46/releases
         - pip3 install gitlab_release
-        - python3 -m gitlab_release --zip "release-${CI_COMMIT_TAG}.zip" " $PRIVATE_TOKEN *
+        - python3 -m gitlab_release --zip "release-${CI_COMMIT_TAG}.zip" " $CI_PRIVATE_TOKEN *
 
     only:
         - tags
