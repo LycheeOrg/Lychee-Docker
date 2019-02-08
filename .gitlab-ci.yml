@@ -10,10 +10,9 @@ variables:
     #TEST: bigrob8181/$CI_PROJECT_NAME:$CI_PIPELINE_IID
     RELEASE: bigrob8181/$CI_PROJECT_NAME:$CI_COMMIT_TAG
     LATEST: bigrob8181/$CI_PROJECT_NAME:latest
-    CI_REGISTRY: index.docker.io/bigrob8181/$CI_PROJECT_NAME
 
 before_script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - docker login -u '$CI_REGISTRY_USER' -p '$CI_REGISTRY_PASSWORD'
 
 # For Production
 build_prod:
