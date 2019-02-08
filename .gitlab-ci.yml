@@ -8,7 +8,7 @@ stages:
 variables:
     DEV: bigrob8181/$CI_PROJECT_NAME:dev
     #TEST: bigrob8181/$CI_PROJECT_NAME:$CI_PIPELINE_IID
-    RELEASE: bigrob8181/$CI_PROJECT_NAME:$CI_COMMIT_REF_NAME
+    RELEASE: bigrob8181/$CI_PROJECT_NAME:$CI_COMMIT_TAG
     LATEST: bigrob8181/$CI_PROJECT_NAME:latest
 
 before_script:
