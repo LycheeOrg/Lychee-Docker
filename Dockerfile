@@ -58,12 +58,12 @@ RUN \
 # edit .env to match the parameters
 
 
-RUN \
-    echo "**** install php libraries ****" && \
-    cd /var/www/html/Lychee-Laravel && \
-    composer install --no-dev && \
-    chown -R www-data:www-data \
-    	/var/www/html/Lychee-Laravel
+#RUN \
+#    echo "**** install php libraries ****" && \
+#    cd /var/www/html/Lychee-Laravel && \
+#    composer install --no-dev && \
+#    chown -R www-data:www-data \
+#    	/var/www/html/Lychee-Laravel
 
 RUN \
     echo "**** Laravel requires mode rewrite to be enabled ****" && \
