@@ -41,7 +41,10 @@ release_prod:
         #- docker pull $TEST
         - docker tag $RELEASE $LATEST
         - docker push bigrob8181/$CI_PROJECT_NAME
-        - curl --header 'Content-Type: application/json' --header "PRIVATE-TOKEN: $API_SECRET" --data '{ "name": "$CI_COMMIT_REF_NAME", "tag_name": "$CI_COMMIT_REF_NAME", "description": "Lychee-Laravel Docker Image" }' --request POST http://gitlab.landry.me/api/v4/projects/46/releases
+        #- curl --header 'Content-Type: application/json' --header "PRIVATE-TOKEN: $PRIVATE_TOKEN" --data '{ "name": "$CI_COMMIT_REF_NAME", "tag_name": "$CI_COMMIT_REF_NAME", "description": "Lychee-Laravel Docker Image" }' --request POST http://gitlab.landry.me/api/v4/projects/46/releases
+        - pip3 install gitlab_release
+        - python3 -m gitlab_release --zip "release-${CI_COMMIT_TAG}.zip" " $PRIVATE_TOKEN *
+
     only:
         - tags
 
