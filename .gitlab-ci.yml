@@ -44,11 +44,7 @@ release_prod:
         - python3 -m ensurepip
         - rm -rf /var/cache/apk/*
         - pip3 install gitlab_release
-        - python3 -m gitlab_release \
-                --server "gitlab.landry.me" \
-                --project_id "74" \
-                --release_tag "$CI_COMMIT_TAG" \
-                --zip "release-${CI_COMMIT_TAG}.zip" "$CI_PRIVATE_TOKEN" *
+        - python3 -m gitlab_release --server "gitlab.landry.me" --project_id "74" --release_tag "$CI_COMMIT_TAG" --zip "release-${CI_COMMIT_TAG}.zip" "$CI_PRIVATE_TOKEN" *
     only:
         - tags
 
