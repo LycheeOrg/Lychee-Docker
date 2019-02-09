@@ -15,7 +15,7 @@ services:
     # Ports: 90
     #-------------------------------------------
     lychee-laravel:
-        image: bigrob8181/lychee-laravel:dev
+        image: bigrob8181/lychee-laravel:latest
         container_name: lychee-laravel
         #restart: always
         ports:
@@ -28,8 +28,8 @@ services:
         networks:
             - other_default
         environment:
-            - PUID=1000
-            - PGID=1000
+            #- PUID=1000
+            #- PGID=1000
             - PHP_TZ=America/New_York
             #- MY_APP_NAME=Laravel
             #- MY_APP_ENV=local
