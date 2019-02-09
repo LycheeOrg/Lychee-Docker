@@ -5,9 +5,6 @@ fi
 if [ "$APP_ENV" != '' ]; then
     sed -i "s|APP_ENV=.*|APP_ENV=${APP_ENV}|i" /conf/.env
 fi
-if [ "$APP_KEY" != '' ]; then
-    sed -i "s|APP_KEY=.*|APP_KEY=${APP_KEY}|i" /conf/.env
-fi
 if [ "$APP_DEBUG" != '' ]; then
     sed -i "s|APP_DEBUG=.*|APP_DEBUG=${APP_DEBUG}|i" /conf/.env
 fi

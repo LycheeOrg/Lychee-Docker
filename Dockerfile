@@ -10,7 +10,7 @@ ENV PHP_TZ=America/New_York
 # taken from .env file
 ENV APP_NAME=''
 ENV APP_ENV=''
-ENV APP_KEY=''
+#ENV APP_KEY=''
 ENV APP_DEBUG=''
 ENV APP_URL=''
 ENV LOG_CHANNEL=''
