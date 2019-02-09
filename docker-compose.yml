@@ -15,7 +15,7 @@ services:
     # Ports: 90
     #-------------------------------------------
     lychee-laravel:
-        image: bigrob8181/lychee-laravel:latest
+        image: bigrob8181/lychee-laravel:dev
         container_name: lychee-laravel
         #restart: always
         ports:

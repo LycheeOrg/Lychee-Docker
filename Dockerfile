@@ -44,7 +44,7 @@ ENV MY_PUSHER_APP_CLUSTER=''
 
 RUN \
     echo "**** Add User and Group ****" && \
-    adduser --no-create-home --disabled-password --group abc
+    adduser --group --no-create-home --disabled-password abc
 
 
 RUN \
@@ -89,7 +89,6 @@ RUN \
     echo "**** Add custom Site to apache and enable it ****"
 COPY default.conf /etc/apache2/sites-available/default.conf
 RUN \
-    ls -la /etc/apache2/sites-available/ && \
     a2ensite default.conf && \
     a2dissite 000-default.conf
 COPY apache2.conf /etc/apache2/apache2.conf
