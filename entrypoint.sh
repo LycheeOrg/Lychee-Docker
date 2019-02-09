@@ -35,6 +35,8 @@ echo "**** Inject .env values ****" && \
 	touch /tmp/first_run
 
 echo "**** Create user and use PUID/PGID ****"
+PUID=${PUID:-1000}
+PGID=${PGID:-1000}
 if [ ! "$(id -u abc)" -eq "$PUID" ]; then usermod -o -u "$PUID" abc ; fi
 if [ ! "$(id -g abc)" -eq "$PGID" ]; then groupmod -o -g "$PGID" abc ; fi
 echo "  User uid:    $(id -u abc)"
