@@ -44,7 +44,7 @@ ENV MY_PUSHER_APP_CLUSTER=''
 
 RUN \
     echo "**** Add User and Group ****" && \
-    adduser --group --no-create-home --disabled-password abc
+    adduser --no-create-home --disabled-password abc
 
 
 RUN \
