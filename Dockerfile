@@ -4,8 +4,8 @@ FROM debian:buster-slim
 LABEL maintainer="bigrob8181"
 
 # environment variables
-ENV PUID=1000
-ENV PGID=1000
+ENV PUID=''
+ENV PGID=''
 ENV PHP_TZ=America/New_York
 # taken from .env file
 ENV MY_APP_NAME=''
@@ -44,8 +44,7 @@ ENV MY_PUSHER_APP_CLUSTER=''
 
 RUN \
     echo "**** Add User and Group ****" && \
-    addgroup --gid ${PGID} abc && \
-    adduser --system --no-create-home --uid ${PUID} --gid ${PGID} --disabled-password abc
+    adduser --no-create-home --disabled-password --group abc
 
 
 RUN \
