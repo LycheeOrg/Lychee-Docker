@@ -6,9 +6,9 @@
 
 1.  Create the db, username, password.
 2.  Edit the environment variables:
-    *  After the first run, edit the /conf/.env file with the appropriate info
-    *  **OR**
-    *  Supply the environment variables via docker run/docker-compose
+    *  After the first run, edit the `/conf/.env` file with the appropriate info, **or**
+    *  Supply the environment variables via docker run/docker-compose, **or**
+    *  Create a `.env` file with the appropriate info and mount it to `/conf`.
 
 ## Example docker run command ##
 
@@ -39,8 +39,9 @@ bigrob8181/lychee-laravel
 
 ## Example docker-compose.yml ##
 
-[docker-compose.yml](https://gitlab.landry.me/Dockerfile/lychee-laravel/blob/master/docker-compose.yml)  
-<!--- [docker-compose-database.yml](https://gitlab.landry.me/Dockerfile/lychee-laravel/blob/master/docker-compose-database.yml) -->
+Change the environment variable in the [provided example](docker-compose.yml) to reflect your database credentials.
+
+Note that in order to avoid writing credentials directly into the file, you can create a `db_secrets.env` and use the `env_file` directive (see the [docs](https://docs.docker.com/compose/environment-variables/#the-env_file-configuration-option)).
 
 ## Available Environment Variables and defaults ##
 
@@ -51,7 +52,7 @@ PHP_TZ=America/New_York
 MY_APP_NAME=Laravel  
 MY_APP_ENV=local  
 MY_APP_DEBUG=true  
-MY_APP_URL=http://localhost  
+MY_APP_URL=http://localhost
 MY_LOG_CHANNEL=stack  
 MY_DB_CONNECTION=mysql  
 MY_DB_HOST=mariadb  
