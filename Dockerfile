@@ -16,35 +16,28 @@ RUN \
 
 RUN \
  echo "**** Install base dependencies ****" && \
- apt update && \
- apt install -y \
-    bash \
+    apt update && \
+    apt install -y \
     libapache2-mod-php7.3 \
-    git \
     php7.3-mysql \
     php7.3-imagick \
     php7.3-mbstring \
     php7.3-json \
     php7.3-gd \
     php7.3-xml \
-    php7.3-zip \
-    #mariadb-server \
-    composer \
-    && rm -rf /var/lib/apt/lists/*
-
-
-RUN \
+    php7.3-zip && \
     echo "**** Clone the repo ****" && \
+    apt install -y git && \
     cd /var/www/html && \
-    git clone --recurse-submodules https://github.com/LycheeOrg/Lychee-Laravel.git
-
-
-RUN \
+    git clone --recurse-submodules https://github.com/LycheeOrg/Lychee-Laravel.git && \
     echo "**** Install PHP libraries ****" && \
+    apt install -y composer && \
     cd /var/www/html/Lychee-Laravel && \
     composer install --no-dev && \
-    chown -R www-data:www-data \
-    	/var/www/html/Lychee-Laravel
+    chown -R www-data:www-data /var/www/html/Lychee-Laravel && \
+    apt purge -y git composer && \
+    apt autoremove -y && \
+    rm -rf /var/lib/apt/lists/*
 
 
 RUN \
