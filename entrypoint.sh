@@ -3,7 +3,6 @@
 echo "**** Starting the Entrypoint Script ****"
 set -e
 
-
 echo "**** Make sure the /conf and /uploads folders exist ****"
 [ ! -f /conf ] && \
 	mkdir -p /conf
@@ -23,7 +22,6 @@ echo "**** Copy the .env to /conf ****" && \
 	ln -s /conf/.env /var/www/html/Lychee-Laravel/.env
 echo "**** Inject .env values ****" && \
 	/inject.sh
-
 
 [ ! -e /tmp/first_run ] && \
 	echo "**** Generate the key (to make sure that cookies cannot be decrypted etc) ****" && \
@@ -49,4 +47,5 @@ chmod -R a+rw /uploads
 chown -R www-data:www-data /var/www/html/Lychee-Laravel
 
 echo "**** Setup complete, starting the server. ****"
+php-fpm7.3
 exec $@

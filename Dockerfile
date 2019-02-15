@@ -1,70 +1,58 @@
 FROM debian:buster-slim
 
-# set version label
+# Set version label
 LABEL maintainer="bigrob8181"
 
-# environment variables
+# Environment variables
 ENV PUID='1000'
 ENV PGID='1000'
 ENV USER='lychee'
 ENV PHP_TZ=America/New_York
 
+# Add User and Group
 RUN \
-    echo "**** Add User and Group ****" && \
     addgroup --gid "$PGID" "$USER" && \
-    adduser --no-create-home --disabled-password --uid "$PUID" --gid "$PGID" "$USER"
+    adduser --gecos '' --no-create-home --disabled-password --uid "$PUID" --gid "$PGID" "$USER"
 
+# Install base dependencies, clone the repo and install php libraries
 RUN \
- echo "**** Install base dependencies ****" && \
-    apt update && \
-    apt install -y \
-    libapache2-mod-php7.3 \
+    apt-get update && \
+    apt-get install -y \
+    nginx-light \
     php7.3-mysql \
     php7.3-imagick \
     php7.3-mbstring \
     php7.3-json \
     php7.3-gd \
     php7.3-xml \
-    php7.3-zip && \
-    echo "**** Clone the repo ****" && \
-    apt install -y git && \
+    php7.3-zip \
+    php7.3-fpm \
+    git \
+    composer && \
     cd /var/www/html && \
     git clone --recurse-submodules https://github.com/LycheeOrg/Lychee-Laravel.git && \
-    echo "**** Install PHP libraries ****" && \
-    apt install -y composer && \
+    apt-get install -y composer && \
     cd /var/www/html/Lychee-Laravel && \
     composer install --no-dev && \
     chown -R www-data:www-data /var/www/html/Lychee-Laravel && \
-    apt purge -y git composer && \
-    apt autoremove -y && \
+    apt-get purge -y git composer && \
+    apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/*
 
-
-RUN \
-    echo "**** Laravel requires mode rewrite to be enabled ****" && \
-    a2enmod rewrite
-
-
-RUN \
-    echo "**** Add custom site to apache and enable it ****"
-COPY default.conf /etc/apache2/sites-available/default.conf
-RUN \
-    a2ensite default.conf && \
-    a2dissite 000-default.conf
-COPY apache2.conf /etc/apache2/apache2.conf
-
+# Add custom site to apache
+COPY default.conf /etc/nginx/nginx.conf
 
 EXPOSE 80
 VOLUME /conf /uploads
 
 WORKDIR /var/www/html/Lychee-Laravel
 
-COPY entrypoint.sh /entrypoint.sh
-COPY inject.sh /inject.sh
+COPY entrypoint.sh inject.sh /
 
-RUN chmod +x /entrypoint.sh
-RUN chmod +x /inject.sh
+RUN chmod +x /entrypoint.sh && \
+    chmod +x /inject.sh && \
+    mkdir /run/php
 
 ENTRYPOINT [ "/entrypoint.sh" ]
 
-CMD [ "apache2ctl", "-D", "FOREGROUND" ]
+CMD [ "nginx" ]
