@@ -37,14 +37,14 @@ echo "**** Inject .env values ****" && \
 echo "**** Create user and use PUID/PGID ****"
 PUID=${PUID:-1000}
 PGID=${PGID:-1000}
-if [ ! "$(id -u abc)" -eq "$PUID" ]; then usermod -o -u "$PUID" abc ; fi
-if [ ! "$(id -g abc)" -eq "$PGID" ]; then groupmod -o -g "$PGID" abc ; fi
-echo "  User uid:    $(id -u abc)"
-echo "  User gid:    $(id -g abc)"
+if [ ! "$(id -u "$USER")" -eq "$PUID" ]; then usermod -o -u "$PUID" "$USER" ; fi
+if [ ! "$(id -g "$USER")" -eq "$PGID" ]; then groupmod -o -g "$PGID" "$USER" ; fi
+echo -e " \tUser UID :\t$(id -u "$USER")"
+echo -e " \tUser GID :\t$(id -g "$USER")"
 
 echo "**** Set Permissions ****" && \
-chown -R abc:abc /conf
-chown -R abc:abc /uploads
+chown -R "$USER":"$USER" /conf
+chown -R "$USER":"$USER" /uploads
 chmod -R a+rw /uploads
 chown -R www-data:www-data /var/www/html/Lychee-Laravel/storage/logs
 

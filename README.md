@@ -46,6 +46,7 @@ bigrob8181/lychee-laravel
 
 PUID=1000  
 PGID=1000  
+USER=lychee
 PHP_TZ=America/New_York  
 MY_APP_NAME=Laravel  
 MY_APP_ENV=local  

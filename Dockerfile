@@ -4,51 +4,18 @@ FROM debian:buster-slim
 LABEL maintainer="bigrob8181"
 
 # environment variables
-ENV PUID=''
-ENV PGID=''
+ENV PUID='1000'
+ENV PGID='1000'
+ENV USER='lychee'
 ENV PHP_TZ=America/New_York
-# taken from .env file
-ENV MY_APP_NAME=''
-ENV MY_APP_ENV=''
-ENV MY_APP_DEBUG=''
-ENV MY_APP_URL=''
-ENV MY_LOG_CHANNEL=''
-ENV MY_DB_CONNECTION=''
-ENV MY_DB_HOST=''
-ENV MY_DB_PORT=''
-ENV MY_DB_DATABASE=''
-ENV MY_DB_USERNAME=''
-ENV MY_DB_PASSWORD=''
-ENV MY_DB_DROP_CLEAR_TABLES_ON_ROLLBACK=''
-ENV MY_DB_OLD_LYCHEE_PREFIX=''
-ENV MY_BROADCAST_DRIVER=''
-ENV MY_CACHE_DRIVER=''
-ENV MY_SESSION_DRIVER=''
-ENV MY_SESSION_LIFETIME=''
-ENV MY_QUEUE_DRIVER=''
-ENV MY_SECURITY_HEADER_HSTS_ENABLE=''
-ENV MY_REDIS_HOST=''
-ENV MY_REDIS_PASSWORD=''
-ENV MY_REDIS_PORT=''
-ENV MY_MAIL_DRIVER=''
-ENV MY_MAIL_HOST=''
-ENV MY_MAIL_PORT=''
-ENV MY_MAIL_USERNAME=''
-ENV MY_MAIL_PASSWORD=''
-ENV MY_MAIL_ENCRYPTION=''
-ENV MY_PUSHER_APP_ID=''
-ENV MY_PUSHER_APP_KEY=''
-ENV MY_PUSHER_APP_SECRET=''
-ENV MY_PUSHER_APP_CLUSTER=''
-
 
 RUN \
     echo "**** Add User and Group ****" && \
-    adduser --no-create-home --disabled-password abc
-
+    addgroup --gid "$PGID" "$USER" && \
+    adduser --no-create-home --disabled-password --uid "$PUID" --gid "$PGID" "$USER"
 
 RUN \
- echo "**** install Base dependencies ****" && \
+ echo "**** Install base dependencies ****" && \
  apt update && \
  apt install -y \
     bash \
@@ -73,7 +40,7 @@ RUN \
 
 
 RUN \
-    echo "**** install php libraries ****" && \
+    echo "**** Install PHP libraries ****" && \
     cd /var/www/html/Lychee-Laravel && \
     composer install --no-dev && \
     chown -R www-data:www-data \
@@ -86,7 +53,7 @@ RUN \
 
 
 RUN \
-    echo "**** Add custom Site to apache and enable it ****"
+    echo "**** Add custom site to apache and enable it ****"
 COPY default.conf /etc/apache2/sites-available/default.conf
 RUN \
     a2ensite default.conf && \
