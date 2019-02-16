@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/LycheeOrg/Lychee-Laravel-Docker.svg?branch=master)](https://travis-ci.com/LycheeOrg/Lychee-Laravel-Docker)
+
 ## Prerequsites ##
 
 *  You must have a database docker running **OR** create one in your docker-compose.yml.
