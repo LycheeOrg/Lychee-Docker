@@ -15,13 +15,6 @@ services:
 
 addons:
   mariadb: '10.3'
-  apt:
-    packages:
-      - php-pecl-http
-      - php-imagick
-      - php-mbstring
-      - php-json
-      - php-gd
 
 before_install:
   - mysql -e 'create database homestead_test;'
