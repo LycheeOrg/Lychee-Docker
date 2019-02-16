@@ -43,7 +43,7 @@ after_script:
   - docker stop $NAME && docker rm $NAME
 
 after_success:
-  - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD ;
+  - docker login -u $DOCKER_USERNAME -p $REGISTRY_PASS ;
     if [[ "$TRAVIS_BRANCH" == "tags" ]]; then
       docker tag $REPO':'$TRAVIS_TAG $REPO':latest' ;
       docker push $REPO':'$TRAVIS_TAG ;
