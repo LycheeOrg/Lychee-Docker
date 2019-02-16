@@ -32,7 +32,7 @@ install:
   - docker build -t $REPO':'$TRAVIS_BUILD_ID .
   - docker run -d --name=$NAME -e PUID=1000 -e PGID=1000 -e PHP_TZ=America/New_York
     -e MY_DB_CONNECTION=mysql -e MY_DB_HOST=mariadb -e MY_DB_PORT=3306 -e MY_DB_DATABASE=homestead_test
-    -e MY_DB_USERNAME=root -e MY_DB_PASSWORD= -p 127.0.0.1:80:80 $REPO
+    -e MY_DB_USERNAME=root -e MY_DB_PASSWORD= -p 127.0.0.1:80:80 $REPO':'$TRAVIS_BUILD_ID
 
 before_script:
 
