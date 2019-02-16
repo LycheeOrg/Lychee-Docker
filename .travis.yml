@@ -1,5 +1,5 @@
 os:
-- linux
+  - linux
 
 dist: xenial
 
@@ -7,36 +7,57 @@ sudo: required
 
 env:
   global:
-  - NAME=lychee-laravel-docker
-  - REPO=bigrob8181/lychee-laravel-docker
+    - NAME=lychee-laravel-docker
+    - REPO=bigrob8181/lychee-laravel-docker
   matrix:
-  - secure: aCIzUK/tXSwEeWZBWzUFkJLeXzlANKb7T3hRekIyjfT1DIxihMo7r0MKt3t3Q8nMsII2S+viNM9UefmY0111stWXjyfrz6umNqyMU1vClTjsjc4em6897IjoZ2TEbAHp1TPW2e+/2nK46/sOPb8jPKMDle2ECLQaM5pVYLsYTs3XoxcbwABJK2q/a3jDcOmT7Xku1y3Z3M4fQ/O+Wqi+mZQmGxiDr4cxGYmvVC+ghH1fLNzEvzmfKun/G9GL+7IsTlWsKs+quF3YcWfLcZ+c8RCjo7is24ckK8foAdQDjCAnRTrF1qB4rSfGnyuAXVbxZrqMmqNgmE5tGWiOcZbShN+tIIztTvLXEWu+Tob6rZ9RAk+EkG+UYACjrPfii4LceDHd688fmRPhRntkdOpPEHfgEaZchEZI3/ZsJ/bmMyzPeMnhcYz3vIhn/Y+gowbuXa8jdvhLyfQCBioUaBSg3f9Uiv7dKhi2f+7CQztz/rjVGBHmNgokAlZLbLcqTLec2y65VmJsu/vUllQemsEc722Y3PZq2K9+ElCIdD4Vz8JBsRd0+ahfnUCmlDBGpQxyo8Bc6q6CGF+8PJyf9lNTokwLtqOqvYJWfIeJFOXmShn4D/e0qzi7D7iZ4HKESI5QAQZONbVWz9g+43dv4nGN3mJ02ra46El1wbCVPwo1iek=
-  - secure: VDDyu+fuwFM5PJnadOgPJJo+Iw5bnmlC75iXl4lIc/b2lOI0eq9RN5qr+qayKxEF2nhBFa0n4zRqmJuMMW2Li25fYQq+0FNh86IrY/MG5F3XSIw/rYPUD+y1rOlE0GxgkBbCSVGea4z1bAfLK2USAVYLEy2697lcDKITeT++x4DFeSJSoAUYjwelvQexoXrs0rNXXanCJ6gdz85Sun85LguEUZNf64vTF57MNYwLmPhrKFpoisKNaszc2DQrFKd/tHU0hVH71wIstelRz3b5yBaDgncNZHWDU9gUGTGB61rJ01+GNHbDnxV1qTvyzKD33nPZTcteIJlEBuq2PpZxUNbPaayLCWisWKVKzi/1Y0wMw2Ai2QS38Ca4RGvHVJBuDC36xm8WwYc9JE1fvQLumzWHuFGBrMqL+avAnoWSm2aU+2GF3XLlj+ea1qHqMBpeiWMank1RczCteOZo+ndfhZvESq9Gp5U3ONzWVoYzVS/PdZMaViJo8mCcLRPpsBDRI1Kr8lnHYfShGanAI2hcNlF/ODoi3u5lQbf30+pTv/G+hAreC+Vipa52s70GWiltiXfj+x80IaTYkM6ZOC/RNMqa/mxumNT8Sps3QsKXbm/hcMq2xv+myLu0EJf0NrnabxNA7rRNijwtWEKe425YnhVbB4Z8YzCQwtzu/QOezuo=
+    - secure: aCIzUK/tXSwEeWZBWzUFkJLeXzlANKb7T3hRekIyjfT1DIxihMo7r0MKt3t3Q8nMsII2S+viNM9UefmY0111stWXjyfrz6umNqyMU1vClTjsjc4em6897IjoZ2TEbAHp1TPW2e+/2nK46/sOPb8jPKMDle2ECLQaM5pVYLsYTs3XoxcbwABJK2q/a3jDcOmT7Xku1y3Z3M4fQ/O+Wqi+mZQmGxiDr4cxGYmvVC+ghH1fLNzEvzmfKun/G9GL+7IsTlWsKs+quF3YcWfLcZ+c8RCjo7is24ckK8foAdQDjCAnRTrF1qB4rSfGnyuAXVbxZrqMmqNgmE5tGWiOcZbShN+tIIztTvLXEWu+Tob6rZ9RAk+EkG+UYACjrPfii4LceDHd688fmRPhRntkdOpPEHfgEaZchEZI3/ZsJ/bmMyzPeMnhcYz3vIhn/Y+gowbuXa8jdvhLyfQCBioUaBSg3f9Uiv7dKhi2f+7CQztz/rjVGBHmNgokAlZLbLcqTLec2y65VmJsu/vUllQemsEc722Y3PZq2K9+ElCIdD4Vz8JBsRd0+ahfnUCmlDBGpQxyo8Bc6q6CGF+8PJyf9lNTokwLtqOqvYJWfIeJFOXmShn4D/e0qzi7D7iZ4HKESI5QAQZONbVWz9g+43dv4nGN3mJ02ra46El1wbCVPwo1iek=
+    - secure: VDDyu+fuwFM5PJnadOgPJJo+Iw5bnmlC75iXl4lIc/b2lOI0eq9RN5qr+qayKxEF2nhBFa0n4zRqmJuMMW2Li25fYQq+0FNh86IrY/MG5F3XSIw/rYPUD+y1rOlE0GxgkBbCSVGea4z1bAfLK2USAVYLEy2697lcDKITeT++x4DFeSJSoAUYjwelvQexoXrs0rNXXanCJ6gdz85Sun85LguEUZNf64vTF57MNYwLmPhrKFpoisKNaszc2DQrFKd/tHU0hVH71wIstelRz3b5yBaDgncNZHWDU9gUGTGB61rJ01+GNHbDnxV1qTvyzKD33nPZTcteIJlEBuq2PpZxUNbPaayLCWisWKVKzi/1Y0wMw2Ai2QS38Ca4RGvHVJBuDC36xm8WwYc9JE1fvQLumzWHuFGBrMqL+avAnoWSm2aU+2GF3XLlj+ea1qHqMBpeiWMank1RczCteOZo+ndfhZvESq9Gp5U3ONzWVoYzVS/PdZMaViJo8mCcLRPpsBDRI1Kr8lnHYfShGanAI2hcNlF/ODoi3u5lQbf30+pTv/G+hAreC+Vipa52s70GWiltiXfj+x80IaTYkM6ZOC/RNMqa/mxumNT8Sps3QsKXbm/hcMq2xv+myLu0EJf0NrnabxNA7rRNijwtWEKe425YnhVbB4Z8YzCQwtzu/QOezuo=
 
 language: php
 
 php:
-- '7.2'
+  - '7.2'
 
 services:
-- docker
+  - docker
 
 addons:
   mariadb: '10.3'
 
 before_install:
-- mysql -e 'create database homestead_test;'
+  - mysql -e 'create database homestead_test;'
 
 install:
-- docker build -t $REPO .
-- docker run -d --name=$NAME -e PUID=1000 -e PGID=1000 -e PHP_TZ=America/New_York
-  -e MY_DB_CONNECTION=mysql -e MY_DB_HOST=mariadb -e MY_DB_PORT=3306 -e MY_DB_DATABASE=homestead_test
-  -e MY_DB_USERNAME=root -e MY_DB_PASSWORD= -p 127.0.0.1:80:80 $REPO
+  - docker build -t $REPO .
+  - docker run -d --name=$NAME -e PUID=1000 -e PGID=1000 -e PHP_TZ=America/New_York
+    -e MY_DB_CONNECTION=mysql -e MY_DB_HOST=mariadb -e MY_DB_PORT=3306 -e MY_DB_DATABASE=homestead_test
+    -e MY_DB_USERNAME=root -e MY_DB_PASSWORD= -p 127.0.0.1:80:80 $REPO
 
 before_script:
 
 script:
-- docker ps -a | awk '{print $NF}' | grep -w $NAME'_test' | cat
+  - docker ps -a | awk '{print $NF}' | grep -w $NAME'_test' | cat
 
 after_script:
-- docker stop $NAME'_test' && docker rm $NAME'_test'
+  - docker stop $NAME'_test' && docker rm $NAME'_test'
+
+after_success:
+  - if [[ "$TRAVIS_BRANCH" == "master" ]]; then
+    docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD ;
+      docker push $REPO':dev' ;
+    fi
+  - if [[ "$TRAVIS_BRANCH" == "tags" ]]; then
+    docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD ;
+      docker push $REPO':dev' ;
+      docker tag $REPO':'$TRAVIS_TAG $REPO':latest' ;
+      docker push $REPO':'$TRAVIS_TAG ;
+      docker push $REPO':latest' ;
+    fi
+
+#deploy:
+#  provider: releases
+#  api_key: "GITHUB OAUTH TOKEN"
+#  file: "FILE TO UPLOAD"
+#  skip_cleanup: true
+#  on:
+#    tags: true
