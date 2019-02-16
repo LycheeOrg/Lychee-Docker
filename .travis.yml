@@ -9,7 +9,6 @@ env:
   global:
     - NAME=lychee-laravel
     - REPO=bigrob8181/lychee-laravel
-    - REGISTRY_USER=bigrob8181
   matrix:
     - secure: "FXXbM8yDCuf9h17rAyO63XCgI2wJ5EKROY3u1MNxudz54sz3VloZ/SNnVqzdjzYPX9LXfCxVpaDhNLmQtNbqYXg4WBq+5ZuuS0efxFgVaBK0HK6lVoS3/BsJR/U1cglag0Apn2wjFgL3j7d2ZREeG7WIEuDHW5QWcVWhFGWvcAG9JRChFostdde1wbZ6SLTTW2SZFypoRThIdh5PCOnX1oCCmfzeTiCy74uTaiOkkOWsseWeDBy09UrDsFDKd8WX9R7E7g9arv4f9tjzmk1ikQM6Bnfa4YONsY9NjiKFS7/1qfXqg6Z5WfuNr+tW90KrXlk3quCPTn9PEThfqJkgS3BcsLwdhM0OUPx0BXml3RFzYl7jrtj6Wg1vSh6JJIrCh6YrBvg62qRgBs8VPI7QJ60VC56QjhZCiH1YjkjKF0+vVSygC6oJ8wsSciFGu3Cfi4ix6K8iCN90URr6YGl7WOANgfzBTwil/w1Q3IKmzNj6K2UWD+Dm92k/7dkJ2/N5gZ8LUmqhxs5nRzLBZvm77xp/ykRtadP5MHC6HTVHBM6f4tfe6jLWWSi4D8GzQX5sN6Xd2VhvifFsxQeexobhxA918ZjxvUgXHP8mng/WUYccr8DJQmom6uyXpqNpVXGRbjW4CVmgLGBZ05+lgBEmqkyEiXggNRcZipi4E9FICys="
     - secure: "fbRpdrR5C9NzRppEj8EYzmkEKnZrHng5iq6DRcFocKk+YO4JVKYJhvseVtbnmbxufw44CZcfmwrq5CCF/nec4nSYg0ggNwVX6MtoQFd2CuWvuXBCxBvTk+K/pfNlpEVtTNYoRX00PvIscZMh9RxK6qxQYzIqQLIqbPPsOnvTlVT7DLlr2ba2e35l5l5cgEB8mzZXGH6ghUadx6Xmhh+3S9JA3WXsm14a63fZ3kL8xBh4E2Ed7wlnsJIY3X59RpqxyC8V1+mkAIlCCIeNVtj04gF1cEknQ5CG+HFdUQbqszOlYMkkejYWVoXZeCsKz3ztW9aD2x9K2yBeMeNB6WMtzk2AVtC5QVrSYMsoUWCy/E3mAU84NCV0qYc9cV2xRua4E1AJx83RP8bTzPf5ggsv5G8oZqYsy3S60Jvxa1c/VSCi1t6KDCl+eRuPefUCv0na5WrS0yDEwe+lwJkzyKny7oNxGenejOvVmhPiJti9ZjcuK4AvBg6xe15h/W2EIkWqKvnCZ6NJjpt0cEIcSzJ0p/N5j5n/MjUqUjE3sYcRzMrbYdzVuJbJdApHb5GilRincEwTJ4xhb7iK1TGf7mGSLy9mB3/cZnDga5FLaT7nwOjUX9FcKnimmIvI0jOMVGuXEhsNKzSn2QcuiIpM/qReIPHfOU8eiXmxnkAf+DrYCpw="
@@ -62,7 +61,7 @@ deploy:
   provider: releases
   api_key: $GITHUB_OAUTH
   file_glob: true
-  file: *
+  file: /*
   skip_cleanup: true
   on:
     tags: true
