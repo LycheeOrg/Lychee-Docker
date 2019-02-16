@@ -29,7 +29,7 @@ before_install:
 #  - chmod +x deploy.sh
 
 install:
-  - docker build -t $REPO':$TRAVIS_BUILD_ID' .
+  - docker build -t $REPO':'$TRAVIS_BUILD_ID .
   - docker run -d --name=$NAME -e PUID=1000 -e PGID=1000 -e PHP_TZ=America/New_York
     -e MY_DB_CONNECTION=mysql -e MY_DB_HOST=mariadb -e MY_DB_PORT=3306 -e MY_DB_DATABASE=homestead_test
     -e MY_DB_USERNAME=root -e MY_DB_PASSWORD= -p 127.0.0.1:80:80 $REPO
@@ -44,15 +44,13 @@ after_script:
 
 after_success:
   - docker login -u $REGISTRY_USER -p $REGISTRY_PASS ;
-    if [[ "$TRAVIS_BRANCH" == "tags" ]]; then
+  - if [[ "$TRAVIS_BRANCH" == "tags" ]]; then
       docker tag $REPO':'$TRAVIS_TAG $REPO':latest' ;
       docker push $REPO':'$TRAVIS_TAG ;
       docker push $REPO':latest' ;
     elif [[ "$TRAVIS_BRANCH" == "master" ]]; then
-      #docker tag $REPO':dev' ;
       docker push $REPO':dev' ;
     else
-      #docker tag $REPO':testing' ;
       docker push $REPO':testing' ;
     fi
 
