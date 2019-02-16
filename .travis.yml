@@ -1,0 +1,40 @@
+os:
+  - linux
+
+sudo: required
+
+dist: xenial
+
+language: php
+
+php:
+  - '7.2'
+
+services:
+  - docker
+
+addons:
+  mariadb: '10.3'
+  apt:
+    packages:
+      - php-pecl-http
+      - php-imagick
+      - php-mbstring
+      - php-json
+      - php-gd
+
+install:
+  - docker build -t lychee-laravel_test .
+  - docker run -d --name=lychee-laravel_test -e PUID=1000 -e PGID=1000 -e PHP_TZ=America/New_York -e MY_DB_CONNECTION=mysql -e MY_DB_HOST=mariadb -e MY_DB_PORT=3306 -e MY_DB_DATABASE=homestead_test -e MY_DB_USERNAME=root -e MY_DB_PASSWORD= -p 127.0.0.1:80:80
+   # --link db_name bigrob8181/lychee-laravel
+#  - docker run -d --name=lychee-laravel_test -v /host_path/lychee-laravel/conf:/conf -v /host_path/lychee-laravel/uploads:/uploads -e PUID=1000 -e PGID=1000 -e PHP_TZ=America/New_York -e MY_DB_CONNECTION=mysql -e MY_DB_HOST=mariadb -e MY_DB_PORT=3306 -e MY_DB_DATABASE=homestead_test -e MY_DB_USERNAME=root -e MY_DB_PASSWORD= -p 90:80 --link db_name bigrob8181/lychee-laravel
+
+before_script:
+  - printf "\n" | pecl install imagick
+  - cp .env.travis .env
+  - mysql -e 'create database homestead_test;'
+
+script:
+  - docker ps -a | awk '{print $NF}' | grep -w 'lychee-laravel_test' | cat
+
+after_script:
