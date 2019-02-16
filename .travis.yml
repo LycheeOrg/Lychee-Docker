@@ -23,18 +23,18 @@ addons:
       - php-json
       - php-gd
 
+before_install:
+  - mysql -e 'create database homestead_test;'
+
 install:
-  - docker build -t lychee-laravel_test .
-  - docker run -d --name=lychee-laravel_test -e PUID=1000 -e PGID=1000 -e PHP_TZ=America/New_York -e MY_DB_CONNECTION=mysql -e MY_DB_HOST=mariadb -e MY_DB_PORT=3306 -e MY_DB_DATABASE=homestead_test -e MY_DB_USERNAME=root -e MY_DB_PASSWORD= -p 127.0.0.1:80:80
-   # --link db_name bigrob8181/lychee-laravel
+  - docker build -t LycheeOrg/lychee-laravel_test .
+  - docker run -d --name=lychee-laravel_test -e PUID=1000 -e PGID=1000 -e PHP_TZ=America/New_York -e MY_DB_CONNECTION=mysql -e MY_DB_HOST=mariadb -e MY_DB_PORT=3306 -e MY_DB_DATABASE=homestead_test -e MY_DB_USERNAME=root -e MY_DB_PASSWORD= -p 127.0.0.1:80:80 --link homestead_test LycheeOrg/lychee-laravel_test
 #  - docker run -d --name=lychee-laravel_test -v /host_path/lychee-laravel/conf:/conf -v /host_path/lychee-laravel/uploads:/uploads -e PUID=1000 -e PGID=1000 -e PHP_TZ=America/New_York -e MY_DB_CONNECTION=mysql -e MY_DB_HOST=mariadb -e MY_DB_PORT=3306 -e MY_DB_DATABASE=homestead_test -e MY_DB_USERNAME=root -e MY_DB_PASSWORD= -p 90:80 --link db_name bigrob8181/lychee-laravel
 
 before_script:
-  - printf "\n" | pecl install imagick
-  - cp .env.travis .env
-  - mysql -e 'create database homestead_test;'
 
 script:
   - docker ps -a | awk '{print $NF}' | grep -w 'lychee-laravel_test' | cat
 
 after_script:
+  - docker stop 'lychee-laravel_test' && docker rm 'lychee-laravel_test'
