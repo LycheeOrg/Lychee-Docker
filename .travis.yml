@@ -9,10 +9,6 @@ env:
   global:
     - NAME=lychee-laravel-docker
     - REPO=bigrob8181/lychee-laravel-docker
-    - DEV=bigrob8181/lychee-laravel-docker:dev
-    - RELEASE=bigrob8181/lychee-laravel-docker:$TRAVIS_TAG
-    - TESTING=bigrob8181/lychee-laravel-docker:$TRAVIS_BUILD_NUMBER
-    - LATEST=bigrob8181/lychee-laravel-docker:latest
   matrix:
     #- secure: aCIzUK/tXSwEeWZBWzUFkJLeXzlANKb7T3hRekIyjfT1DIxihMo7r0MKt3t3Q8nMsII2S+viNM9UefmY0111stWXjyfrz6umNqyMU1vClTjsjc4em6897IjoZ2TEbAHp1TPW2e+/2nK46/sOPb8jPKMDle2ECLQaM5pVYLsYTs3XoxcbwABJK2q/a3jDcOmT7Xku1y3Z3M4fQ/O+Wqi+mZQmGxiDr4cxGYmvVC+ghH1fLNzEvzmfKun/G9GL+7IsTlWsKs+quF3YcWfLcZ+c8RCjo7is24ckK8foAdQDjCAnRTrF1qB4rSfGnyuAXVbxZrqMmqNgmE5tGWiOcZbShN+tIIztTvLXEWu+Tob6rZ9RAk+EkG+UYACjrPfii4LceDHd688fmRPhRntkdOpPEHfgEaZchEZI3/ZsJ/bmMyzPeMnhcYz3vIhn/Y+gowbuXa8jdvhLyfQCBioUaBSg3f9Uiv7dKhi2f+7CQztz/rjVGBHmNgokAlZLbLcqTLec2y65VmJsu/vUllQemsEc722Y3PZq2K9+ElCIdD4Vz8JBsRd0+ahfnUCmlDBGpQxyo8Bc6q6CGF+8PJyf9lNTokwLtqOqvYJWfIeJFOXmShn4D/e0qzi7D7iZ4HKESI5QAQZONbVWz9g+43dv4nGN3mJ02ra46El1wbCVPwo1iek=
     - secure: "Rluj5G4DIRpzCh6Go0H5QBNQvFoUXeAuwZrMco6Vf20rJzgnYLIaaArnpH7U18/8K94aqBheVhvNE/uwgRs87pDzK/nT6u+kUDxpZdBkhIO5yj+6/SvO1xDiZHMMudAs3ngRP0BbtRv96MMOBZkjcxptQrpH2VO2KooFtjXl10UQAXDn4x7H49FWVLfREVSrdUYT2W9b9JxWH51vxt/E+Ec2wu2XiZvxX6kKJCGOPLjMWM+JMhzqvXtP7FiUakTfcMKidPAJfjDI5gGsChtfawEz7qrZfBl9NTdKBOwfg3VRYC4YboKxPud0XYfxqrM0J9i5HiwoKg4i8mednGY44CLIP6lSG4chV9Qmh6yzsTWAyhf0RKZ+BFxmpYtMI4HEVmLZHwCtPnz2XyoLpBpSoxTghbd5wNelGQyTcSZCR7Y/DMf96pxvl5+JreC4Wxd1g5wm5fi2NaI1esf9dM0N4Kgiq0VN72YT3dSq5WgS2451geXa1SvKfnQi2c6xDNtQdxll3OHgbpaF1m3Z1BbqKDPKAoXsiGgB4uw7EHHYKsFl9SNkT5Guk2JMX2mKEzAQ4PeaE6jfKcrQkl7BgccO5yWQtX6fyR1LC0q+kyig9T3UQ9mH7SnGufHiI4NiMCI3ngQ03trJIey2tU5BjPPoKRtn3MSYig2DP9SEsC0JizA="
@@ -30,6 +26,7 @@ addons:
 
 before_install:
   - mysql -e 'create database homestead_test;'
+  - docker login -u $REGISTRY_USER -p $REGISTRY_PASS ;
 
 install:
   - docker build --pull -t $REPO':'$TRAVIS_BUILD_NUMBER .
@@ -47,7 +44,7 @@ after_script:
 
 after_success:
   - docker images ;
-  - docker login -u "$REGISTRY_USER" -p "$REGISTRY_PASS" ;
+  - docker login -u $REGISTRY_USER -p $REGISTRY_PASS ;
   - if [[ "$TRAVIS_BRANCH" == "tags" ]]; then
       docker tag $REPO':'$TRAVIS_NUMBER $REPO':latest' ;
       docker tag $REPO':'$TRAVIS_NUMBER $REPO':'$TRAVIS_TAG ;
