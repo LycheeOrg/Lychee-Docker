@@ -42,15 +42,16 @@ after_script:
   - docker stop $NAME && docker rm $NAME
 
 after_success:
-  - docker images ;
   - docker login -u $REGISTRY_USER -p $REGISTRY_PASS ;
   - if [[ "$TRAVIS_BRANCH" == "tags" ]]; then
       docker tag $REPO':'$TRAVIS_TAG $REPO':latest' ;
       docker push $REPO':'$TRAVIS_TAG ;
       docker push $REPO':latest' ;
     elif [[ "$TRAVIS_BRANCH" == "master" ]]; then
+      docker tag $REPO':'$TRAVIS_BUILD_ID $REPO':dev' ;
       docker push $REPO':dev' ;
     else
+      docker tag $REPO':'$TRAVIS_BUILD_ID $REPO':dev' ;
       docker push $REPO':testing' ;
     fi
 
