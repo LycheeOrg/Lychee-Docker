@@ -6,9 +6,8 @@
 
 1.  Create the db, username, password.
 2.  Edit the environment variables:
-    *  After the first run, edit the /conf/.env file with the appropriate info
-    *  **OR**
-    *  Supply the environment variables via docker run/docker-compose
+    *  Supply the environment variables via `docker run` / `docker-compose`, **or**
+    *  Create a `.env` file with the appropriate info and mount it to `/conf`.
 
 ## Example docker run command ##
 
@@ -25,12 +24,12 @@ docker run -d \
 -e PUID=1000 \
 -e PGID=1000 \
 -e PHP_TZ=America/New_York \
--e MY_DB_CONNECTION=mysql \
--e MY_DB_HOST=mariadb \
--e MY_DB_PORT=3306 \
--e MY_DB_DATABASE=homestead \
--e MY_DB_USERNAME=homestead \
--e MY_DB_PASSWORD=secret \
+-e DB_CONNECTION=mysql \
+-e DB_HOST=mariadb \
+-e DB_PORT=3306 \
+-e DB_DATABASE=homestead \
+-e DB_USERNAME=homestead \
+-e DB_PASSWORD=secret \
 -p 90:80 \
 --net network_name \
 --link db_name \
@@ -39,43 +38,16 @@ bigrob8181/lychee-laravel
 
 ## Example docker-compose.yml ##
 
-[docker-compose.yml](https://gitlab.landry.me/Dockerfile/lychee-laravel/blob/master/docker-compose.yml)  
-<!--- [docker-compose-database.yml](https://gitlab.landry.me/Dockerfile/lychee-laravel/blob/master/docker-compose-database.yml) -->
+Change the environment variable in the [provided example](docker-compose.yml) to reflect your database credentials.
+
+Note that in order to avoid writing credentials directly into the file, you can create a `db_secrets.env` and use the `env_file` directive (see the [docs](https://docs.docker.com/compose/environment-variables/#the-env_file-configuration-option)).
 
 ## Available Environment Variables and defaults ##
 
-PUID=1000  
-PGID=1000  
-PHP_TZ=America/New_York  
-MY_APP_NAME=Laravel  
-MY_APP_ENV=local  
-MY_APP_DEBUG=true  
-MY_APP_URL=http://localhost  
-MY_LOG_CHANNEL=stack  
-MY_DB_CONNECTION=mysql  
-MY_DB_HOST=mariadb  
-MY_DB_PORT=3306  
-MY_DB_DATABASE=homestead  
-MY_DB_USERNAME=homestead  
-MY_DB_PASSWORD=secret  
-MY_DB_DROP_CLEAR_TABLES_ON_ROLLBACK=false  
-MY_DB_OLD_LYCHEE_PREFIX=''  
-MY_BROADCAST_DRIVER=log  
-MY_CACHE_DRIVER=file  
-MY_SESSION_DRIVER=file  
-MY_SESSION_LIFETIME=120  
-MY_QUEUE_DRIVER=sync  
-MY_SECURITY_HEADER_HSTS_ENABLE=false  
-MY_REDIS_HOST=127.0.0.1  
-MY_REDIS_PASSWORD=null  
-MY_REDIS_PORT=6379  
-MY_MAIL_DRIVER=smtp  
-MY_MAIL_HOST=smtp.mailtrap.io  
-MY_MAIL_PORT=2525  
-MY_MAIL_USERNAME=null  
-MY_MAIL_PASSWORD=null  
-MY_MAIL_ENCRYPTION=null  
-MY_PUSHER_APP_ID=''  
-MY_PUSHER_APP_KEY=''  
-MY_PUSHER_APP_SECRET=''  
-MY_PUSHER_APP_CLUSTER=mt1  
+If you do not provide environment variables or `.conf` file, the [example env file](https://github.com/LycheeOrg/Lychee-Laravel/blob/master/.env.example) will be used with some values already set by default.
+
+Some variables are specific to Docker, and the default values are :
+* PUID=1000  
+* PGID=1000  
+* USER=lychee
+* PHP_TZ=America/New_York  

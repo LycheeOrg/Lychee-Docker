@@ -1,31 +1,29 @@
-#!/bin/bash
+#!/bin/sh
 
 echo "**** Starting the Entrypoint Script ****"
 set -e
 
-
 echo "**** Make sure the /conf and /uploads folders exist ****"
-[[ ! -f /conf ]] && \
+[ ! -f /conf ] && \
 	mkdir -p /conf
-[[ ! -f /uploads ]] && \
+[ ! -f /uploads ] && \
 	mkdir -p /uploads
 
 echo "**** Create the symbolic link for the /uploads folder ****"
-[[ ! -L /var/www/html/Lychee-Laravel/public/uploads ]] && \
+[ ! -L /var/www/html/Lychee-Laravel/public/uploads ] && \
 	cp -r /var/www/html/Lychee-Laravel/public/uploads/* /uploads && \
 	rm -r /var/www/html/Lychee-Laravel/public/uploads && \
 	ln -s /uploads /var/www/html/Lychee-Laravel/public/uploads
 
 echo "**** Copy the .env to /conf ****" && \
-[[ ! -e /conf/.env ]] && \
+[ ! -e /conf/.env ] && \
 	cp /var/www/html/Lychee-Laravel/.env.example /conf/.env
-[[ ! -L /var/www/html/Lychee-Laravel/.env ]] && \
+[ ! -L /var/www/html/Lychee-Laravel/.env ] && \
 	ln -s /conf/.env /var/www/html/Lychee-Laravel/.env
 echo "**** Inject .env values ****" && \
 	/inject.sh
 
-
-[[ ! -e /tmp/first_run ]] && \
+[ ! -e /tmp/first_run ] && \
 	echo "**** Generate the key (to make sure that cookies cannot be decrypted etc) ****" && \
 	cd /var/www/html/Lychee-Laravel && \
 	./artisan key:generate && \
@@ -37,16 +35,17 @@ echo "**** Inject .env values ****" && \
 echo "**** Create user and use PUID/PGID ****"
 PUID=${PUID:-1000}
 PGID=${PGID:-1000}
-if [ ! "$(id -u abc)" -eq "$PUID" ]; then usermod -o -u "$PUID" abc ; fi
-if [ ! "$(id -g abc)" -eq "$PGID" ]; then groupmod -o -g "$PGID" abc ; fi
-echo "  User uid:    $(id -u abc)"
-echo "  User gid:    $(id -g abc)"
+if [ ! "$(id -u "$USER")" -eq "$PUID" ]; then usermod -o -u "$PUID" "$USER" ; fi
+if [ ! "$(id -g "$USER")" -eq "$PGID" ]; then groupmod -o -g "$PGID" "$USER" ; fi
+echo -e " \tUser UID :\t$(id -u "$USER")"
+echo -e " \tUser GID :\t$(id -g "$USER")"
 
 echo "**** Set Permissions ****" && \
-chown -R abc:abc /conf
-chown -R abc:abc /uploads
+chown -R "$USER":"$USER" /conf
+chown -R "$USER":"$USER" /uploads
 chmod -R a+rw /uploads
-chown -R www-data:www-data /var/www/html/Lychee-Laravel/storage/logs
+chown -R www-data:www-data /var/www/html/Lychee-Laravel
 
 echo "**** Setup complete, starting the server. ****"
+php-fpm7.3
 exec $@
