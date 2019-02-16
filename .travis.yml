@@ -28,77 +28,38 @@ services:
 addons:
   mariadb: '10.3'
 
-stages:
-  - before
-  - build_release
-    if branch = tags
-  - build_dev
-    if branch = master
-  - build_all
-  - test_release
-    if branch = tags
-  - test_dev
-    if branch = master
-  - test_all
-  - after
-  - deploy_release
-    if branch = tags
-  - deploy_dev
-    if branch = master
-  - deploy_all
+before_install:
+  - mysql -e 'create database homestead_test;'
 
+install:
+  - docker build --pull -t $REPO':'$TRAVIS_BUILD_NUMBER .
+  - docker run -d --name=$NAME -e PUID=1000 -e PGID=1000 -e PHP_TZ=America/New_York
+    -e DB_CONNECTION=mysql -e DB_HOST=mariadb -e DB_PORT=3306 -e DB_DATABASE=homestead_test
+    -e DB_USERNAME=root -e DB_PASSWORD= -p 127.0.0.1:80:80 $REPO':'$TRAVIS_BUILD_NUMBER
 
-jobs:
-  include:
-    - stage: before
-      script: mysql -e 'create database homestead_test;'
-    - stage: build_release
-      script:
-        - docker build --pull -t $RELEASE .
-    - stage: build_dev
-      script:
-        - docker build --pull -t $DEV .
-    - stage: build_all
-      script:
-        - docker build --pull -t $TESTING .
-    - stage: test_release
-      script:
-        - docker run -d --name=$NAME -e PUID=1000 -e PGID=1000 -e PHP_TZ=America/New_York
-          -e MY_DB_CONNECTION=mysql -e MY_DB_HOST=mariadb -e MY_DB_PORT=3306 -e MY_DB_DATABASE=homestead_test
-          -e MY_DB_USERNAME=root -e MY_DB_PASSWORD= -p 127.0.0.1:80:80 $RELEASE
-        - docker ps -a | awk '{print $NF}' | grep -w $NAME | cat
-    - stage: test_dev
-      script:
-        - docker run -d --name=$NAME -e PUID=1000 -e PGID=1000 -e PHP_TZ=America/New_York
-          -e MY_DB_CONNECTION=mysql -e MY_DB_HOST=mariadb -e MY_DB_PORT=3306 -e MY_DB_DATABASE=homestead_test
-          -e MY_DB_USERNAME=root -e MY_DB_PASSWORD= -p 127.0.0.1:80:80 $DEV
-        - docker ps -a | awk '{print $NF}' | grep -w $NAME | cat
-    - stage: test_all
-      script:
-        - docker run -d --name=$NAME -e PUID=1000 -e PGID=1000 -e PHP_TZ=America/New_York
-          -e MY_DB_CONNECTION=mysql -e MY_DB_HOST=mariadb -e MY_DB_PORT=3306 -e MY_DB_DATABASE=homestead_test
-          -e MY_DB_USERNAME=root -e MY_DB_PASSWORD= -p 127.0.0.1:80:80 $TESTING
-        - docker ps -a | awk '{print $NF}' | grep -w $NAME | cat
-    - stage: after
-      script:
-        - docker stop $NAME && docker rm $NAME
-    - stage: deploy_release
-      script:
-        - docker images ;
-        - docker login -u $REGISTRY_USER -p $REGISTRY_PASS ;
-        - docker tag $RELEASE $LATEST ;
-        - docker push $RELEASE ;
-        - docker push $LATEST ;
-    - stage: deploy_dev
-      script:
-        - docker images ;
-        - docker login -u $REGISTRY_USER -p $REGISTRY_PASS ;
-        - docker push $DEV ;
-    - stage: deploy_all
-      script:
-        - docker images ;
-        - docker login -u $REGISTRY_USER -p $REGISTRY_PASS ;
-        - docker push $TESTING ;
+before_script:
+
+script:
+  - docker ps -a | awk '{print $NF}' | grep -w $NAME | cat
+
+after_script:
+  - docker stop $NAME && docker rm $NAME
+
+after_success:
+  - docker images ;
+  - docker login -u $REGISTRY_USER -p $REGISTRY_PASS ;
+  - if [[ "$TRAVIS_BRANCH" == "tags" ]]; then
+      docker tag $REPO':'$TRAVIS_NUMBER $REPO':latest' ;
+      docker tag $REPO':'$TRAVIS_NUMBER $REPO':'$TRAVIS_TAG ;
+      docker push $REPO':'$TRAVIS_TAG ;
+      docker push $REPO':latest' ;
+    elif [[ "$TRAVIS_BRANCH" == "master" ]]; then
+      docker tag $REPO':'$TRAVIS_BUILD_NUMBER $REPO':dev' ;
+      docker push $REPO':dev' ;
+    else
+      docker tag $REPO':'$TRAVIS_BUILD_NUMBER $REPO':testing' ;
+      docker push $REPO':testing' ;
+    fi
 
 
 #deploy:
