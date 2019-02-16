@@ -47,7 +47,7 @@ after_script:
 
 after_success:
   - docker images ;
-  - docker login -u $REGISTRY_USER -p $REGISTRY_PASS ;
+  - docker login -u "$REGISTRY_USER" -p "$REGISTRY_PASS" ;
   - if [[ "$TRAVIS_BRANCH" == "tags" ]]; then
       docker tag $REPO':'$TRAVIS_NUMBER $REPO':latest' ;
       docker tag $REPO':'$TRAVIS_NUMBER $REPO':'$TRAVIS_TAG ;
