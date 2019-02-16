@@ -37,13 +37,14 @@ install:
 before_script:
 
 script:
-  - docker ps -a | awk '{print $NF}' | grep -w $NAME'_test' | cat
+  - docker ps -a | awk '{print $NF}' | grep -w $NAME | cat
 
 after_script:
-  - docker stop $NAME'_test' && docker rm $NAME'_test'
+  - docker stop $NAME && docker rm $NAME
 
-after_success:
-  - ./deploy.sh
+deploy:
+  - provider: script
+    script: bash deploy.sh
 
 #deploy:
 #  provider: releases
