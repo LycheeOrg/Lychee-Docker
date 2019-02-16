@@ -27,7 +27,7 @@ before_install:
 
 install:
   - docker build -t $REPO'_test' .
-  - docker run -d --name=$NAME'_test' -e PUID=1000 -e PGID=1000 -e PHP_TZ=America/New_York -e MY_DB_CONNECTION=mysql -e MY_DB_HOST=mariadb -e MY_DB_PORT=3306 -e MY_DB_DATABASE=homestead_test -e MY_DB_USERNAME=root -e MY_DB_PASSWORD= -p 127.0.0.1:80:80 --link homestead_test $REPO'_test'
+  - docker run -d --name=$NAME'_test' -e PUID=1000 -e PGID=1000 -e PHP_TZ=America/New_York -e MY_DB_CONNECTION=mysql -e MY_DB_HOST=mariadb -e MY_DB_PORT=3306 -e MY_DB_DATABASE=homestead_test -e MY_DB_USERNAME=root -e MY_DB_PASSWORD= -p 127.0.0.1:80:80 $REPO'_test'
 #  - docker run -d --name=lychee-laravel_test -v /host_path/lychee-laravel/conf:/conf -v /host_path/lychee-laravel/uploads:/uploads -e PUID=1000 -e PGID=1000 -e PHP_TZ=America/New_York -e MY_DB_CONNECTION=mysql -e MY_DB_HOST=mariadb -e MY_DB_PORT=3306 -e MY_DB_DATABASE=homestead_test -e MY_DB_USERNAME=root -e MY_DB_PASSWORD= -p 90:80 --link db_name bigrob8181/lychee-laravel
 
 before_script:
