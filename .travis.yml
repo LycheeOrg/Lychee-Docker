@@ -9,6 +9,10 @@ env:
   global:
     - NAME=lychee-laravel-docker
     - REPO=bigrob8181/lychee-laravel-docker
+    - DEV=bigrob8181/$CI_PROJECT_NAME:dev
+    - RELEASE=bigrob8181/$CI_PROJECT_NAME:$TRAVIS_BUILD_ID
+    - TESTING=bigrob8181/$CI_PROJECT_NAME:$TRAVIS_BUILD_NUMBER
+    - LATEST=bigrob8181/$CI_PROJECT_NAME:latest
   matrix:
     - secure: aCIzUK/tXSwEeWZBWzUFkJLeXzlANKb7T3hRekIyjfT1DIxihMo7r0MKt3t3Q8nMsII2S+viNM9UefmY0111stWXjyfrz6umNqyMU1vClTjsjc4em6897IjoZ2TEbAHp1TPW2e+/2nK46/sOPb8jPKMDle2ECLQaM5pVYLsYTs3XoxcbwABJK2q/a3jDcOmT7Xku1y3Z3M4fQ/O+Wqi+mZQmGxiDr4cxGYmvVC+ghH1fLNzEvzmfKun/G9GL+7IsTlWsKs+quF3YcWfLcZ+c8RCjo7is24ckK8foAdQDjCAnRTrF1qB4rSfGnyuAXVbxZrqMmqNgmE5tGWiOcZbShN+tIIztTvLXEWu+Tob6rZ9RAk+EkG+UYACjrPfii4LceDHd688fmRPhRntkdOpPEHfgEaZchEZI3/ZsJ/bmMyzPeMnhcYz3vIhn/Y+gowbuXa8jdvhLyfQCBioUaBSg3f9Uiv7dKhi2f+7CQztz/rjVGBHmNgokAlZLbLcqTLec2y65VmJsu/vUllQemsEc722Y3PZq2K9+ElCIdD4Vz8JBsRd0+ahfnUCmlDBGpQxyo8Bc6q6CGF+8PJyf9lNTokwLtqOqvYJWfIeJFOXmShn4D/e0qzi7D7iZ4HKESI5QAQZONbVWz9g+43dv4nGN3mJ02ra46El1wbCVPwo1iek=
 #    - secure: VDDyu+fuwFM5PJnadOgPJJo+Iw5bnmlC75iXl4lIc/b2lOI0eq9RN5qr+qayKxEF2nhBFa0n4zRqmJuMMW2Li25fYQq+0FNh86IrY/MG5F3XSIw/rYPUD+y1rOlE0GxgkBbCSVGea4z1bAfLK2USAVYLEy2697lcDKITeT++x4DFeSJSoAUYjwelvQexoXrs0rNXXanCJ6gdz85Sun85LguEUZNf64vTF57MNYwLmPhrKFpoisKNaszc2DQrFKd/tHU0hVH71wIstelRz3b5yBaDgncNZHWDU9gUGTGB61rJ01+GNHbDnxV1qTvyzKD33nPZTcteIJlEBuq2PpZxUNbPaayLCWisWKVKzi/1Y0wMw2Ai2QS38Ca4RGvHVJBuDC36xm8WwYc9JE1fvQLumzWHuFGBrMqL+avAnoWSm2aU+2GF3XLlj+ea1qHqMBpeiWMank1RczCteOZo+ndfhZvESq9Gp5U3ONzWVoYzVS/PdZMaViJo8mCcLRPpsBDRI1Kr8lnHYfShGanAI2hcNlF/ODoi3u5lQbf30+pTv/G+hAreC+Vipa52s70GWiltiXfj+x80IaTYkM6ZOC/RNMqa/mxumNT8Sps3QsKXbm/hcMq2xv+myLu0EJf0NrnabxNA7rRNijwtWEKe425YnhVbB4Z8YzCQwtzu/QOezuo=
@@ -24,36 +28,77 @@ services:
 addons:
   mariadb: '10.3'
 
-before_install:
-  - mysql -e 'create database homestead_test;'
+stages:
+  - before
+  - build_release
+    if branch = tags
+  - build_dev
+    if branch = master
+  - build_all
+  - test_release
+    if branch = tags
+  - test_dev
+    if branch = master
+  - test_all
+  - after
+  - deploy_release
+    if branch = tags
+  - deploy_dev
+    if branch = master
+  - deploy_all
 
-install:
-  - docker build -t $REPO':'$TRAVIS_BUILD_ID .
-  - docker run -d --name=$NAME -e PUID=1000 -e PGID=1000 -e PHP_TZ=America/New_York
-    -e MY_DB_CONNECTION=mysql -e MY_DB_HOST=mariadb -e MY_DB_PORT=3306 -e MY_DB_DATABASE=homestead_test
-    -e MY_DB_USERNAME=root -e MY_DB_PASSWORD= -p 127.0.0.1:80:80 $REPO':'$TRAVIS_BUILD_ID
 
-before_script:
-
-script:
-  - docker ps -a | awk '{print $NF}' | grep -w $NAME | cat
-
-after_script:
-  - docker stop $NAME && docker rm $NAME
-
-after_success:
-  - docker login -u $REGISTRY_USER -p $REGISTRY_PASS ;
-  - if [[ "$TRAVIS_BRANCH" == "tags" ]]; then
-      docker tag $REPO':'$TRAVIS_TAG $REPO':latest' ;
-      docker push $REPO':'$TRAVIS_TAG ;
-      docker push $REPO':latest' ;
-    elif [[ "$TRAVIS_BRANCH" == "master" ]]; then
-      docker tag $REPO':'$TRAVIS_BUILD_ID $REPO':dev' ;
-      docker push $REPO':dev' ;
-    else
-      docker tag $REPO':'$TRAVIS_BUILD_ID $REPO':dev' ;
-      docker push $REPO':testing' ;
-    fi
+jobs:
+  include:
+    - stage: before
+      script: mysql -e 'create database homestead_test;'
+    - stage: build_release
+      script:
+        - docker build --pull -t $RELEASE .
+    - stage: build_dev
+      script:
+        - docker build --pull -t $DEV .
+    - stage: build_all
+      script:
+        - docker build --pull -t $TESTING .
+    - stage: test_release
+      script:
+        - docker run -d --name=$NAME -e PUID=1000 -e PGID=1000 -e PHP_TZ=America/New_York
+          -e MY_DB_CONNECTION=mysql -e MY_DB_HOST=mariadb -e MY_DB_PORT=3306 -e MY_DB_DATABASE=homestead_test
+          -e MY_DB_USERNAME=root -e MY_DB_PASSWORD= -p 127.0.0.1:80:80 $RELEASE
+        - docker ps -a | awk '{print $NF}' | grep -w $NAME | cat
+    - stage: test_dev
+      script:
+        - docker run -d --name=$NAME -e PUID=1000 -e PGID=1000 -e PHP_TZ=America/New_York
+          -e MY_DB_CONNECTION=mysql -e MY_DB_HOST=mariadb -e MY_DB_PORT=3306 -e MY_DB_DATABASE=homestead_test
+          -e MY_DB_USERNAME=root -e MY_DB_PASSWORD= -p 127.0.0.1:80:80 $DEV
+        - docker ps -a | awk '{print $NF}' | grep -w $NAME | cat
+    - stage: test_all
+      script:
+        - docker run -d --name=$NAME -e PUID=1000 -e PGID=1000 -e PHP_TZ=America/New_York
+          -e MY_DB_CONNECTION=mysql -e MY_DB_HOST=mariadb -e MY_DB_PORT=3306 -e MY_DB_DATABASE=homestead_test
+          -e MY_DB_USERNAME=root -e MY_DB_PASSWORD= -p 127.0.0.1:80:80 $TESTING
+        - docker ps -a | awk '{print $NF}' | grep -w $NAME | cat
+    - stage: after
+      script:
+        - docker stop $NAME && docker rm $NAME
+    - stage: deploy_release
+      script:
+        - docker images ;
+        - docker login -u $REGISTRY_USER -p $REGISTRY_PASS ;
+        - docker tag $RELEASE $LATEST ;
+        - docker push $RELEASE ;
+        - docker push $LATEST ;
+    - stage: deploy_dev
+      script:
+        - docker images ;
+        - docker login -u $REGISTRY_USER -p $REGISTRY_PASS ;
+        - docker push $DEV ;
+    - stage: deploy_all
+      script:
+        - docker images ;
+        - docker login -u $REGISTRY_USER -p $REGISTRY_PASS ;
+        - docker push $TESTING ;
 
 
 #deploy:
