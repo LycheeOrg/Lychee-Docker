@@ -49,8 +49,10 @@ after_success:
       docker push $REPO':'$TRAVIS_TAG ;
       docker push $REPO':latest' ;
     elif [[ "$TRAVIS_BRANCH" == "master" ]]; then
+      docker tag $REPO':dev' ;
       docker push $REPO':dev' ;
     else
+      docker tag $REPO':testing' ;
       docker push $REPO':testing' ;
     fi
 
