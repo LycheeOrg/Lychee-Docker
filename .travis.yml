@@ -1,9 +1,15 @@
 os:
   - linux
 
+dist: xenial
+
 sudo: required
 
-dist: xenial
+env:
+  global:
+    - NAME=lychee-laravel-docker
+    - REPO=lycheeorg/lychee-laravel-docker
+    # REGISTRY_PASS=...
 
 language: php
 
@@ -20,14 +26,14 @@ before_install:
   - mysql -e 'create database homestead_test;'
 
 install:
-  - docker build -t LycheeOrg/lychee-laravel_test .
-  - docker run -d --name=lychee-laravel_test -e PUID=1000 -e PGID=1000 -e PHP_TZ=America/New_York -e MY_DB_CONNECTION=mysql -e MY_DB_HOST=mariadb -e MY_DB_PORT=3306 -e MY_DB_DATABASE=homestead_test -e MY_DB_USERNAME=root -e MY_DB_PASSWORD= -p 127.0.0.1:80:80 --link homestead_test LycheeOrg/lychee-laravel_test
+  - docker build -t $REPO'_test' .
+  - docker run -d --name=$NAME'_test' -e PUID=1000 -e PGID=1000 -e PHP_TZ=America/New_York -e MY_DB_CONNECTION=mysql -e MY_DB_HOST=mariadb -e MY_DB_PORT=3306 -e MY_DB_DATABASE=homestead_test -e MY_DB_USERNAME=root -e MY_DB_PASSWORD= -p 127.0.0.1:80:80 --link homestead_test $REPO'_test'
 #  - docker run -d --name=lychee-laravel_test -v /host_path/lychee-laravel/conf:/conf -v /host_path/lychee-laravel/uploads:/uploads -e PUID=1000 -e PGID=1000 -e PHP_TZ=America/New_York -e MY_DB_CONNECTION=mysql -e MY_DB_HOST=mariadb -e MY_DB_PORT=3306 -e MY_DB_DATABASE=homestead_test -e MY_DB_USERNAME=root -e MY_DB_PASSWORD= -p 90:80 --link db_name bigrob8181/lychee-laravel
 
 before_script:
 
 script:
-  - docker ps -a | awk '{print $NF}' | grep -w 'lychee-laravel_test' | cat
+  - docker ps -a | awk '{print $NF}' | grep -w $NAME'_test' | cat
 
 after_script:
-  - docker stop 'lychee-laravel_test' && docker rm 'lychee-laravel_test'
+  - docker stop $NAME'_test' && docker rm $NAME'_test'
