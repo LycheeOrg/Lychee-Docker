@@ -9,8 +9,8 @@ env:
   global:
     - NAME=lychee-laravel-docker
     - REPO=bigrob8181/lychee-laravel-docker
+    - REGISTRY_USER=bigrob8181
   matrix:
-    #- secure: aCIzUK/tXSwEeWZBWzUFkJLeXzlANKb7T3hRekIyjfT1DIxihMo7r0MKt3t3Q8nMsII2S+viNM9UefmY0111stWXjyfrz6umNqyMU1vClTjsjc4em6897IjoZ2TEbAHp1TPW2e+/2nK46/sOPb8jPKMDle2ECLQaM5pVYLsYTs3XoxcbwABJK2q/a3jDcOmT7Xku1y3Z3M4fQ/O+Wqi+mZQmGxiDr4cxGYmvVC+ghH1fLNzEvzmfKun/G9GL+7IsTlWsKs+quF3YcWfLcZ+c8RCjo7is24ckK8foAdQDjCAnRTrF1qB4rSfGnyuAXVbxZrqMmqNgmE5tGWiOcZbShN+tIIztTvLXEWu+Tob6rZ9RAk+EkG+UYACjrPfii4LceDHd688fmRPhRntkdOpPEHfgEaZchEZI3/ZsJ/bmMyzPeMnhcYz3vIhn/Y+gowbuXa8jdvhLyfQCBioUaBSg3f9Uiv7dKhi2f+7CQztz/rjVGBHmNgokAlZLbLcqTLec2y65VmJsu/vUllQemsEc722Y3PZq2K9+ElCIdD4Vz8JBsRd0+ahfnUCmlDBGpQxyo8Bc6q6CGF+8PJyf9lNTokwLtqOqvYJWfIeJFOXmShn4D/e0qzi7D7iZ4HKESI5QAQZONbVWz9g+43dv4nGN3mJ02ra46El1wbCVPwo1iek=
     - secure: "FXXbM8yDCuf9h17rAyO63XCgI2wJ5EKROY3u1MNxudz54sz3VloZ/SNnVqzdjzYPX9LXfCxVpaDhNLmQtNbqYXg4WBq+5ZuuS0efxFgVaBK0HK6lVoS3/BsJR/U1cglag0Apn2wjFgL3j7d2ZREeG7WIEuDHW5QWcVWhFGWvcAG9JRChFostdde1wbZ6SLTTW2SZFypoRThIdh5PCOnX1oCCmfzeTiCy74uTaiOkkOWsseWeDBy09UrDsFDKd8WX9R7E7g9arv4f9tjzmk1ikQM6Bnfa4YONsY9NjiKFS7/1qfXqg6Z5WfuNr+tW90KrXlk3quCPTn9PEThfqJkgS3BcsLwdhM0OUPx0BXml3RFzYl7jrtj6Wg1vSh6JJIrCh6YrBvg62qRgBs8VPI7QJ60VC56QjhZCiH1YjkjKF0+vVSygC6oJ8wsSciFGu3Cfi4ix6K8iCN90URr6YGl7WOANgfzBTwil/w1Q3IKmzNj6K2UWD+Dm92k/7dkJ2/N5gZ8LUmqhxs5nRzLBZvm77xp/ykRtadP5MHC6HTVHBM6f4tfe6jLWWSi4D8GzQX5sN6Xd2VhvifFsxQeexobhxA918ZjxvUgXHP8mng/WUYccr8DJQmom6uyXpqNpVXGRbjW4CVmgLGBZ05+lgBEmqkyEiXggNRcZipi4E9FICys="
 
 language: php
@@ -26,7 +26,6 @@ addons:
 
 before_install:
   - mysql -e 'create database homestead_test;'
-  - docker login -u $REGISTRY_USER -p $REGISTRY_PASS ;
 
 install:
   - docker build --pull -t $REPO':'$TRAVIS_BUILD_NUMBER .
