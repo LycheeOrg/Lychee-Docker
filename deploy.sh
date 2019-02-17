@@ -2,6 +2,12 @@
 
 docker login -u $REGISTRY_USER -p $REGISTRY_PASS
 
+echo "TRAVIS_BRANCH: $TRAVIS_BRANCH"
+echo "TRAVIS_TAG: $TRAVIS_TAG"
+echo "TRAVIS_PULL_REQUEST: $TRAVIS_PULL_REQUEST"
+echo "TRAVIS_EVENT_TYPE: $TRAVIS_EVENT_TYPE"
+echo "TRAVIS_PULL_REQUEST_BRANCH: $TRAVIS_PULL_REQUEST_BRANCH"
+
 # if its a tagged version
 if [[ -n "$TRAVIS_TAG" ]]; then
   echo "Pushing tagged version and latest"
@@ -23,3 +29,10 @@ else
   docker push $REPO':testing'
 
 fi
+
+
+# notes:
+# create pr branch = testing
+# create pr = testing
+# merge pr = ? should be dev
+# create tag = tag/latest
