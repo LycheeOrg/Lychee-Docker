@@ -17,7 +17,7 @@ if [[ -n "$TRAVIS_TAG" ]]; then
   docker push $REPO':latest'
 
 # if its a merged pr or nightly
-elif [[ "$TRAVIS_BRANCH" == "master" && -z "$TRAVIS_PULL_REQUEST" ]]; then
+elif [[ "$TRAVIS_BRANCH" == "master" && "$TRAVIS_PULL_REQUEST" == "false" ]]; then
   echo "Pushing dev"
   docker tag $REPO':'$TRAVIS_BUILD_NUMBER $REPO':dev'
   docker push $REPO':dev'
@@ -33,6 +33,27 @@ fi
 
 # notes:
 # create pr branch = testing
+
 # create pr = testing
+#    CI-BRANCH
+#    TRAVIS_BRANCH: CI-PR2
+#    TRAVIS_TAG:
+#    TRAVIS_PULL_REQUEST: false
+#    TRAVIS_EVENT_TYPE: push
+#    TRAVIS_PULL_REQUEST_BRANCH:
+#
+#    CI-PR
+#    TRAVIS_BRANCH: master
+#    TRAVIS_TAG:
+#    TRAVIS_PULL_REQUEST: 7
+#    TRAVIS_EVENT_TYPE: pull_request
+#    TRAVIS_PULL_REQUEST_BRANCH: CI-PR2
+
 # merge pr = ? should be dev
+#    TRAVIS_BRANCH: master
+#    TRAVIS_TAG:
+#    TRAVIS_PULL_REQUEST: false
+#    TRAVIS_EVENT_TYPE: push
+#    TRAVIS_PULL_REQUEST_BRANCH:
+
 # create tag = tag/latest
