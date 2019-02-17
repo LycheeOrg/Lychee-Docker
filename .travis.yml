@@ -49,7 +49,7 @@ after_success:
       docker tag $REPO':'$TRAVIS_BUILD_NUMBER $REPO':'$TRAVIS_TAG ;
       docker push $REPO':'$TRAVIS_TAG ;
       docker push $REPO':latest' ;
-    elif [[ "$TRAVIS_BRANCH" == "master" ]]; then
+    elif [[ "$TRAVIS_BRANCH" == "master" ]] && [[ -z "$TRAVIS_PULL_REQUEST" ]]; then
       echo "Pushing master" ;
       docker tag $REPO':'$TRAVIS_BUILD_NUMBER $REPO':dev' ;
       docker push $REPO':dev' ;
