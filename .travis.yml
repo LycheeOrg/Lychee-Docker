@@ -42,19 +42,4 @@ after_script:
   - docker stop $NAME && docker rm $NAME
 
 after_success:
-  - docker login -u $REGISTRY_USER -p $REGISTRY_PASS ;
-  - if [[ -n "$TRAVIS_TAG" ]]; then
-      echo "Pushing tagged version and latest" ;
-      docker tag $REPO':'$TRAVIS_BUILD_NUMBER $REPO':latest' ;
-      docker tag $REPO':'$TRAVIS_BUILD_NUMBER $REPO':'$TRAVIS_TAG ;
-      docker push $REPO':'$TRAVIS_TAG ;
-      docker push $REPO':latest' ;
-    elif [[ "$TRAVIS_BRANCH" == "master" ]] && [[ -z "$TRAVIS_PULL_REQUEST" ]]; then
-      echo "Pushing master" ;
-      docker tag $REPO':'$TRAVIS_BUILD_NUMBER $REPO':dev' ;
-      docker push $REPO':dev' ;
-    else
-      echo "Pushing testing" ;
-      docker tag $REPO':'$TRAVIS_BUILD_NUMBER $REPO':testing' ;
-      docker push $REPO':testing' ;
-    fi
+  - deploy.sh
