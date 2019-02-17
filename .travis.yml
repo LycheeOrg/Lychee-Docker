@@ -43,10 +43,10 @@ after_script:
 
 after_success:
   - docker login -u $REGISTRY_USER -p $REGISTRY_PASS ;
-  - if [[ "$TRAVIS_BRANCH" == "tags" ]]; then
+  - if [[ -n "$TRAVIS_TAG" ]]; then
       echo "Pushing tagged version and latest" ;
-      docker tag $REPO':'$TRAVIS_NUMBER $REPO':latest' ;
-      docker tag $REPO':'$TRAVIS_NUMBER $REPO':'$TRAVIS_TAG ;
+      docker tag $REPO':'$TRAVIS_BUILD_NUMBER $REPO':latest' ;
+      docker tag $REPO':'$TRAVIS_BUILD_NUMBER $REPO':'$TRAVIS_TAG ;
       docker push $REPO':'$TRAVIS_TAG ;
       docker push $REPO':latest' ;
     elif [[ "$TRAVIS_BRANCH" == "master" ]]; then
