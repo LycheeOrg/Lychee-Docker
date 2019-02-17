@@ -1,4 +1,7 @@
-[![Build Status](https://travis-ci.com/LycheeOrg/Lychee-Laravel-Docker.svg?branch=master)](https://travis-ci.com/LycheeOrg/Lychee-Laravel-Docker)
+[![Build Status](https://img.shields.io/travis/com/LycheeOrg/Lychee-Laravel-Docker/master.svg?style=flat)](https://travis-ci.com/LycheeOrg/Lychee-Laravel-Docker)
+[![Docker Pulls](https://img.shields.io/docker/pulls/bigrob8181/lychee-laravel.svg?style=flat)](https://hub.docker.com/r/bigrob8181/lychee-laravel)
+[![Release](https://img.shields.io/github/release/LycheeOrg/Lychee-Laravel-Docker.svg?style=flat)](https://github.com/LycheeOrg/Lychee-Laravel-Docker/releases)
+![Last Commit](https://img.shields.io/github/last-commit/LycheeOrg/Lychee-Laravel-Docker.svg?style=flat)
 
 ## Prerequsites ##
 
@@ -10,6 +13,12 @@
 2.  Edit the environment variables:
     *  Supply the environment variables via `docker run` / `docker-compose`, **or**
     *  Create a `.env` file with the appropriate info and mount it to `/conf`.
+
+## Available Docker Tags ##
+* **latest**: current stable tag
+* **v[NUMBER]**: stable version tag
+* **dev**: current master branch tag
+* **testing**: branch and pr tag for testing
 
 ## Example docker run command ##
 
