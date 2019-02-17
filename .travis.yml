@@ -42,26 +42,19 @@ after_script:
   - docker stop $NAME && docker rm $NAME
 
 after_success:
-  - docker images ;
   - docker login -u $REGISTRY_USER -p $REGISTRY_PASS ;
   - if [[ "$TRAVIS_BRANCH" == "tags" ]]; then
+      echo "Pushing tagged version and latest" ;
       docker tag $REPO':'$TRAVIS_NUMBER $REPO':latest' ;
       docker tag $REPO':'$TRAVIS_NUMBER $REPO':'$TRAVIS_TAG ;
       docker push $REPO':'$TRAVIS_TAG ;
       docker push $REPO':latest' ;
     elif [[ "$TRAVIS_BRANCH" == "master" ]]; then
+      echo "Pushing master" ;
       docker tag $REPO':'$TRAVIS_BUILD_NUMBER $REPO':dev' ;
       docker push $REPO':dev' ;
     else
+      echo "Pushing testing" ;
       docker tag $REPO':'$TRAVIS_BUILD_NUMBER $REPO':testing' ;
       docker push $REPO':testing' ;
     fi
-
-deploy:
-  provider: releases
-  api_key: $GITHUB_OAUTH
-  file_glob: true
-  file: /*
-  skip_cleanup: true
-  on:
-    tags: true
