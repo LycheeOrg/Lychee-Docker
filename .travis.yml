@@ -42,4 +42,4 @@ after_script:
   - docker stop $NAME && docker rm $NAME
 
 after_success:
-  - deploy.sh
+  - ./deploy.sh
