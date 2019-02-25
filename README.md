@@ -3,9 +3,15 @@
 [![Release](https://img.shields.io/github/release/LycheeOrg/Lychee-Laravel-Docker.svg?style=flat)](https://github.com/LycheeOrg/Lychee-Laravel-Docker/releases)
 ![Last Commit](https://img.shields.io/github/last-commit/LycheeOrg/Lychee-Laravel-Docker.svg?style=flat)
 
-## Prerequsites ##
+## Prerequisites ##
 
 *  You must have a database docker running **OR** create one in your docker-compose.yml.
+
+## Image content
+
+This image features Lychee (Laravel version), nginx and PHP-FPM.
+
+Note that nginx will accept by default images up to 100MB (`client_max_body_size 100M`), according to the [recommendations of the Lychee-Laravel FAQ](https://github.com/LycheeOrg/Lychee/wiki/FAQ#i-cant-upload-photos). However, to upload large files, you will need to modify `php.ini` directives as well (see FAQ). To do so, please mount your custom `php.ini` file to `/etc/php/7.3/php/php.ini`.
 
 ## Setup ##
 
