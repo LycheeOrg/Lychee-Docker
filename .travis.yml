@@ -38,8 +38,9 @@ before_script:
 script:
   - docker ps -a | awk '{print $NF}' | grep -w $NAME | cat
 
-after_success:
-  - ./deploy.sh
+deploy:
+  - provider: script
+    script: ./deploy.sh
 
 after_script:
   - docker stop $NAME && docker rm $NAME
