@@ -53,6 +53,12 @@ docker run -d \
 bigrob8181/lychee-laravel
 ```
 
+**Warning** : if you use a MySQL database, make sure to use the `mysql_native_password` authentication plugin, either by using the `--default-authentication-plugin` option when starting mysql, or by running a query to enable the authentication plugin for the `lychee` user, e.g. :
+
+```
+alter user 'lychee' identified with mysql_native_password by '<your password>';
+```
+
 ## Example docker-compose.yml ##
 
 Change the environment variable in the [provided example](docker-compose.yml) to reflect your database credentials.
