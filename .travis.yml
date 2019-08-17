@@ -38,8 +38,24 @@ before_script:
 script:
   - docker ps -a | awk '{print $NF}' | grep -w $NAME | cat
 
-after_success:
-  - ./deploy.sh
+# after_success:
+#   - ./deploy.sh
+deploy:
+  - provider: script
+    script: ./deploy.sh
+    skip_cleanup: true
+    on:
+      branch: master
+  - provider: script
+    script: ./deploy.sh
+    skip_cleanup: true
+    on:
+      tags: true
+  - provider: script
+    script: ./deploy.sh
+    skip_cleanup: true
+    on:
+      all_branches: true
 
 after_script:
   - docker stop $NAME && docker rm $NAME
