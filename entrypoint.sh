@@ -1,7 +1,28 @@
 #!/bin/sh
 
-echo "**** Starting the Entrypoint Script ****"
 set -e
+
+# Read Last commit hash from .git
+# This prevents installing git, and allows display of commit
+read -r longhash < /var/www/html/Lychee-Laravel/.git/refs/heads/master
+shorthash=$(echo $longhash |cut -c1-7)
+
+echo '
+-------------------------------------
+  _               _                
+ | |   _   _  ___| |__   ___  ___  
+ | |  | | | |/ __|  _ \ / _ \/ _ \ 
+ | |__| |_| | (__| | | |  __/  __/ 
+ |_____\__, |\___|_| |_|\___|\___| 
+ | |   |___/ _ __ __ ___   _____| |
+ | |   / _'\'' | '\''__/ _'\'' \ \ / / _ \ |
+ | |__| (_| | | | (_| |\ V /  __/ |
+ |_____\__,_|_|  \__,_| \_/ \___|_|
+
+-------------------------------------
+Latest Commit: '$shorthash'
+https://github.com/LycheeOrg/Lychee-Laravel/commit/'$longhash'
+-------------------------------------'
 
 echo "**** Make sure the /conf and /uploads folders exist ****"
 [ ! -f /conf ] && \

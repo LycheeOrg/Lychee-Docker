@@ -1,7 +1,7 @@
 #-------------------------------------------
 #  Docker Compose
 # @RobLandry
-# Original Repo : https://gitlab.landry.me/
+# Repo : https://github.com/LycheeOrg/Lychee-Laravel-Docker
 #-------------------------------------------
 
 version: '3'
