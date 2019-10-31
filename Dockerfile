@@ -20,6 +20,7 @@ RUN \
     apt-get install -y \
     nginx-light \
     php7.3-mysql \
+    php7.3-pgsql \
     php7.3-imagick \
     php7.3-mbstring \
     php7.3-json \

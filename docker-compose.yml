@@ -1,7 +1,7 @@
 #-------------------------------------------
 #  Docker Compose
 # @RobLandry
-# Original Repo : https://gitlab.landry.me/
+# Repo : https://github.com/LycheeOrg/Lychee-Laravel-Docker
 #-------------------------------------------
 
 version: '3'
@@ -25,7 +25,7 @@ services:
     restart: unless-stopped
 
   lychee:
-    image: lychee-laravel
+    image: bigrob8181/lychee-laravel
     container_name: lychee_laravel
     ports:
       - 90:80
