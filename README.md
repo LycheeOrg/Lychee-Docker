@@ -3,19 +3,18 @@
 [![Release](https://img.shields.io/github/release/LycheeOrg/Lychee-Laravel-Docker.svg?style=flat)](https://github.com/LycheeOrg/Lychee-Laravel-Docker/releases)
 ![Last Commit](https://img.shields.io/github/last-commit/LycheeOrg/Lychee-Laravel-Docker.svg?style=flat)
 
+## Table of Contents
 <!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
-
-	- [Image content](#image-content)
-	- [Setup](#setup)
-		- [Prerequisites](#prerequisites)
-		- [Run with Docker](#run-with-docker)
-		- [Run with Docker Compose](#run-with-docker-compose)
-	- [Available environment variables and defaults](#available-environment-variables-and-defaults)
-	- [Advanced configuration](#advanced-configuration)
-
+- [Image content](#image-content)
+- [Setup](#setup)
+	- [Prerequisites](#prerequisites)
+	- [Run with Docker](#run-with-docker)
+	- [Run with Docker Compose](#run-with-docker-compose)
+- [Available environment variables and defaults](#available-environment-variables-and-defaults)
+- [Advanced configuration](#advanced-configuration)
 <!-- /TOC -->
 
-## Image content
+## Image Content
 
 This image features Lychee (Laravel version), nginx and PHP-FPM. The provided configuration (PHP, nginx...) follows Lychee's official recommandations.
 
