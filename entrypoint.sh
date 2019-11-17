@@ -64,7 +64,8 @@ echo -e " \tUser GID :\t$(id -g "$USER")"
 echo "**** Set Permissions ****" && \
 chown -R "$USER":"$USER" /conf
 chown -R "$USER":"$USER" /uploads
-chmod -R a+rw /uploads
+usermod -a -G "$USER" www-data
+chmod -R 775 /uploads
 chown -R www-data:www-data /var/www/html/Lychee-Laravel
 
 echo "**** Setup complete, starting the server. ****"
