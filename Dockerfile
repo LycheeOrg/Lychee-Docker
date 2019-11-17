@@ -28,6 +28,7 @@ RUN \
     php7.3-xml \
     php7.3-zip \
     php7.3-fpm \
+    curl \
     git \
     composer && \
     cd /var/www/html && \
@@ -53,6 +54,8 @@ COPY entrypoint.sh inject.sh /
 RUN chmod +x /entrypoint.sh && \
     chmod +x /inject.sh && \
     mkdir /run/php
+
+HEALTHCHECK CMD curl --fail http://localhost:80/ || exit 1
 
 ENTRYPOINT [ "/entrypoint.sh" ]
 
