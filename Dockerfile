@@ -29,6 +29,7 @@ RUN \
     php7.3-zip \
     php7.3-fpm \
     curl \
+    libimage-exiftool-perl \
     git \
     composer && \
     cd /var/www/html && \
