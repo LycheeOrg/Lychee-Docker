@@ -30,6 +30,7 @@ RUN \
     php7.3-fpm \
     curl \
     libimage-exiftool-perl \
+    ffmpeg \
     git \
     composer && \
     cd /var/www/html && \
