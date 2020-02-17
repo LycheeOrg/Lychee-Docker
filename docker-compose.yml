@@ -25,7 +25,7 @@ services:
     restart: unless-stopped
 
   lychee:
-    image: bigrob8181/lychee-laravel
+    image: lycheeorg/lychee-laravel
     container_name: lychee_laravel
     ports:
       - 90:80

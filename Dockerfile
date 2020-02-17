@@ -1,7 +1,7 @@
 FROM debian:buster-slim
 
 # Set version label
-LABEL maintainer="bigrob8181"
+LABEL maintainer="lycheeorg"
 
 # Environment variables
 ENV PUID='1000'
@@ -29,8 +29,6 @@ RUN \
     php7.3-zip \
     php7.3-fpm \
     curl \
-    libimage-exiftool-perl \
-    ffmpeg \
     git \
     composer && \
     cd /var/www/html && \
