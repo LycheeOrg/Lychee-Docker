@@ -19,8 +19,8 @@ language: php
 php:
   - '7.2'
 
-services:
-  - docker
+# services:
+#   - docker
 
 addons:
   mariadb: '10.3'
