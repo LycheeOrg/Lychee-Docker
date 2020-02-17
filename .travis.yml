@@ -41,6 +41,8 @@ before_install:
 
 install:
   # - docker build --pull -t $REPO':'$TRAVIS_BUILD_NUMBER .
+  - docker buildx create --name multibuilder
+  - docker buildx use multibuilder
   - docker buildx build --platform linux/arm/v7,linux/arm64,linux/amd64 -t $REPO':'$TRAVIS_BUILD_NUMBER .
 
   - docker run -d --name=$NAME -e PUID=1000 -e PGID=1000 -e PHP_TZ=America/New_York
