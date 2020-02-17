@@ -3,6 +3,9 @@
 [![Release](https://img.shields.io/github/release/LycheeOrg/Lychee-Laravel-Docker.svg?style=flat)](https://github.com/LycheeOrg/Lychee-Laravel-Docker/releases)
 ![Last Commit](https://img.shields.io/github/last-commit/LycheeOrg/Lychee-Laravel-Docker.svg?style=flat)
 
+## Notice: Dockerhub repository has been migrated to [lycheeorg/lychee-laravel](https://hub.docker.com/r/lycheeorg/lychee-laravel)  
+**Make sure you update your docker-compose files accordingly**
+
 ## Table of Contents
 <!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 - [Image content](#image-content)
