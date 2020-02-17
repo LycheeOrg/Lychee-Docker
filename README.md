@@ -1,5 +1,5 @@
 [![Build Status](https://img.shields.io/travis/com/LycheeOrg/Lychee-Laravel-Docker/master.svg?style=flat)](https://travis-ci.com/LycheeOrg/Lychee-Laravel-Docker)
-[![Docker Pulls](https://img.shields.io/docker/pulls/bigrob8181/lychee-laravel.svg?style=flat)](https://hub.docker.com/r/bigrob8181/lychee-laravel)
+[![Docker Pulls](https://img.shields.io/docker/pulls/lycheeorg/lychee-laravel.svg?style=flat)](https://hub.docker.com/r/lycheeorg/lychee-laravel)
 [![Release](https://img.shields.io/github/release/LycheeOrg/Lychee-Laravel-Docker.svg?style=flat)](https://github.com/LycheeOrg/Lychee-Laravel-Docker/releases)
 ![Last Commit](https://img.shields.io/github/last-commit/LycheeOrg/Lychee-Laravel-Docker.svg?style=flat)
 
@@ -59,7 +59,7 @@ docker run -d \
 -p 90:80 \
 --net network_name \
 --link db_name \
-bigrob8181/lychee-laravel
+lycheeorg/lychee-laravel
 ```
 
 **Warning** : if you use a MySQL database, make sure to use the `mysql_native_password` authentication plugin, either by using the `--default-authentication-plugin` option when starting mysql, or by running a query to enable the authentication plugin for the `lychee` user, e.g. :
