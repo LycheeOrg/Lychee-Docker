@@ -1,18 +1,7 @@
-# os:
-#   - linux
+os:
+  - linux
 
-arch:
-  - amd64
-  - arm64
-
-matrix:
-  include:
-   - os: linux
-     arch: amd64
-   - os: linux
-     arch: arm64
-
-dist: bionic
+dist: xenial
 
 sudo: required
 
@@ -38,13 +27,19 @@ addons:
 
 before_install:
   # Setup multi-arch builds
-  - sudo rm -rf /var/lib/apt/lists/*
-  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-  - lsb_release -cs
-  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) edge"
-  - sudo apt-get update
-  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
-  - docker run --rm --privileged multiarch/qemu-user-static:register --reset
+  # - sudo rm -rf /var/lib/apt/lists/*
+  # - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  # - lsb_release -cs
+  # - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) edge"
+  # - sudo apt-get update
+  # - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
+  # - docker run --rm --privileged multiarch/qemu-user-static:register --reset
+
+  - curl -fsSL https://get.docker.com | sh
+  - echo '{"experimental":"enabled"}' | sudo tee /etc/docker/daemon.json
+  - mkdir -p $HOME/.docker
+  - echo '{"experimental":"enabled"}' | sudo tee $HOME/.docker/config.json
+  - sudo service docker start
 
   # Setup MariaDB and chmod deploy.sh
   - mysql -e 'create database homestead_test;'
@@ -52,10 +47,15 @@ before_install:
 
 install:
   # - docker build --pull -t $REPO':'$TRAVIS_BUILD_NUMBER .
-  - docker buildx create --name multibuilder
-  - docker buildx use multibuilder
-  - docker buildx inspect --bootstrap
-  - docker buildx build --platform linux/arm/v7,linux/arm64,linux/amd64 -t $REPO':'$TRAVIS_BUILD_NUMBER .
+
+  # - docker buildx create --name multibuilder
+  # - docker buildx use multibuilder
+  # - docker buildx inspect --bootstrap
+  # - docker buildx build --platform linux/arm/v7,linux/arm64,linux/amd64 -t $REPO':'$TRAVIS_BUILD_NUMBER .
+
+  - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+  - docker buildx create --name xbuilder --use
+  - docker buildx build --pull --progress plain --platform linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64 -t $REPO':'$TRAVIS_BUILD_NUMBER .
 
   - docker run -d --name=$NAME -e PUID=1000 -e PGID=1000 -e PHP_TZ=America/New_York
     -e DB_CONNECTION=mysql -e DB_HOST=mariadb -e DB_PORT=3306 -e DB_DATABASE=homestead_test
