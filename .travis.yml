@@ -45,20 +45,21 @@ before_script:
 
 script:
   # - docker ps -a | awk '{print $NF}' | grep -w $NAME | cat
+  ./deploy.sh
 
 deploy:
-  - provider: script
-    script: ./deploy.sh
-    on:
-      branch: master
-  - provider: script
-    script: ./deploy.sh
-    on:
-      tags: true
-  - provider: script
-    script: ./deploy.sh
-    on:
-      all_branches: true
+  # - provider: script
+  #   script: ./deploy.sh
+  #   on:
+  #     branch: master
+  # - provider: script
+  #   script: ./deploy.sh
+  #   on:
+  #     tags: true
+  # - provider: script
+  #   script: ./deploy.sh
+  #   on:
+  #     all_branches: true
 
 after_script:
   # - docker stop $NAME && docker rm $NAME
