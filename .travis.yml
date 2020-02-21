@@ -43,9 +43,8 @@ install:
 
 before_script:
 
-script:
+script: bash deploy.sh
   # - docker ps -a | awk '{print $NF}' | grep -w $NAME | cat
-  ./deploy.sh
 
 deploy:
   # - provider: script

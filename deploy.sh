@@ -19,12 +19,6 @@ if [[ -n "$TRAVIS_TAG" ]]; then
     -t $DOCKER_REPO':'$TRAVIS_BUILD_NUMBER \
     --push
 
-  # echo "Pushing tagged version and latest"
-  # docker tag $REPO':'$TRAVIS_BUILD_NUMBER $REPO':latest'
-  # docker tag $REPO':'$TRAVIS_BUILD_NUMBER $REPO':'$TRAVIS_TAG
-  # docker push $REPO':'$TRAVIS_TAG
-  # docker push $REPO':latest'
-
 # if its a merged pr or nightly
 elif [[ "$TRAVIS_BRANCH" == "master" && "$TRAVIS_PULL_REQUEST" == "false" ]]; then
   echo "Building mulit arch and pushing dev"
@@ -35,10 +29,6 @@ elif [[ "$TRAVIS_BRANCH" == "master" && "$TRAVIS_PULL_REQUEST" == "false" ]]; th
     -t $DOCKER_REPO':'$TRAVIS_BUILD_NUMBER \
     --push
 
-  # echo "Pushing dev"
-  # docker tag $REPO':'$TRAVIS_BUILD_NUMBER $REPO':dev'
-  # docker push $REPO':dev'
-
 # if a pr is created, or anything otherwise
 else
   echo "Building mulit arch and pushing testing"
@@ -48,9 +38,5 @@ else
     -t $DOCKER_REPO':testing' \
     -t $DOCKER_REPO':'$TRAVIS_BUILD_NUMBER \
     --push
-
-  # echo "Pushing testing"
-  # docker tag $REPO':'$TRAVIS_BUILD_NUMBER $REPO':testing'
-  # docker push $REPO':testing'
 
 fi
