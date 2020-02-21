@@ -17,7 +17,8 @@ if [[ -n "$TRAVIS_TAG" ]]; then
     -t $DOCKER_REPO':latest' \
     -t $DOCKER_REPO':'$TRAVIS_TAG \
     -t $DOCKER_REPO':'$TRAVIS_BUILD_NUMBER \
-    --push
+    --push \
+    .
 
 # if its a merged pr or nightly
 elif [[ "$TRAVIS_BRANCH" == "master" && "$TRAVIS_PULL_REQUEST" == "false" ]]; then
@@ -27,7 +28,8 @@ elif [[ "$TRAVIS_BRANCH" == "master" && "$TRAVIS_PULL_REQUEST" == "false" ]]; th
     --platform linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64 \
     -t $DOCKER_REPO':dev' \
     -t $DOCKER_REPO':'$TRAVIS_BUILD_NUMBER \
-    --push
+    --push \
+    .
 
 # if a pr is created, or anything otherwise
 else
@@ -37,6 +39,7 @@ else
     --platform linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64 \
     -t $DOCKER_REPO':testing' \
     -t $DOCKER_REPO':'$TRAVIS_BUILD_NUMBER \
-    --push
+    --push \
+    .
 
 fi
