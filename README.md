@@ -1,7 +1,12 @@
-[![Build Status](https://img.shields.io/travis/com/LycheeOrg/Lychee-Laravel-Docker/master.svg?style=flat)](https://travis-ci.com/LycheeOrg/Lychee-Laravel-Docker)
-[![Docker Pulls](https://img.shields.io/docker/pulls/lycheeorg/lychee-laravel.svg?style=flat)](https://hub.docker.com/r/lycheeorg/lychee-laravel)
-[![Release](https://img.shields.io/github/release/LycheeOrg/Lychee-Laravel-Docker.svg?style=flat)](https://github.com/LycheeOrg/Lychee-Laravel-Docker/releases)
-![Last Commit](https://img.shields.io/github/last-commit/LycheeOrg/Lychee-Laravel-Docker.svg?style=flat)
+[![Build Status][build-status-shield]](https://travis-ci.com/LycheeOrg/Lychee-Laravel-Docker)
+[![Docker Pulls][docker-pulls-shield]](https://hub.docker.com/r/lycheeorg/lychee-laravel)
+[![Release][release-shield]](https://github.com/LycheeOrg/Lychee-Laravel-Docker/releases)
+![Last Commit][last-commit-shield]
+
+![Supports amd64 Architecture][amd64-shield]
+![Supports aarch64 Architecture][aarch64-shield]
+![Supports armhf Architecture][armhf-shield]
+![Supports armv7 Architecture][armv7-shield]
 
 ## Notice: Dockerhub repository has been migrated to [lycheeorg/lychee-laravel](https://hub.docker.com/r/lycheeorg/lychee-laravel)  
 **Make sure you update your docker-compose files accordingly**
@@ -101,3 +106,11 @@ Instead, we recommend to use the `PHP_VALUE` directive of PHP-FPM to override sp
 3. Add a new line and set your new parameter
 4. Mount your new file to `/etc/nginx/nginx.conf`
 
+[aarch64-shield]: https://img.shields.io/badge/aarch64-yes-success.svg?style=flat
+[amd64-shield]: https://img.shields.io/badge/amd64-yes-success.svg?style=flat
+[armhf-shield]: https://img.shields.io/badge/armhf-yes-success.svg?style=flat
+[armv7-shield]: https://img.shields.io/badge/armv7-yes-success.svg?style=flat
+[build-status-shield]: https://img.shields.io/travis/com/LycheeOrg/Lychee-Laravel-Docker/master.svg?style=flat
+[docker-pulls-shield]: https://img.shields.io/docker/pulls/lycheeorg/lychee-laravel.svg?style=flat
+[last-commit-shield]: https://img.shields.io/github/last-commit/LycheeOrg/Lychee-Laravel-Docker.svg?style=flat
+[release-shield]: https://img.shields.io/github/release/LycheeOrg/Lychee-Laravel-Docker.svg?style=flat
