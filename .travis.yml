@@ -28,12 +28,12 @@ jobs:
       script:
         - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
         - echo "Building mulit arch and pushing testing"
-        - docker buildx build \
-            --progress plain \
-            --platform linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64 \
-            -t $DOCKER_REPO':testing' \
-            -t $DOCKER_REPO':'$TRAVIS_BUILD_NUMBER \
-            --push \
+        - docker buildx build
+            --progress plain
+            --platform linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64
+            -t $DOCKER_REPO':testing'
+            -t $DOCKER_REPO':'$TRAVIS_BUILD_NUMBER
+            --push
             .
       # deploy:
       # after_script:
@@ -101,11 +101,11 @@ jobs:
           script:
             - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
             - echo "Building mulit arch and pushing testing"
-            - docker buildx build \
-                --progress plain \
-                --platform linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64 \
-                -t $DOCKER_REPO':dev' \
-                --push \
+            - docker buildx build
+                --progress plain
+                --platform linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64
+                -t $DOCKER_REPO':dev'
+                --push
                 .
         - provider: script
           on:
@@ -113,12 +113,12 @@ jobs:
           script:
             - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
             - echo "Building mulit arch and pushing testing"
-            - docker buildx build \
-                --progress plain \
-                --platform linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64 \
-                -t $DOCKER_REPO':latest' \
-                -t $DOCKER_REPO':'$TRAVIS_TAG \
-                --push \
+            - docker buildx build
+                --progress plain
+                --platform linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64
+                -t $DOCKER_REPO':latest'
+                -t $DOCKER_REPO':'$TRAVIS_TAG
+                --push
                 .
         - provider: script
           on:
@@ -126,10 +126,10 @@ jobs:
           script:
             - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
             - echo "Building mulit arch and pushing testing"
-            - docker buildx build \
-                --progress plain \
-                --platform linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64 \
-                -t $DOCKER_REPO':testing' \
-                --push \
+            - docker buildx build
+                --progress plain
+                --platform linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64
+                -t $DOCKER_REPO':testing'
+                --push
                 .
       # after_script:
