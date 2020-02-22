@@ -1,64 +1,134 @@
-os:
-  - linux
-
+os: linux
 dist: xenial
-
-sudo: required
+language: generic
 
 env:
   global:
     - NAME=lychee-laravel
     - DOCKER_REPO=lycheeorg/lychee-laravel
-  matrix:
+  jobs:
     - secure: "FXXbM8yDCuf9h17rAyO63XCgI2wJ5EKROY3u1MNxudz54sz3VloZ/SNnVqzdjzYPX9LXfCxVpaDhNLmQtNbqYXg4WBq+5ZuuS0efxFgVaBK0HK6lVoS3/BsJR/U1cglag0Apn2wjFgL3j7d2ZREeG7WIEuDHW5QWcVWhFGWvcAG9JRChFostdde1wbZ6SLTTW2SZFypoRThIdh5PCOnX1oCCmfzeTiCy74uTaiOkkOWsseWeDBy09UrDsFDKd8WX9R7E7g9arv4f9tjzmk1ikQM6Bnfa4YONsY9NjiKFS7/1qfXqg6Z5WfuNr+tW90KrXlk3quCPTn9PEThfqJkgS3BcsLwdhM0OUPx0BXml3RFzYl7jrtj6Wg1vSh6JJIrCh6YrBvg62qRgBs8VPI7QJ60VC56QjhZCiH1YjkjKF0+vVSygC6oJ8wsSciFGu3Cfi4ix6K8iCN90URr6YGl7WOANgfzBTwil/w1Q3IKmzNj6K2UWD+Dm92k/7dkJ2/N5gZ8LUmqhxs5nRzLBZvm77xp/ykRtadP5MHC6HTVHBM6f4tfe6jLWWSi4D8GzQX5sN6Xd2VhvifFsxQeexobhxA918ZjxvUgXHP8mng/WUYccr8DJQmom6uyXpqNpVXGRbjW4CVmgLGBZ05+lgBEmqkyEiXggNRcZipi4E9FICys="
 
-language: generic
+jobs:
+  include:
 
-# php:
-#   - '7.2'
+    # Build and push to staging
+    - stage: build
+      before_install:
+        # Setup multi-arch builds
+        - curl -fsSL https://get.docker.com | sh
+        - echo '{"experimental":"enabled"}' | sudo tee /etc/docker/daemon.json
+        - mkdir -p $HOME/.docker
+        - echo '{"experimental":"enabled"}' | sudo tee $HOME/.docker/config.json
+        - sudo service docker start
+      install:
+        - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+        - docker buildx create --name xbuilder --use
+      # before_script:
+      script:
+        - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
+        - echo "Building mulit arch and pushing testing"
+        - docker buildx build \
+            --progress plain \
+            --platform linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64 \
+            -t $DOCKER_REPO':testing' \
+            -t $DOCKER_REPO':'$TRAVIS_BUILD_NUMBER \
+            --push \
+            .
+      # deploy:
+      # after_script:
 
-# addons:
-#   mariadb: '10.3'
+    # Pull images and test them
+    - stage: "Test amd64"
+      arch: amd64
+      addons:
+        mariadb: '10.3'
+      services: docker
+      before_install:
+        # Setup MariaDB and chmod deploy.sh
+        - mysql -e 'create database homestead_test;'
+        # - chmod +x deploy.sh
+      install:
+        - docker run -d --name=$NAME -e PUID=1000 -e PGID=1000 -e PHP_TZ=America/New_York
+          -e DB_CONNECTION=mysql -e DB_HOST=mariadb -e DB_PORT=3306 -e DB_DATABASE=homestead_test
+          -e DB_USERNAME=root -e DB_PASSWORD= -p 127.0.0.1:80:80 $DOCKER_REPO':'$TRAVIS_BUILD_NUMBER
+      # before_script:
+      script:
+        - docker ps -a | awk '{print $NF}' | grep -w $NAME | cat
+      # deploy:
+      after_script:
+        - docker stop $NAME && docker rm $NAME
 
-before_install:
-  # Setup multi-arch builds
-  - curl -fsSL https://get.docker.com | sh
-  - echo '{"experimental":"enabled"}' | sudo tee /etc/docker/daemon.json
-  - mkdir -p $HOME/.docker
-  - echo '{"experimental":"enabled"}' | sudo tee $HOME/.docker/config.json
-  - sudo service docker start
+    # Pull images and test them
+    - stage: "Test arm64"
+      arch: arm64
+      addons:
+        mariadb: '10.3'
+      services: docker
+      before_install:
+        # Setup MariaDB and chmod deploy.sh
+        - mysql -e 'create database homestead_test;'
+        # - chmod +x deploy.sh
+      install:
+        - docker run -d --name=$NAME -e PUID=1000 -e PGID=1000 -e PHP_TZ=America/New_York
+          -e DB_CONNECTION=mysql -e DB_HOST=mariadb -e DB_PORT=3306 -e DB_DATABASE=homestead_test
+          -e DB_USERNAME=root -e DB_PASSWORD= -p 127.0.0.1:80:80 $DOCKER_REPO':'$TRAVIS_BUILD_NUMBER
+      # before_script:
+      script:
+        - docker ps -a | awk '{print $NF}' | grep -w $NAME | cat
+      # deploy:
+      after_script:
+        - docker stop $NAME && docker rm $NAME
 
-  # Setup MariaDB and chmod deploy.sh
-  # - mysql -e 'create database homestead_test;'
-  # - chmod +x deploy.sh
-
-install:
-  - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-  - docker buildx create --name xbuilder --use
-  # - docker buildx build --pull --progress plain --platform linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64 -t $DOCKER_REPO':'$TRAVIS_BUILD_NUMBER .
-
-  # - docker run -d --name=$NAME -e PUID=1000 -e PGID=1000 -e PHP_TZ=America/New_York
-  #   -e DB_CONNECTION=mysql -e DB_HOST=mariadb -e DB_PORT=3306 -e DB_DATABASE=homestead_test
-  #   -e DB_USERNAME=root -e DB_PASSWORD= -p 127.0.0.1:80:80 $DOCKER_REPO':'$TRAVIS_BUILD_NUMBER
-
-before_script:
-
-script: bash deploy.sh
-  # - docker ps -a | awk '{print $NF}' | grep -w $NAME | cat
-
-deploy:
-  # - provider: script
-  #   script: ./deploy.sh
-  #   on:
-  #     branch: master
-  # - provider: script
-  #   script: ./deploy.sh
-  #   on:
-  #     tags: true
-  # - provider: script
-  #   script: ./deploy.sh
-  #   on:
-  #     all_branches: true
-
-after_script:
-  # - docker stop $NAME && docker rm $NAME
+    # Finally Push tags and master
+    - stage: deploy
+      before_install:
+        # Setup multi-arch builds
+        - curl -fsSL https://get.docker.com | sh
+        - echo '{"experimental":"enabled"}' | sudo tee /etc/docker/daemon.json
+        - mkdir -p $HOME/.docker
+        - echo '{"experimental":"enabled"}' | sudo tee $HOME/.docker/config.json
+        - sudo service docker start
+      install:
+        - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+        - docker buildx create --name xbuilder --use
+      # before_script:
+      script:
+      deploy:
+        - provider: script
+          on:
+            branch: master
+          script:
+            - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
+            - echo "Building mulit arch and pushing testing"
+            - docker buildx build \
+                --progress plain \
+                --platform linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64 \
+                -t $DOCKER_REPO':dev' \
+                --push \
+                .
+        - provider: script
+          on:
+            tags: true
+          script:
+            - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
+            - echo "Building mulit arch and pushing testing"
+            - docker buildx build \
+                --progress plain \
+                --platform linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64 \
+                -t $DOCKER_REPO':latest' \
+                -t $DOCKER_REPO':'$TRAVIS_TAG \
+                --push \
+                .
+        - provider: script
+          on:
+            all_branches: true
+            - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
+            - echo "Building mulit arch and pushing testing"
+            - docker buildx build \
+                --progress plain \
+                --platform linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64 \
+                -t $DOCKER_REPO':testing' \
+                --push \
+                .
+      # after_script:
