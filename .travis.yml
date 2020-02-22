@@ -42,7 +42,7 @@ jobs:
     # - stage: "Test amd64"
     #   arch: amd64
     #   addons:
-    #     mariadb: '10.3'
+    #     mariadb: '10.4'
     #   services: docker
     #   before_install:
     #     # Setup MariaDB and chmod deploy.sh
@@ -72,7 +72,7 @@ jobs:
       install:
         - docker run -d --name=$NAME -e PUID=1000 -e PGID=1000 -e PHP_TZ=America/New_York
           -e DB_CONNECTION=mysql -e DB_HOST=mariadb -e DB_PORT=3306 -e DB_DATABASE=homestead_test
-          -e DB_USERNAME=root -e DB_PASSWORD= -p 127.0.0.1:80:80 $DOCKER_REPO':'$TRAVIS_BUILD_NUMBER
+          -e DB_USERNAME=root -e DB_PASSWORD= -p 127.0.0.1:80:80 $DOCKER_REPO':518'
       # before_script:
       script:
         - docker ps -a | awk '{print $NF}' | grep -w $NAME | cat
