@@ -98,38 +98,13 @@ jobs:
         - provider: script
           on:
             branch: master
-          script:
-            - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
-            - echo "Building mulit arch and pushing testing"
-            - docker buildx build
-                --progress plain
-                --platform linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64
-                -t $DOCKER_REPO':dev'
-                --push
-                .
+          script: ./deploy.sh
         - provider: script
           on:
             tags: true
-          script:
-            - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
-            - echo "Building mulit arch and pushing testing"
-            - docker buildx build
-                --progress plain
-                --platform linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64
-                -t $DOCKER_REPO':latest'
-                -t $DOCKER_REPO':'$TRAVIS_TAG
-                --push
-                .
+          script: ./deploy.sh
         - provider: script
           on:
             all_branches: true
-          script:
-            - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
-            - echo "Building mulit arch and pushing testing"
-            - docker buildx build
-                --progress plain
-                --platform linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64
-                -t $DOCKER_REPO':testing'
-                --push
-                .
+          script: ./deploy.sh
       # after_script:

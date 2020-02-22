@@ -16,7 +16,6 @@ if [[ -n "$TRAVIS_TAG" ]]; then
     --platform linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64 \
     -t $DOCKER_REPO':latest' \
     -t $DOCKER_REPO':'$TRAVIS_TAG \
-    -t $DOCKER_REPO':'$TRAVIS_BUILD_NUMBER \
     --push \
     .
 
@@ -27,7 +26,6 @@ elif [[ "$TRAVIS_BRANCH" == "master" && "$TRAVIS_PULL_REQUEST" == "false" ]]; th
     --progress plain \
     --platform linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64 \
     -t $DOCKER_REPO':dev' \
-    -t $DOCKER_REPO':'$TRAVIS_BUILD_NUMBER \
     --push \
     .
 
@@ -38,7 +36,6 @@ else
     --progress plain \
     --platform linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64 \
     -t $DOCKER_REPO':testing' \
-    -t $DOCKER_REPO':'$TRAVIS_BUILD_NUMBER \
     --push \
     .
 
