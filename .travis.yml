@@ -123,6 +123,7 @@ jobs:
         - provider: script
           on:
             all_branches: true
+          script:
             - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
             - echo "Building mulit arch and pushing testing"
             - docker buildx build \
