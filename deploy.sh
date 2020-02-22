@@ -31,12 +31,5 @@ elif [[ "$TRAVIS_BRANCH" == "master" && "$TRAVIS_PULL_REQUEST" == "false" ]]; th
 
 # if a pr is created, or anything otherwise
 else
-  echo "Building mulit arch and pushing testing"
-  docker buildx build \
-    --progress plain \
-    --platform linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64 \
-    -t $DOCKER_REPO':testing' \
-    --push \
-    .
-
+  echo "Nothing to push"
 fi
