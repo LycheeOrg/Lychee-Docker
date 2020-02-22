@@ -63,7 +63,7 @@ jobs:
     - stage: "Test arm64"
       arch: arm64
       addons:
-        mariadb: '10.2'
+        mariadb: '10.4'
       services: docker
       before_install:
         # Setup MariaDB and chmod deploy.sh
