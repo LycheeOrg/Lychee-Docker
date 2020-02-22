@@ -63,11 +63,11 @@ jobs:
     - stage: "Test arm64"
       arch: arm64
       addons:
-        mariadb: '10.4'
+        mariadb: '10.3'
       services: docker
       before_install:
         # Setup MariaDB and chmod deploy.sh
-        - mysql -e 'create database homestead_test;'
+        - sudo mysql -e 'create database homestead_test;'
         # - chmod +x deploy.sh
       install:
         - docker run -d --name=$NAME -e PUID=1000 -e PGID=1000 -e PHP_TZ=America/New_York
