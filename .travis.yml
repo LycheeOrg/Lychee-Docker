@@ -59,26 +59,26 @@ jobs:
     #   after_script:
     #     - docker stop $NAME && docker rm $NAME
 
-    # Pull images and test them
-    - stage: "Test arm64"
-      arch: arm64
-      addons:
-        mariadb: '10.4'
-      services: docker
-      before_install:
-        # Setup MariaDB and chmod deploy.sh
-        - sudo mysql -e 'create database homestead_test;'
-        # - chmod +x deploy.sh
-      install:
-        - docker run -d --name=$NAME -e PUID=1000 -e PGID=1000 -e PHP_TZ=America/New_York
-          -e DB_CONNECTION=mysql -e DB_HOST=mariadb -e DB_PORT=3306 -e DB_DATABASE=homestead_test
-          -e DB_USERNAME=root -e DB_PASSWORD= -p 127.0.0.1:80:80 $DOCKER_REPO':518'
-      # before_script:
-      script:
-        - docker ps -a | awk '{print $NF}' | grep -w $NAME | cat
-      # deploy:
-      after_script:
-        - docker stop $NAME && docker rm $NAME
+    # # Pull images and test them
+    # - stage: "Test arm64"
+    #   arch: arm64
+    #   addons:
+    #     mariadb: '10.4'
+    #   services: docker
+    #   before_install:
+    #     # Setup MariaDB and chmod deploy.sh
+    #     - sudo mysql -e 'create database homestead_test;'
+    #     # - chmod +x deploy.sh
+    #   install:
+    #     - docker run -d --name=$NAME -e PUID=1000 -e PGID=1000 -e PHP_TZ=America/New_York
+    #       -e DB_CONNECTION=mysql -e DB_HOST=mariadb -e DB_PORT=3306 -e DB_DATABASE=homestead_test
+    #       -e DB_USERNAME=root -e DB_PASSWORD= -p 127.0.0.1:80:80 $DOCKER_REPO':518'
+    #   # before_script:
+    #   script:
+    #     - docker ps -a | awk '{print $NF}' | grep -w $NAME | cat
+    #   # deploy:
+    #   after_script:
+    #     - docker stop $NAME && docker rm $NAME
 
     # Finally Push tags and master
     - stage: deploy
@@ -93,7 +93,7 @@ jobs:
         - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
         - docker buildx create --name xbuilder --use
       # before_script:
-      script:
+      # script:
       deploy:
         - provider: script
           on:
