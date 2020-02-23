@@ -6,8 +6,6 @@ env:
   global:
     - NAME=lychee-laravel
     - DOCKER_REPO=lycheeorg/lychee-laravel
-  jobs:
-    - secure: "FXXbM8yDCuf9h17rAyO63XCgI2wJ5EKROY3u1MNxudz54sz3VloZ/SNnVqzdjzYPX9LXfCxVpaDhNLmQtNbqYXg4WBq+5ZuuS0efxFgVaBK0HK6lVoS3/BsJR/U1cglag0Apn2wjFgL3j7d2ZREeG7WIEuDHW5QWcVWhFGWvcAG9JRChFostdde1wbZ6SLTTW2SZFypoRThIdh5PCOnX1oCCmfzeTiCy74uTaiOkkOWsseWeDBy09UrDsFDKd8WX9R7E7g9arv4f9tjzmk1ikQM6Bnfa4YONsY9NjiKFS7/1qfXqg6Z5WfuNr+tW90KrXlk3quCPTn9PEThfqJkgS3BcsLwdhM0OUPx0BXml3RFzYl7jrtj6Wg1vSh6JJIrCh6YrBvg62qRgBs8VPI7QJ60VC56QjhZCiH1YjkjKF0+vVSygC6oJ8wsSciFGu3Cfi4ix6K8iCN90URr6YGl7WOANgfzBTwil/w1Q3IKmzNj6K2UWD+Dm92k/7dkJ2/N5gZ8LUmqhxs5nRzLBZvm77xp/ykRtadP5MHC6HTVHBM6f4tfe6jLWWSi4D8GzQX5sN6Xd2VhvifFsxQeexobhxA918ZjxvUgXHP8mng/WUYccr8DJQmom6uyXpqNpVXGRbjW4CVmgLGBZ05+lgBEmqkyEiXggNRcZipi4E9FICys="
 
 jobs:
   include:
@@ -25,8 +23,8 @@ jobs:
         - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
         - docker buildx create --name xbuilder --use
       script:
-        - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
-        - echo "Building mulit arch and pushing testing"
+        - echo "$REGISTRY_PASS" | docker login -u $REGISTRY_USER --password-stdin
+        - echo "Building multi arch and pushing testing"
         - docker buildx build
             --progress plain
             --platform linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64
