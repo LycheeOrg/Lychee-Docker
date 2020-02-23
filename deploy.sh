@@ -10,21 +10,26 @@ docker login -u $REGISTRY_USER -p $REGISTRY_PASS
 
 # if its a tagged version
 if [[ -n "$TRAVIS_TAG" ]]; then
-  echo "Pushing tagged version and latest"
-  docker tag $REPO':'$TRAVIS_BUILD_NUMBER $REPO':latest'
-  docker tag $REPO':'$TRAVIS_BUILD_NUMBER $REPO':'$TRAVIS_TAG
-  docker push $REPO':'$TRAVIS_TAG
-  docker push $REPO':latest'
+  echo "Building mulit arch and pushing tagged version and latest"
+  docker buildx build \
+    --progress plain \
+    --platform linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64 \
+    -t $DOCKER_REPO':latest' \
+    -t $DOCKER_REPO':'$TRAVIS_TAG \
+    --push \
+    .
 
 # if its a merged pr or nightly
 elif [[ "$TRAVIS_BRANCH" == "master" && "$TRAVIS_PULL_REQUEST" == "false" ]]; then
-  echo "Pushing dev"
-  docker tag $REPO':'$TRAVIS_BUILD_NUMBER $REPO':dev'
-  docker push $REPO':dev'
+  echo "Building mulit arch and pushing dev"
+  docker buildx build \
+    --progress plain \
+    --platform linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64 \
+    -t $DOCKER_REPO':dev' \
+    --push \
+    .
 
 # if a pr is created, or anything otherwise
 else
-  echo "Pushing testing"
-  docker tag $REPO':'$TRAVIS_BUILD_NUMBER $REPO':testing'
-  docker push $REPO':testing'
+  echo "Nothing to push"
 fi
