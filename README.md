@@ -5,7 +5,7 @@
 
 ![Supports amd64 Architecture][amd64-shield]
 ![Supports aarch64 Architecture][aarch64-shield]
-![Supports armhf Architecture][armhf-shield]
+![Supports armv6 Architecture][armv6-shield]
 ![Supports armv7 Architecture][armv7-shield]
 
 ## Notice: Dockerhub repository has been migrated to [lycheeorg/lychee-laravel](https://hub.docker.com/r/lycheeorg/lychee-laravel)  
@@ -108,7 +108,7 @@ Instead, we recommend to use the `PHP_VALUE` directive of PHP-FPM to override sp
 
 [aarch64-shield]: https://img.shields.io/badge/aarch64-yes-success.svg?style=flat
 [amd64-shield]: https://img.shields.io/badge/amd64-yes-success.svg?style=flat
-[armhf-shield]: https://img.shields.io/badge/armhf-yes-success.svg?style=flat
+[armv6-shield]: https://img.shields.io/badge/armv6-yes-success.svg?style=flat
 [armv7-shield]: https://img.shields.io/badge/armv7-yes-success.svg?style=flat
 [build-status-shield]: https://img.shields.io/travis/com/LycheeOrg/Lychee-Laravel-Docker/master.svg?style=flat
 [docker-pulls-shield]: https://img.shields.io/docker/pulls/lycheeorg/lychee-laravel.svg?style=flat
