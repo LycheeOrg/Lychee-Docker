@@ -47,7 +47,7 @@ RUN \
 COPY default.conf /etc/nginx/nginx.conf
 
 EXPOSE 80
-VOLUME /conf /uploads
+VOLUME /conf /uploads /sym
 
 WORKDIR /var/www/html/Lychee-Laravel
 

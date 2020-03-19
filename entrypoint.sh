@@ -29,12 +29,21 @@ echo "**** Make sure the /conf and /uploads folders exist ****"
 	mkdir -p /conf
 [ ! -f /uploads ] && \
 	mkdir -p /uploads
+[ ! -f /sym ] && \
+	mkdir -p /sym
 
 echo "**** Create the symbolic link for the /uploads folder ****"
 [ ! -L /var/www/html/Lychee-Laravel/public/uploads ] && \
 	cp -r /var/www/html/Lychee-Laravel/public/uploads/* /uploads && \
 	rm -r /var/www/html/Lychee-Laravel/public/uploads && \
 	ln -s /uploads /var/www/html/Lychee-Laravel/public/uploads
+
+echo "**** Create the symbolic link for the /sym folder ****"
+[ ! -L /var/www/html/Lychee-Laravel/public/sym ] && \
+	touch /var/www/html/Lychee-Laravel/public/sym/empty_file && \
+	cp -r /var/www/html/Lychee-Laravel/public/sym/* /sym && \
+	rm -r /var/www/html/Lychee-Laravel/public/sym && \
+	ln -s /sym /var/www/html/Lychee-Laravel/public/sym
 
 echo "**** Copy the .env to /conf ****" && \
 [ ! -e /conf/.env ] && \
@@ -64,6 +73,7 @@ echo -e " \tUser GID :\t$(id -g "$USER")"
 echo "**** Set Permissions ****" && \
 chown -R "$USER":"$USER" /conf
 chown -R "$USER":"$USER" /uploads
+chown -R "$USER":"$USER" /sym
 usermod -a -G "$USER" www-data
 chmod -R 775 /uploads
 chown -R www-data:www-data /var/www/html/Lychee-Laravel

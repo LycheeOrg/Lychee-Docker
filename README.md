@@ -55,6 +55,7 @@ docker run -d \
 --name=lychee-laravel \
 -v /host_path/lychee-laravel/conf:/conf \
 -v /host_path/lychee-laravel/uploads:/uploads \
+-v /host_path/lychee-laravel/sym:/sym \
 -e PUID=1000 \
 -e PGID=1000 \
 -e PHP_TZ=America/New_York \
