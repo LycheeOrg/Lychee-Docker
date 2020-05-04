@@ -4,8 +4,9 @@ language: generic
 
 env:
   global:
-    - NAME=lychee-laravel
-    - DOCKER_REPO=lycheeorg/lychee-laravel
+    - NAME=lychee
+    - DOCKER_REPO=lycheeorg/lychee
+    - OLD_DOCKER_REPO=lycheeorg/lychee-laravel
 
 jobs:
   include:
