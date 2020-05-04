@@ -4,7 +4,7 @@ set -e
 
 # Read Last commit hash from .git
 # This prevents installing git, and allows display of commit
-read -r longhash < /var/www/html/Lychee-Laravel/.git/refs/heads/master
+read -r longhash < /var/www/html/Lychee/.git/refs/heads/master
 shorthash=$(echo $longhash |cut -c1-7)
 
 echo '
@@ -21,7 +21,7 @@ echo '
 
 -------------------------------------
 Latest Commit: '$shorthash'
-https://github.com/LycheeOrg/Lychee-Laravel/commit/'$longhash'
+https://github.com/LycheeOrg/Lychee/commit/'$longhash'
 -------------------------------------'
 
 echo "**** Make sure the /conf and /uploads folders exist ****"
@@ -33,32 +33,32 @@ echo "**** Make sure the /conf and /uploads folders exist ****"
 	mkdir -p /sym
 
 echo "**** Create the symbolic link for the /uploads folder ****"
-[ ! -L /var/www/html/Lychee-Laravel/public/uploads ] && \
-	cp -r /var/www/html/Lychee-Laravel/public/uploads/* /uploads && \
-	rm -r /var/www/html/Lychee-Laravel/public/uploads && \
-	ln -s /uploads /var/www/html/Lychee-Laravel/public/uploads
+[ ! -L /var/www/html/Lychee/public/uploads ] && \
+	cp -r /var/www/html/Lychee/public/uploads/* /uploads && \
+	rm -r /var/www/html/Lychee/public/uploads && \
+	ln -s /uploads /var/www/html/Lychee/public/uploads
 
 echo "**** Create the symbolic link for the /sym folder ****"
-[ ! -L /var/www/html/Lychee-Laravel/public/sym ] && \
-	touch /var/www/html/Lychee-Laravel/public/sym/empty_file && \
-	cp -r /var/www/html/Lychee-Laravel/public/sym/* /sym && \
-	rm -r /var/www/html/Lychee-Laravel/public/sym && \
-	ln -s /sym /var/www/html/Lychee-Laravel/public/sym
+[ ! -L /var/www/html/Lychee/public/sym ] && \
+	touch /var/www/html/Lychee/public/sym/empty_file && \
+	cp -r /var/www/html/Lychee/public/sym/* /sym && \
+	rm -r /var/www/html/Lychee/public/sym && \
+	ln -s /sym /var/www/html/Lychee/public/sym
 
 echo "**** Copy the .env to /conf ****" && \
 [ ! -e /conf/.env ] && \
-	cp /var/www/html/Lychee-Laravel/.env.example /conf/.env
-[ ! -L /var/www/html/Lychee-Laravel/.env ] && \
-	ln -s /conf/.env /var/www/html/Lychee-Laravel/.env
+	cp /var/www/html/Lychee/.env.example /conf/.env
+[ ! -L /var/www/html/Lychee/.env ] && \
+	ln -s /conf/.env /var/www/html/Lychee/.env
 echo "**** Inject .env values ****" && \
 	/inject.sh
 
 [ ! -e /tmp/first_run ] && \
 	echo "**** Generate the key (to make sure that cookies cannot be decrypted etc) ****" && \
-	cd /var/www/html/Lychee-Laravel && \
+	cd /var/www/html/Lychee && \
 	./artisan key:generate && \
 	echo "**** Migrate the database ****" && \
-	cd /var/www/html/Lychee-Laravel && \
+	cd /var/www/html/Lychee && \
 	./artisan migrate && \
 	touch /tmp/first_run
 
@@ -76,7 +76,7 @@ chown -R "$USER":"$USER" /uploads
 chown -R "$USER":"$USER" /sym
 usermod -a -G "$USER" www-data
 chmod -R 775 /uploads
-chown -R www-data:www-data /var/www/html/Lychee-Laravel
+chown -R www-data:www-data /var/www/html/Lychee
 
 echo "**** Setup complete, starting the server. ****"
 php-fpm7.3

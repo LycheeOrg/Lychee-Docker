@@ -34,11 +34,11 @@ RUN \
     git \
     composer && \
     cd /var/www/html && \
-    git clone --recurse-submodules https://github.com/LycheeOrg/Lychee-Laravel.git && \
+    git clone --recurse-submodules https://github.com/LycheeOrg/Lychee.git && \
     apt-get install -y composer && \
-    cd /var/www/html/Lychee-Laravel && \
+    cd /var/www/html/Lychee && \
     composer install --no-dev && \
-    chown -R www-data:www-data /var/www/html/Lychee-Laravel && \
+    chown -R www-data:www-data /var/www/html/Lychee && \
     apt-get purge -y git composer && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/*
@@ -49,7 +49,7 @@ COPY default.conf /etc/nginx/nginx.conf
 EXPOSE 80
 VOLUME /conf /uploads /sym
 
-WORKDIR /var/www/html/Lychee-Laravel
+WORKDIR /var/www/html/Lychee
 
 COPY entrypoint.sh inject.sh /
 
