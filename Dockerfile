@@ -7,7 +7,7 @@ LABEL maintainer="lycheeorg"
 ENV PUID='1000'
 ENV PGID='1000'
 ENV USER='lychee'
-ENV PHP_TZ=America/New_York
+ENV PHP_TZ=UTC
 
 # Arguments
 # To use the latest Lychee release instead of master pass `--build-arg TARGET=release` to `docker build`
