@@ -34,7 +34,7 @@ RUN \
     git \
     composer && \
     cd /var/www/html && \
-    git clone --recurse-submodules https://github.com/LycheeOrg/Lychee.git && \
+    git clone --depth 1 https://github.com/LycheeOrg/Lychee.git && \
     apt-get install -y composer && \
     cd /var/www/html/Lychee && \
     composer install --no-dev && \
