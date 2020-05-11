@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
@@ -6,6 +6,17 @@ set -e
 # This prevents installing git, and allows display of commit
 read -r longhash < /var/www/html/Lychee/.git/refs/heads/master
 shorthash=$(echo $longhash |cut -c1-7)
+lycheeversion=$(</var/www/html/Lychee/version.md)
+read -r -a taghash < /var/www/html/Lychee/.git/FETCH_HEAD
+
+# Are we using a release or master?
+if [ "$longhash" = "${taghash[0]}" ]
+then
+	releaseinfo="Lychee release: $lycheeversion"
+else
+	releaseinfo="Previous release: $lycheeversion"
+	shorthash="$shorthash (dev)"
+fi
 
 echo '
 -------------------------------------
@@ -20,7 +31,8 @@ echo '
  |_____\__,_|_|  \__,_| \_/ \___|_|
 
 -------------------------------------
-Latest Commit: '$shorthash'
+Lychee Commit: '$shorthash'
+'$releaseinfo'
 https://github.com/LycheeOrg/Lychee/commit/'$longhash'
 -------------------------------------'
 

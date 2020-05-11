@@ -9,6 +9,10 @@ ENV PGID='1000'
 ENV USER='lychee'
 ENV PHP_TZ=America/New_York
 
+# Arguments
+# To use the latest Lychee release instead of master pass `--build-arg TARGET=release` to `docker build`
+ARG TARGET
+
 # Add User and Group
 RUN \
     addgroup --gid "$PGID" "$USER" && \
@@ -34,9 +38,12 @@ RUN \
     git \
     composer && \
     cd /var/www/html && \
-    git clone --depth 1 https://github.com/LycheeOrg/Lychee.git && \
-    apt-get install -y composer && \
+    if [ "$TARGET" = "release" ] ; then RELEASE_TAG="-b v$(curl -s https://raw.githubusercontent.com/LycheeOrg/Lychee/master/version.md)" ; fi && \
+    git clone --depth 1 $RELEASE_TAG https://github.com/LycheeOrg/Lychee.git && \
     cd /var/www/html/Lychee && \
+    echo "Last release: $(cat version.md)" && \
+    git fetch --depth=1 origin tag v$(cat version.md) && \
+    apt-get install -y composer && \
     composer install --no-dev && \
     chown -R www-data:www-data /var/www/html/Lychee && \
     apt-get purge -y git composer && \

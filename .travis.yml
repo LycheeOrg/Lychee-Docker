@@ -26,12 +26,7 @@ jobs:
       script:
         - echo "$REGISTRY_PASS" | docker login -u $REGISTRY_USER --password-stdin
         - echo "Building multi arch and pushing testing"
-        - docker buildx build
-            --progress plain
-            --platform linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64
-            -t $DOCKER_REPO':testing'
-            --push
-            .
+        - ./deploy.sh
 
     # Pull images and test them
     - stage: "Test amd64"
