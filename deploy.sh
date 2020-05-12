@@ -8,6 +8,15 @@ echo "$REGISTRY_PASS" | docker login -u $REGISTRY_USER --password-stdin
 #echo "TRAVIS_EVENT_TYPE: $TRAVIS_EVENT_TYPE"
 #echo "TRAVIS_PULL_REQUEST_BRANCH: $TRAVIS_PULL_REQUEST_BRANCH"
 
+build_push() {
+  docker buildx build \
+    --progress plain \
+    --platform linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64 \
+    $BUILD_ARGS \
+    --push \
+    .
+}
+
 # testing
 if [ "$TRAVIS_BUILD_STAGE_NAME" = "build" ]; then
   if [ -n "$TRAVIS_TAG" ]; then
@@ -16,39 +25,28 @@ if [ "$TRAVIS_BUILD_STAGE_NAME" = "build" ]; then
     BUILD_ARGS="--build-arg TESTTESTTEST=something"
   fi
   BUILD_ARGS=$BUILD_ARGS+" -t $DOCKER_REPO:testing "
-  docker buildx build \
-    --progress plain \
-    --platform linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64 \
-    $BUILD_ARGS \
-    --push \
-    .
+  build_push
 
 # tagged version
 elif [[ -n "$TRAVIS_TAG" ]]; then
   echo "Checking for latest Lychee version"
   LYCHEE_TAG="$(curl -s https://raw.githubusercontent.com/LycheeOrg/Lychee/master/version.md)"
   echo "Building multi arch and pushing tagged version (:v$LYCHEE_TAG) and :latest"
-  docker buildx build \
-    --progress plain \
-    --platform linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64 \
+  BUILD_ARGS="\
     --build-arg TARGET=release \
-    -t $DOCKER_REPO':latest' \
-    -t $DOCKER_REPO':'v$LYCHEE_TAG \
-    -t $OLD_DOCKER_REPO':latest' \
-    -t $OLD_DOCKER_REPO':'$LYCHEE_TAG \
-    --push \
-    .
+    -t $DOCKER_REPO:latest \
+    -t $DOCKER_REPO:v$LYCHEE_TAG \
+    -t $OLD_DOCKER_REPO:latest \
+    -t $OLD_DOCKER_REPO:$LYCHEE_TAG"
+  build_push
 
 # new commit to master or nightly build
 elif [[ "$TRAVIS_BRANCH" == "master" && "$TRAVIS_PULL_REQUEST" == "false" ]]; then
   echo "Building multi arch and pushing :dev"
-  docker buildx build \
-    --progress plain \
-    --platform linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64 \
-    -t $DOCKER_REPO':dev' \
-    -t $OLD_DOCKER_REPO':dev' \
-    --push \
-    .
+  BUILD_ARGS="\
+    -t $DOCKER_REPO:dev \
+    -t $OLD_DOCKER_REPO:dev"
+  build_push
 
 # anything else
 else
