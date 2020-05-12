@@ -1,18 +1,47 @@
 os: linux
 dist: xenial
 language: generic
+arch:
+  - amd64
+  - arm64
+services:
+  - docker
 
 env:
   global:
     - NAME=lychee
     - DOCKER_REPO=lycheeorg/lychee
     - OLD_DOCKER_REPO=lycheeorg/lychee-laravel
+  jobs:
+    - ENVFILE=mysql
+    - ENVFILE=postgres
+    - ENVFILE=sqlite
+    - ENVFILE=sqlite2
+    - ENVFILE=default
+
+stages:
+  - build
+  - test
+  - deploy
+
+before_install:
+  - if [ "$ENVFILE" = "mysql" ] ; then docker run -d --name=db --network=bridge -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=lychee mariadb:latest ; sleep 20 ; docker ps ; docker container logs db ; fi
+  - if [ "$ENVFILE" = "postgres" ] ; then docker run -d --name=db --network=bridge -e POSTGRES_PASSWORD=password -e POSTGRES_DB=lychee postgres:latest ; sleep 20 ; docker ps ; docker container logs db ; fi
+script:
+  - if [ "$ENVFILE" = "mysql" ] || [ "$ENVFILE" = "postgres" ] ; then LINK_DB="--link db" ; fi ; docker run -d --name=$NAME --env-file=env.$ENVFILE $LINK_DB -p 127.0.0.1:80:80 $DOCKER_REPO':testing' && sleep 45 && docker ps -a | grep -w $NAME && curl -sSw "%{stderr}%{http_code}" http://localhost/ > /dev/null && curl -f http://localhost/
+after_script:
+  - echo "Logs:" && docker exec $NAME cat /var/www/html/Lychee/storage/logs/laravel.log || echo "No lychee log found"
+  - echo "Last 5 lines from Docker output:" && docker container logs --tail=5 $NAME
+  - docker stop $NAME && docker rm $NAME
+  - docker stop db && docker rm db
+
 
 jobs:
   include:
 
     # Build and push to staging
     - stage: build
+      arch: amd64
       before_install:
         # Setup multi-arch builds
         - curl -fsSL https://get.docker.com | sh
@@ -28,42 +57,10 @@ jobs:
         - echo "Building multi arch and pushing testing"
         - ./deploy.sh
 
-    # Pull images and test them
-    - stage: "Test amd64"
-      arch: amd64
-      addons:
-        mariadb: '10.4'
-      services: docker
-      before_install:
-        - sudo mysql -e 'create database homestead_test;'
-      install:
-        - docker run -d --name=$NAME -e PUID=1000 -e PGID=1000 -e PHP_TZ=America/New_York
-          -e DB_CONNECTION=mysql -e DB_HOST=mariadb -e DB_PORT=3306 -e DB_DATABASE=homestead_test
-          -e DB_USERNAME=root -e DB_PASSWORD= -p 127.0.0.1:80:80 $DOCKER_REPO':testing'
-      script:
-        - docker ps -a | awk '{print $NF}' | grep -w $NAME | cat
-      after_script:
-        - docker stop $NAME && docker rm $NAME
-
-    # Pull images and test them
-    - stage: "Test arm64"
-      arch: arm64
-      addons:
-        mariadb: '10.4'
-      services: docker
-      before_install:
-        - sudo mysql -e 'create database homestead_test;'
-      install:
-        - docker run -d --name=$NAME -e PUID=1000 -e PGID=1000 -e PHP_TZ=America/New_York
-          -e DB_CONNECTION=mysql -e DB_HOST=mariadb -e DB_PORT=3306 -e DB_DATABASE=homestead_test
-          -e DB_USERNAME=root -e DB_PASSWORD= -p 127.0.0.1:80:80 $DOCKER_REPO':testing'
-      script:
-        - docker ps -a | awk '{print $NF}' | grep -w $NAME | cat
-      after_script:
-        - docker stop $NAME && docker rm $NAME
 
     # Finally Push tags and master
     - stage: deploy
+      arch: amd64
       before_install:
         - curl -fsSL https://get.docker.com | sh
         - echo '{"experimental":"enabled"}' | sudo tee /etc/docker/daemon.json
@@ -73,6 +70,10 @@ jobs:
       install:
         - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
         - docker buildx create --name xbuilder --use
+      script:
+        - echo "Skip script"
+      after_script:
+        - echo "Skip after_script"
       deploy:
         - provider: script
           on:
