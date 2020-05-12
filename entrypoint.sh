@@ -22,8 +22,8 @@ echo '
  |_____\__,_|_|  \__,_| \_/ \___|_|
 
 -------------------------------------
-Lychee Commit:  '$shorthash'
 Lychee Version: '$lycheeversion' ('$target')
+Lychee Commit:  '$shorthash'
 https://github.com/LycheeOrg/Lychee/commit/'$longhash'
 -------------------------------------'
 
