@@ -11,7 +11,7 @@ ENV PHP_TZ=America/New_York
 
 # Arguments
 # To use the latest Lychee release instead of master pass `--build-arg TARGET=release` to `docker build`
-ARG TARGET
+ARG TARGET=dev
 
 # Add User and Group
 RUN \
@@ -21,7 +21,7 @@ RUN \
 # Install base dependencies, clone the repo and install php libraries
 RUN \
     apt-get update && \
-    apt-get install -y \
+    apt-get install -qy \
     nginx-light \
     php7.3-mysql \
     php7.3-pgsql \
@@ -40,14 +40,12 @@ RUN \
     cd /var/www/html && \
     if [ "$TARGET" = "release" ] ; then RELEASE_TAG="-b v$(curl -s https://raw.githubusercontent.com/LycheeOrg/Lychee/master/version.md)" ; fi && \
     git clone --depth 1 $RELEASE_TAG https://github.com/LycheeOrg/Lychee.git && \
+    echo "$TARGET" > /var/www/html/Lychee/docker_target && \
     cd /var/www/html/Lychee && \
     echo "Last release: $(cat version.md)" && \
-    git fetch --depth=1 origin tag v$(cat version.md) && \
-    apt-get install -y composer && \
     composer install --no-dev && \
     chown -R www-data:www-data /var/www/html/Lychee && \
-    apt-get purge -y git composer && \
-    apt-get autoremove -y && \
+    apt-get purge -y --autoremove git composer && \
     rm -rf /var/lib/apt/lists/*
 
 # Add custom site to apache

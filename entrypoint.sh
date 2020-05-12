@@ -7,16 +7,7 @@ set -e
 read -r longhash < /var/www/html/Lychee/.git/refs/heads/master
 shorthash=$(echo $longhash |cut -c1-7)
 lycheeversion=$(</var/www/html/Lychee/version.md)
-read -r -a taghash < /var/www/html/Lychee/.git/FETCH_HEAD
-
-# Are we using a release or master?
-if [ "$longhash" = "${taghash[0]}" ]
-then
-	releaseinfo="Lychee release: $lycheeversion"
-else
-	releaseinfo="Previous release: $lycheeversion"
-	shorthash="$shorthash (dev)"
-fi
+target=$(</var/www/html/Lychee/docker_target)
 
 echo '
 -------------------------------------
@@ -31,8 +22,8 @@ echo '
  |_____\__,_|_|  \__,_| \_/ \___|_|
 
 -------------------------------------
-Lychee Commit: '$shorthash'
-'$releaseinfo'
+Lychee Commit:  '$shorthash'
+Lychee Version: '$lycheeversion' ('$target')
 https://github.com/LycheeOrg/Lychee/commit/'$longhash'
 -------------------------------------'
 
