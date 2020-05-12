@@ -25,6 +25,7 @@ RUN \
     nginx-light \
     php7.3-mysql \
     php7.3-pgsql \
+    php7.3-sqlite3 \
     php7.3-imagick \
     php7.3-mbstring \
     php7.3-json \
