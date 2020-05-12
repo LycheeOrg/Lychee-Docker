@@ -8,11 +8,18 @@ env:
     - DOCKER_REPO=lycheeorg/lychee
     - OLD_DOCKER_REPO=lycheeorg/lychee-laravel
 
+stages:
+  - build
+  - test
+  - deploy
+
 jobs:
   include:
 
     # Build and push to staging
     - stage: build
+      arch:
+        - amd64
       before_install:
         # Setup multi-arch builds
         - curl -fsSL https://get.docker.com | sh
@@ -29,34 +36,58 @@ jobs:
         - ./deploy.sh
 
     # Pull images and test them
-    - stage: "Test amd64"
+    - stage: "test"
+      name: "mariadb - amd64"
       arch: amd64
       addons:
         mariadb: '10.4'
       services: docker
       before_install:
-        - sudo mysql -e 'create database homestead_test;'
+        - sudo mysql -e 'create database lychee;'
       install:
-        - docker run -d --name=$NAME -e PUID=1000 -e PGID=1000 -e PHP_TZ=America/New_York
-          -e DB_CONNECTION=mysql -e DB_HOST=mariadb -e DB_PORT=3306 -e DB_DATABASE=homestead_test
+        - docker run -d --name=$NAME -e PUID=1000 -e PGID=1000 -e PHP_TZ=UTC
+          -e DB_CONNECTION=mysql -e DB_HOST=mariadb -e DB_PORT=3306 -e DB_DATABASE=lychee
           -e DB_USERNAME=root -e DB_PASSWORD= -p 127.0.0.1:80:80 $DOCKER_REPO':testing'
       script:
         - docker ps -a | awk '{print $NF}' | grep -w $NAME | cat
       after_script:
         - docker stop $NAME && docker rm $NAME
 
-    # Pull images and test them
-    - stage: "Test arm64"
+    - name: "sqlite - amd64"
+      arch: amd64
+      services: docker
+      install:
+        - docker run -d --name=$NAME -e PUID=1000 -e PGID=1000 -e PHP_TZ=UTC
+          -e DB_CONNECTION=sqlite -e DB_PORT=3306 -e DB_DATABASE=database/database.sqlite
+          -p 127.0.0.1:80:80 $DOCKER_REPO':testing'
+      script:
+        - docker ps -a | awk '{print $NF}' | grep -w $NAME | cat
+      after_script:
+        - docker stop $NAME && docker rm $NAME
+
+    - name: "mariadb - arm64"
       arch: arm64
       addons:
         mariadb: '10.4'
       services: docker
       before_install:
-        - sudo mysql -e 'create database homestead_test;'
+        - sudo mysql -e 'create database lychee;'
       install:
-        - docker run -d --name=$NAME -e PUID=1000 -e PGID=1000 -e PHP_TZ=America/New_York
-          -e DB_CONNECTION=mysql -e DB_HOST=mariadb -e DB_PORT=3306 -e DB_DATABASE=homestead_test
+        - docker run -d --name=$NAME -e PUID=1000 -e PGID=1000 -e PHP_TZ=UTC
+          -e DB_CONNECTION=mysql -e DB_HOST=mariadb -e DB_PORT=3306 -e DB_DATABASE=lychee
           -e DB_USERNAME=root -e DB_PASSWORD= -p 127.0.0.1:80:80 $DOCKER_REPO':testing'
+      script:
+        - docker ps -a | awk '{print $NF}' | grep -w $NAME | cat
+      after_script:
+        - docker stop $NAME && docker rm $NAME
+
+    - name: "sqlite - arm64"
+      arch: arm64
+      services: docker
+      install:
+        - docker run -d --name=$NAME -e PUID=1000 -e PGID=1000 -e PHP_TZ=UTC
+          -e DB_CONNECTION=sqlite -e DB_PORT=3306 -e DB_DATABASE=database/database.sqlite
+          -p 127.0.0.1:80:80 $DOCKER_REPO':testing'
       script:
         - docker ps -a | awk '{print $NF}' | grep -w $NAME | cat
       after_script:
@@ -64,6 +95,8 @@ jobs:
 
     # Finally Push tags and master
     - stage: deploy
+      arch:
+        - amd64
       before_install:
         - curl -fsSL https://get.docker.com | sh
         - echo '{"experimental":"enabled"}' | sudo tee /etc/docker/daemon.json
