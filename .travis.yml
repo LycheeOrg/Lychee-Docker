@@ -1,17 +1,35 @@
 os: linux
 dist: xenial
 language: generic
+arch:
+  - amd64
+  - arm64
+services: docker
+addons:
+  mariadb: '10.4'
 
 env:
   global:
     - NAME=lychee
     - DOCKER_REPO=lycheeorg/lychee
     - OLD_DOCKER_REPO=lycheeorg/lychee-laravel
+  jobs:
+    - ENVFILE=mysql
+    - ENVFILE=sqlite
+    - ENVFILE=sqlite2
 
 stages:
   - build
   - test
   - deploy
+
+before_install:
+  - sudo mysql -e 'create database lychee;'
+script:
+  - docker run -d --name=$NAME --env-file=env.$ENVFILE -p 127.0.0.1:80:80 $DOCKER_REPO':testing' && docker ps -a | awk '{print $NF}' | grep -w $NAME | cat
+after_script:
+  - docker stop $NAME && docker rm $NAME
+
 
 jobs:
   include:
@@ -35,63 +53,6 @@ jobs:
         - echo "Building multi arch and pushing testing"
         - ./deploy.sh
 
-    # Pull images and test them
-    - stage: "test"
-      name: "mariadb - amd64"
-      arch: amd64
-      addons:
-        mariadb: '10.4'
-      services: docker
-      before_install:
-        - sudo mysql -e 'create database lychee;'
-      install:
-        - docker run -d --name=$NAME -e PUID=1000 -e PGID=1000 -e PHP_TZ=UTC
-          -e DB_CONNECTION=mysql -e DB_HOST=mariadb -e DB_PORT=3306 -e DB_DATABASE=lychee
-          -e DB_USERNAME=root -e DB_PASSWORD= -p 127.0.0.1:80:80 $DOCKER_REPO':testing'
-      script:
-        - docker ps -a | awk '{print $NF}' | grep -w $NAME | cat
-      after_script:
-        - docker stop $NAME && docker rm $NAME
-
-    - name: "sqlite - amd64"
-      arch: amd64
-      services: docker
-      install:
-        - docker run -d --name=$NAME -e PUID=1000 -e PGID=1000 -e PHP_TZ=UTC
-          -e DB_CONNECTION=sqlite -e DB_PORT=3306 -e DB_DATABASE=database/database.sqlite
-          -p 127.0.0.1:80:80 $DOCKER_REPO':testing'
-      script:
-        - docker ps -a | awk '{print $NF}' | grep -w $NAME | cat
-      after_script:
-        - docker stop $NAME && docker rm $NAME
-
-    - name: "mariadb - arm64"
-      arch: arm64
-      addons:
-        mariadb: '10.4'
-      services: docker
-      before_install:
-        - sudo mysql -e 'create database lychee;'
-      install:
-        - docker run -d --name=$NAME -e PUID=1000 -e PGID=1000 -e PHP_TZ=UTC
-          -e DB_CONNECTION=mysql -e DB_HOST=mariadb -e DB_PORT=3306 -e DB_DATABASE=lychee
-          -e DB_USERNAME=root -e DB_PASSWORD= -p 127.0.0.1:80:80 $DOCKER_REPO':testing'
-      script:
-        - docker ps -a | awk '{print $NF}' | grep -w $NAME | cat
-      after_script:
-        - docker stop $NAME && docker rm $NAME
-
-    - name: "sqlite - arm64"
-      arch: arm64
-      services: docker
-      install:
-        - docker run -d --name=$NAME -e PUID=1000 -e PGID=1000 -e PHP_TZ=UTC
-          -e DB_CONNECTION=sqlite -e DB_PORT=3306 -e DB_DATABASE=database/database.sqlite
-          -p 127.0.0.1:80:80 $DOCKER_REPO':testing'
-      script:
-        - docker ps -a | awk '{print $NF}' | grep -w $NAME | cat
-      after_script:
-        - docker stop $NAME && docker rm $NAME
 
     # Finally Push tags and master
     - stage: deploy
