@@ -26,7 +26,7 @@ stages:
 before_install:
   - sudo mysql -e 'create database lychee;'
 script:
-  - docker run -d --name=$NAME --env-file=env.$ENVFILE -p 127.0.0.1:80:80 $DOCKER_REPO':testing' && docker ps -a | awk '{print $NF}' | grep -w $NAME | cat
+  - docker run -d --name=$NAME --env-file=env.$ENVFILE -p 127.0.0.1:80:80 $DOCKER_REPO':testing' && docker ps -a | awk '{print $NF}' | grep -w $NAME
 after_script:
   - docker stop $NAME && docker rm $NAME
 
