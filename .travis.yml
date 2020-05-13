@@ -4,7 +4,9 @@ language: generic
 arch:
   - amd64
   - arm64
-services: docker
+services:
+  - docker
+  - postgresql
 addons:
   mariadb: '10.4'
 
@@ -15,6 +17,7 @@ env:
     - OLD_DOCKER_REPO=lycheeorg/lychee-laravel
   jobs:
     - ENVFILE=mysql
+    - ENVFILE=postgres
     - ENVFILE=sqlite
     - ENVFILE=sqlite2
 
@@ -25,6 +28,7 @@ stages:
 
 before_install:
   - sudo mysql -e 'create database lychee;'
+  - psql -U postgres -c 'create database lychee;'
 script:
   - docker run -d --name=$NAME --env-file=env.$ENVFILE -p 127.0.0.1:80:80 $DOCKER_REPO':testing' && docker ps -a | awk '{print $NF}' | grep -w $NAME
 after_script:
