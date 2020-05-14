@@ -30,7 +30,7 @@ before_install:
   - sudo mysql -e 'create database lychee;'
   - psql -U postgres -c 'create database lychee;'
 script:
-  - docker run -d --name=$NAME --env-file=env.$ENVFILE -p 127.0.0.1:80:80 $DOCKER_REPO':testing' && docker ps -a | awk '{print $NF}' | grep -w $NAME && curl -w http_code http://localhost/ && curl -f http://localhost/
+  - docker run -d --name=$NAME --env-file=env.$ENVFILE -p 127.0.0.1:80:80 $DOCKER_REPO':testing' && docker ps -a | awk '{print $NF}' | grep -w $NAME && sleep 45 && curl -w http_code http://localhost/ && curl -f http://localhost/
 after_script:
   - docker stop $NAME && docker rm $NAME
 
