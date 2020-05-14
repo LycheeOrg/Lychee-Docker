@@ -27,7 +27,7 @@ stages:
   - deploy
 
 before_install:
-  - if [ "$ENVFILE" = "mysql" ] ; then sudo mysql -e 'create database lychee;' ; fi
+  - if [ "$ENVFILE" = "mysql" ] ; then mysql -e 'create database lychee;' -h '127.0.0.1' -u 'root' ; mysql -e 'create database lychee;' -h '127.0.0.1' -u 'travis' ; fi
   - if [ "$ENVFILE" = "postgres" ] ; then psql -U postgres -c 'create database lychee;' ; fi
 script:
   - docker run -d --name=$NAME --env-file=env.$ENVFILE --network=host $DOCKER_REPO':testing' && docker ps -a | awk '{print $NF}' | grep -w $NAME && sleep 45 && curl -sSw http_code http://localhost/ > /dev/null && curl -f http://localhost/
