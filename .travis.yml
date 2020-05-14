@@ -7,8 +7,6 @@ arch:
 services:
   - docker
   - postgresql
-addons:
-  mariadb: '10.4'
 
 env:
   global:
@@ -27,10 +25,10 @@ stages:
   - deploy
 
 before_install:
-  - if [ "$ENVFILE" = "mysql" ] ; then mysql -e 'create database lychee;' -h '127.0.0.1' -u 'root' -P 3306 ; mysql -e 'create database lychee;' -h '127.0.0.1' -u 'travis' -P 3306 ; fi
+  - if [ "$ENVFILE" = "mysql" ] ; then docker run -d --name=mariadb --network=bridge -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=lychee -p 127.0.0.1:3306:3306 mariadb:latest ; sleep 20 ; docker ps ; docker container logs mariadb ; fi
   - if [ "$ENVFILE" = "postgres" ] ; then psql -U postgres -c 'create database lychee;' ; fi
 script:
-  - docker run -d --name=$NAME --env-file=env.$ENVFILE --network=host $DOCKER_REPO':testing' && docker ps -a | awk '{print $NF}' | grep -w $NAME && sleep 45 && curl -sSw http_code http://localhost/ > /dev/null && curl -f http://localhost/
+  - if [ "$ENVFILE" = "mysql" ] ; then docker run -d --name=$NAME --env-file=env.$ENVFILE --network=bridge --link mariadb -p 127.0.0.1:80:80 $DOCKER_REPO':testing' && docker ps -a | awk '{print $NF}' | grep -w $NAME && sleep 45 && curl -sSw http_code http://localhost/ > /dev/null && curl -f http://localhost/ ; else docker run -d --name=$NAME --env-file=env.$ENVFILE --network=host $DOCKER_REPO':testing' && docker ps -a | awk '{print $NF}' | grep -w $NAME && sleep 45 && curl -sSw http_code http://localhost/ > /dev/null && curl -f http://localhost/ ; fi
 after_script:
   - echo "Logs:" && docker exec $NAME cat /var/www/html/Lychee/storage/logs/laravel.log || echo "No lychee log found"
   - echo "Last 5 lines from Docker output:" && docker container logs --tail=5 $NAME
