@@ -32,6 +32,7 @@ before_install:
 script:
   - docker run -d --name=$NAME --env-file=env.$ENVFILE -p 127.0.0.1:80:80 $DOCKER_REPO':testing' && docker ps -a | awk '{print $NF}' | grep -w $NAME && sleep 45 && curl -w http_code http://localhost/ && curl -f http://localhost/
 after_script:
+  - echo "Logs:" && docker exec $NAME cat /var/www/html/Lychee/storage/logs/laravel.log || echo "No lychee log found"
   - docker stop $NAME && docker rm $NAME
 
 
