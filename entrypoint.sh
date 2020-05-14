@@ -53,6 +53,7 @@ if [ "$DB_CONNECTION" = "sqlite" ]
 			then echo "**** Specified sqlite database doesn't exist. Creating it ****"
 			echo "**** Please make sure your database is on a persistent volume ****"
 			touch "$DB_DATABASE"
+			chown www-data:www-data "$DB_DATABASE"
 		fi
 		chown www-data:www-data "$DB_DATABASE"
 	else DB_DATABASE="/var/www/html/Lychee/database/database.sqlite"
