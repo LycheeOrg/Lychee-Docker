@@ -41,16 +41,18 @@ RUN \
     cd /var/www/html && \
     if [ "$TARGET" = "release" ] ; then RELEASE_TAG="-b v$(curl -s https://raw.githubusercontent.com/LycheeOrg/Lychee/master/version.md)" ; fi && \
     git clone --depth 1 $RELEASE_TAG https://github.com/LycheeOrg/Lychee.git && \
+    mv Lychee/.git/refs/heads/master Lychee/master && \
+    rm -r Lychee/.git && \
     echo "$TARGET" > /var/www/html/Lychee/docker_target && \
-    find Lychee -wholename '*/[Tt]ests/*' -delete && \
-    find Lychee -wholename '*/[Tt]est/*' -delete && \
-    rm -r Lychee/storage/framework/cache/data/* 2> /dev/null || true && \
-    rm    Lychee/storage/framework/sessions/* 2> /dev/null || true && \
-    rm    Lychee/storage/framework/views/* 2> /dev/null || true && \
-    rm    Lychee/storage/logs/* 2> /dev/null || true && \
     cd /var/www/html/Lychee && \
     echo "Last release: $(cat version.md)" && \
     composer install --no-dev --prefer-dist && \
+    find . -wholename '*/[Tt]ests/*' -delete && \
+    find . -wholename '*/[Tt]est/*' -delete && \
+    rm -r storage/framework/cache/data/* 2> /dev/null || true && \
+    rm    storage/framework/sessions/* 2> /dev/null || true && \
+    rm    storage/framework/views/* 2> /dev/null || true && \
+    rm    storage/logs/* 2> /dev/null || true && \
     chown -R www-data:www-data /var/www/html/Lychee && \
     apt-get purge -y --autoremove git composer && \
     rm -rf /var/lib/apt/lists/*
