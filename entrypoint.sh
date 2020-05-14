@@ -72,7 +72,7 @@ fi
 
 echo "**** Copy the .env to /conf ****" && \
 [ ! -e /conf/.env ] && \
-	cp /var/www/html/Lychee/.env.example /conf/.env
+	sed 's|^#DB_DATABASE=$|DB_DATABASE='$DB_DATABASE'|' /var/www/html/Lychee/.env.example > /conf/.env
 [ ! -L /var/www/html/Lychee/.env ] && \
 	ln -s /conf/.env /var/www/html/Lychee/.env
 echo "**** Inject .env values ****" && \
