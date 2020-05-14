@@ -98,7 +98,6 @@ chown -R "$USER":"$USER" /uploads
 chown -R "$USER":"$USER" /sym
 usermod -a -G "$USER" www-data
 chmod -R 775 /uploads
-chown -R www-data:www-data /var/www/html/Lychee
 
 echo "**** Setup complete, starting the server. ****"
 php-fpm7.3
