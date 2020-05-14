@@ -55,16 +55,16 @@ if [ "$DB_CONNECTION" = "sqlite" ]
 			touch "$DB_DATABASE"
 		fi
 		chown www-data:www-data "$DB_DATABASE"
-	else DB_DATABASE="database/database.sqlite"
+	else DB_DATABASE="/var/www/html/Lychee/database/database.sqlite"
 		export DB_DATABASE
 		if [ ! -L database/database.sqlite ]
 			then [ ! -e /conf/database.sqlite ] && \
 			echo "**** Copy the default database to /conf ****" && \
 			cp database/database.sqlite /conf/database.sqlite
 			echo "**** Create the symbolic link for the database ****"
-			rm /var/www/html/Lychee/database/database.sqlite
-			ln -s /conf/database.sqlite /var/www/html/Lychee/database/database.sqlite
-			chown www-data:www-data /conf /conf/database.sqlite
+			rm database/database.sqlite
+			ln -s /conf/database.sqlite database/database.sqlite
+			chown -h www-data:www-data /conf /conf/database.sqlite database/database.sqlite
 		fi
 	fi
 fi
