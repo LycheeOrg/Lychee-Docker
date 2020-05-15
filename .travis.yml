@@ -27,7 +27,7 @@ before_install:
   - if [ "$ENVFILE" = "mysql" ] ; then docker run -d --name=db --network=bridge -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=lychee mariadb:latest ; sleep 20 ; docker ps ; docker container logs db ; fi
   - if [ "$ENVFILE" = "postgres" ] ; then docker run -d --name=db --network=bridge -e POSTGRES_PASSWORD=password -e POSTGRES_DB=lychee postgres:latest ; sleep 20 ; docker ps ; docker container logs db ; fi
 script:
-  - if [ "$ENVFILE" = "mysql" ] || [ "$ENVFILE" = "postgres" ] ; then LINK_DB="--link db" ; fi ; docker run -d --name=$NAME --env-file=env.$ENVFILE $LINK_DB -p 127.0.0.1:80:80 $DOCKER_REPO':testing' && docker ps -a | awk '{print $NF}' | grep -w $NAME && sleep 45 && curl -sSw "%{stderr}%{http_code}" http://localhost/ > /dev/null && curl -f http://localhost/
+  - if [ "$ENVFILE" = "mysql" ] || [ "$ENVFILE" = "postgres" ] ; then LINK_DB="--link db" ; fi ; docker run -d --name=$NAME --env-file=env.$ENVFILE $LINK_DB -p 127.0.0.1:80:80 $DOCKER_REPO':testing' && sleep 45 && docker ps -a | grep -w $NAME && curl -sSw "%{stderr}%{http_code}" http://localhost/ > /dev/null && curl -f http://localhost/
 after_script:
   - echo "Logs:" && docker exec $NAME cat /var/www/html/Lychee/storage/logs/laravel.log || echo "No lychee log found"
   - echo "Last 5 lines from Docker output:" && docker container logs --tail=5 $NAME
