@@ -42,7 +42,9 @@ RUN \
     if [ "$TARGET" = "release" ] ; then RELEASE_TAG="-b v$(curl -s https://raw.githubusercontent.com/LycheeOrg/Lychee/master/version.md)" ; fi && \
     git clone --depth 1 $RELEASE_TAG https://github.com/LycheeOrg/Lychee.git && \
     mv Lychee/.git/refs/heads/master Lychee/master && \
-    rm -r Lychee/.git && \
+    mv Lychee/.git/HEAD Lychee/HEAD && \
+    rm -r Lychee/.git/* && \
+    mv Lychee/HEAD Lychee/.git/HEAD && \
     echo "$TARGET" > /var/www/html/Lychee/docker_target && \
     cd /var/www/html/Lychee && \
     echo "Last release: $(cat version.md)" && \
