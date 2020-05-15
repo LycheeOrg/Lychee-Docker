@@ -47,7 +47,7 @@ echo "**** Create the symbolic link for the /sym folder ****"
 
 cd /var/www/html/Lychee
 
-if [ "$DB_CONNECTION" = "sqlite" ]
+if [ "$DB_CONNECTION" = "sqlite" ] || [ -z "$DB_CONNECTION" ]
 	then if [ -n "$DB_DATABASE" ]
 		then if [ ! -e "$DB_DATABASE" ]
 			then echo "**** Specified sqlite database doesn't exist. Creating it ****"

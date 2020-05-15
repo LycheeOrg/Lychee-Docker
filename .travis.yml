@@ -17,6 +17,7 @@ env:
     - ENVFILE=postgres
     - ENVFILE=sqlite
     - ENVFILE=sqlite2
+    - ENVFILE=default
 
 stages:
   - build
