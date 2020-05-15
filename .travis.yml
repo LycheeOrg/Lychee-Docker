@@ -40,8 +40,7 @@ jobs:
 
     # Build and push to staging
     - stage: build
-      arch:
-        - amd64
+      arch: amd64
       before_install:
         # Setup multi-arch builds
         - curl -fsSL https://get.docker.com | sh
@@ -60,8 +59,7 @@ jobs:
 
     # Finally Push tags and master
     - stage: deploy
-      arch:
-        - amd64
+      arch: amd64
       before_install:
         - curl -fsSL https://get.docker.com | sh
         - echo '{"experimental":"enabled"}' | sudo tee /etc/docker/daemon.json
