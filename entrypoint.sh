@@ -45,6 +45,10 @@ echo "**** Create the symbolic link for the /sym folder ****"
 	rm -r /var/www/html/Lychee/public/sym && \
 	ln -s /sym /var/www/html/Lychee/public/sym
 
+echo "**** Create the symbolic link to the old Lychee-Laravel folder ****"
+[ ! -L /var/www/html/Lychee-Laravel ] && \
+	ln -s /var/www/html/Lychee /var/www/html/Lychee-Laravel
+
 cd /var/www/html/Lychee
 
 if [ "$DB_CONNECTION" = "sqlite" ] || [ -z "$DB_CONNECTION" ]
