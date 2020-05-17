@@ -33,6 +33,7 @@ RUN \
     php7.3-xml \
     php7.3-zip \
     php7.3-fpm \
+    php7.3-redis \
     curl \
     libimage-exiftool-perl \
     ffmpeg \
