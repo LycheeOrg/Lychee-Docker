@@ -20,15 +20,18 @@ env:
     - ENVFILE=default
 
 stages:
-  - build
-  - test
-  - deploy
+  - name: build
+    if: fork = false
+  - name: test
+  - name: deploy
+    if: fork = false
 
 before_install:
   - if [ "$ENVFILE" = "mysql" ] ; then docker run -d --name=db --network=bridge -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=lychee mariadb:latest ; sleep 20 ; docker ps ; docker container logs db ; fi
   - if [ "$ENVFILE" = "postgres" ] ; then docker run -d --name=db --network=bridge -e POSTGRES_PASSWORD=password -e POSTGRES_DB=lychee postgres:latest ; sleep 20 ; docker ps ; docker container logs db ; fi
+  - if [ -n "$TRAVIS_PULL_REQUEST_SLUG" ] && echo "$TRAVIS_PULL_REQUEST_SLUG" | grep -v '^LycheeOrg/' ; then docker build -t lychee . ; LYCHEE_IMAGE="lychee" ; else LYCHEE_IMAGE="$DOCKER_REPO:testing" ; fi
 script:
-  - if [ "$ENVFILE" = "mysql" ] || [ "$ENVFILE" = "postgres" ] ; then LINK_DB="--link db" ; fi ; docker run -d --name=$NAME --env-file=env.$ENVFILE $LINK_DB -p 127.0.0.1:80:80 $DOCKER_REPO':testing' && sleep 45 && docker ps -a | grep -w $NAME && curl -sSw "%{stderr}%{http_code}" http://localhost/ > /dev/null && curl -f http://localhost/
+  - if [ "$ENVFILE" = "mysql" ] || [ "$ENVFILE" = "postgres" ] ; then LINK_DB="--link db" ; fi ; docker run -d --name=$NAME --env-file=env.$ENVFILE $LINK_DB -p 127.0.0.1:80:80 $LYCHEE_IMAGE && sleep 45 && docker ps -a | grep -w $NAME && curl -sSw "%{stderr}%{http_code}" http://localhost/ > /dev/null && curl -f http://localhost/
 after_script:
   - echo "Logs:" && docker exec $NAME cat /var/www/html/Lychee/storage/logs/laravel.log || echo "No lychee log found"
   - echo "Last 5 lines from Docker output:" && docker container logs --tail=5 $NAME
@@ -56,7 +59,6 @@ jobs:
         - echo "$REGISTRY_PASS" | docker login -u $REGISTRY_USER --password-stdin
         - echo "Building multi arch and pushing testing"
         - ./deploy.sh
-
 
     # Finally Push tags and master
     - stage: deploy
