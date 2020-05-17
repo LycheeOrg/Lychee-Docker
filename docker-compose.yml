@@ -9,8 +9,7 @@ version: '3'
 services:
   lychee_db:
     container_name: lychee_db
-    image: mysql:8.0
-    command: --default-authentication-plugin=mysql_native_password
+    image: mariadb:10
     environment:
       - MYSQL_ROOT_PASSWORD=<ROOT_PASSWORD>
       - MYSQL_DATABASE=lychee
@@ -25,8 +24,8 @@ services:
     restart: unless-stopped
 
   lychee:
-    image: lycheeorg/lychee-laravel
-    container_name: lychee_laravel
+    image: lycheeorg/lychee
+    container_name: lychee
     ports:
       - 90:80
     volumes:
@@ -38,7 +37,8 @@ services:
     environment:
       #- PUID=1000
       #- PGID=1000
-      - PHP_TZ=America/New_York
+      # PHP timezone e.g. PHP_TZ=America/New_York
+      - PHP_TZ=UTC
       #- APP_NAME=Laravel
       #- APP_ENV=local
       #- APP_DEBUG=true

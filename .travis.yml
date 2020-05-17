@@ -60,6 +60,18 @@ jobs:
         - echo "Building multi arch and pushing testing"
         - ./deploy.sh
 
+    # Test docker-compose
+    - stage: test
+      name: docker-compose
+      before_install:
+        - sed -i 's/<.*_PASSWORD>/password/g' docker-compose.yml
+        - >-
+            sed -i 's|image: lycheeorg/lychee|image: lycheeorg/lychee:testing|' docker-compose.yml
+      script: docker-compose up -d && sleep 45 && docker-compose ps && curl -sSw "%{stderr}%{http_code}" http://localhost:90/ > /dev/null && curl -f http://localhost:90/
+      after_script:
+        - docker-compose logs
+        - docker-compose down --volumes
+
     # Finally Push tags and master
     - stage: deploy
       arch: amd64
