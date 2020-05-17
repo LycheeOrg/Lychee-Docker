@@ -27,6 +27,12 @@ Lychee Commit:  '$shorthash'
 https://github.com/LycheeOrg/Lychee/commit/'$longhash'
 -------------------------------------'
 
+if [ -n "$STARTUP_DELAY" ]
+	then echo "**** Delaying startup ($STARTUP_DELAY seconds)... ****"
+	sleep $STARTUP_DELAY
+fi
+
+
 echo "**** Make sure the /conf and /uploads folders exist ****"
 [ ! -f /conf ]    && mkdir -p /conf
 [ ! -f /uploads ] && mkdir -p /uploads

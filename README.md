@@ -92,7 +92,8 @@ Some variables are specific to Docker, and the default values are :
 * PUID=1000  
 * PGID=1000  
 * USER=lychee
-* PHP_TZ=America/New_York
+* PHP_TZ=UTC
+* STARTUP_DELAY=0
 
 ## Advanced configuration
 
