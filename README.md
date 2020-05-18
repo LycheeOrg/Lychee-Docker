@@ -1,7 +1,7 @@
-[![Build Status][build-status-shield]](https://travis-ci.com/LycheeOrg/Lychee-Laravel-Docker)
+[![Build Status][build-status-shield]](https://travis-ci.com/LycheeOrg/Lychee-Docker)
 [![Docker Pulls (old)][docker-pulls-shield-old]](https://hub.docker.com/r/lycheeorg/lychee-laravel)
 [![Docker Pulls (new)][docker-pulls-shield]](https://hub.docker.com/r/lycheeorg/lychee)
-[![Release][release-shield]](https://github.com/LycheeOrg/Lychee-Laravel-Docker/releases)
+[![Release][release-shield]](https://github.com/LycheeOrg/Lychee-Docker/releases)
 ![Last Commit][last-commit-shield]
 
 ![Supports amd64 Architecture][amd64-shield]
@@ -113,8 +113,8 @@ Instead, we recommend to use the `PHP_VALUE` directive of PHP-FPM to override sp
 [amd64-shield]: https://img.shields.io/badge/amd64-yes-success.svg?style=flat
 [armv6-shield]: https://img.shields.io/badge/armv6-yes-success.svg?style=flat
 [armv7-shield]: https://img.shields.io/badge/armv7-yes-success.svg?style=flat
-[build-status-shield]: https://img.shields.io/travis/com/LycheeOrg/Lychee-Laravel-Docker/master.svg?style=flat
-[docker-pulls-shield-old]: https://img.shields.io/docker/pulls/lycheeorg/lychee-laravel.svg?style=flat
-[docker-pulls-shield]: https://img.shields.io/docker/pulls/lycheeorg/lychee.svg?style=flat
-[last-commit-shield]: https://img.shields.io/github/last-commit/LycheeOrg/Lychee-Laravel-Docker.svg?style=flat
-[release-shield]: https://img.shields.io/github/release/LycheeOrg/Lychee-Laravel-Docker.svg?style=flat
+[build-status-shield]: https://img.shields.io/travis/com/LycheeOrg/Lychee-Docker/master.svg?style=flat
+[docker-pulls-shield-old]: https://img.shields.io/docker/pulls/lycheeorg/lychee-laravel.svg?style=flat&label=Docker%20Pulls%20(lychee-laravel)
+[docker-pulls-shield]: https://img.shields.io/docker/pulls/lycheeorg/lychee.svg?style=flat&label=Docker%20Pulls%20(lychee)
+[last-commit-shield]: https://img.shields.io/github/last-commit/LycheeOrg/Lychee-Docker.svg?style=flat
+[release-shield]: https://img.shields.io/github/release/LycheeOrg/Lychee-Docker.svg?style=flat
