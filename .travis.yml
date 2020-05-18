@@ -35,8 +35,6 @@ script:
 after_script:
   - echo "Logs:" && docker exec $NAME cat /var/www/html/Lychee/storage/logs/laravel.log || echo "No lychee log found"
   - echo "Last 5 lines from Docker output:" && docker container logs --tail=5 $NAME
-  - docker stop $NAME && docker rm $NAME
-  - docker stop db && docker rm db
 
 
 jobs:
@@ -70,7 +68,6 @@ jobs:
       script: docker-compose up -d && sleep 45 && docker-compose ps && curl -sSw "%{stderr}%{http_code}" http://localhost:90/ > /dev/null && curl -f http://localhost:90/
       after_script:
         - docker-compose logs
-        - docker-compose down --volumes
 
     # Finally Push tags and master
     - stage: deploy
