@@ -42,7 +42,7 @@ RUN \
     cd /var/www/html && \
     if [ "$TARGET" = "release" ] ; then RELEASE_TAG="-b v$(curl -s https://raw.githubusercontent.com/LycheeOrg/Lychee/master/version.md)" ; fi && \
     git clone --depth 1 $RELEASE_TAG https://github.com/LycheeOrg/Lychee.git && \
-    mv Lychee/.git/refs/heads/master Lychee/master && \
+    if [ -f Lychee/.git/refs/heads/master Lychee/master ] ; then mv Lychee/.git/refs/heads/master Lychee/master ; else mv Lychee/.git/HEAD Lychee/master ; fi && \
     mv Lychee/.git/HEAD Lychee/HEAD && \
     rm -r Lychee/.git/* && \
     mv Lychee/HEAD Lychee/.git/HEAD && \
