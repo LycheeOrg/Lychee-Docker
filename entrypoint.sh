@@ -34,9 +34,9 @@ fi
 
 
 echo "**** Make sure the /conf and /uploads folders exist ****"
-[ ! -d /conf ]    && mkdir -p /conf
-[ ! -d /uploads ] && mkdir -p /uploads
-[ ! -d /sym ]     && mkdir -p /sym
+[ ! -f /conf ]    && mkdir -p /conf
+[ ! -f /uploads ] && mkdir -p /uploads
+[ ! -f /sym ]     && mkdir -p /sym
 
 echo "**** Create the symbolic link for the /uploads folder ****"
 [ ! -L /var/www/html/Lychee/public/uploads ] && \

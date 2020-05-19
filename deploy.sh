@@ -21,8 +21,10 @@ build_push() {
 if [ "$TRAVIS_BUILD_STAGE_NAME" = "build" ]; then
   if [ -n "$TRAVIS_TAG" ]; then
     BUILD_ARGS="--build-arg TARGET=release"
+  else
+    BUILD_ARGS="--build-arg TESTTESTTEST=something"
   fi
-  BUILD_ARGS="$BUILD_ARGS -t $DOCKER_REPO:testing "
+  BUILD_ARGS=$BUILD_ARGS+" -t $DOCKER_REPO:testing "
   build_push
 
 # tagged version
