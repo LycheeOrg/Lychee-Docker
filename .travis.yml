@@ -90,14 +90,4 @@ jobs:
         - echo "Skip after_script"
       deploy:
         - provider: script
-          on:
-            branch: master
-          script: ./deploy.sh
-        - provider: script
-          on:
-            tags: true
-          script: ./deploy.sh
-        - provider: script
-          on:
-            all_branches: true
           script: ./deploy.sh
