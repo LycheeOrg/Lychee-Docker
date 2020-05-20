@@ -74,6 +74,7 @@ jobs:
 
     # Finally Push tags and master
     - stage: deploy
+      name: "Deploy to Docker Hub"
       arch: amd64
       before_install:
         - curl -fsSL https://get.docker.com | sh
@@ -91,3 +92,21 @@ jobs:
       deploy:
         - provider: script
           script: ./deploy.sh
+
+    - name: "Test multiarch"
+      arch: amd64
+      before_install:
+        - curl -fsSL https://get.docker.com | sh
+        - echo '{"experimental":"enabled"}' | sudo tee /etc/docker/daemon.json
+        - mkdir -p $HOME/.docker
+        - echo '{"experimental":"enabled"}' | sudo tee $HOME/.docker/config.json
+        - sudo service docker start
+      install:
+        - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+        - docker buildx create --name xbuilder --use
+      script:
+        - ./deploy.sh
+      after_script:
+        - echo "Skip after_script"
+  allow_failures:
+    - name: "Test multiarch"

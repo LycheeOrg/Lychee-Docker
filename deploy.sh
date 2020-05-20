@@ -11,7 +11,7 @@ echo "$REGISTRY_PASS" | docker login -u $REGISTRY_USER --password-stdin
 build_push() {
   docker buildx build \
     --progress plain \
-    --platform linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64 \
+    --platform $PLATFORM \
     $BUILD_ARGS \
     --push \
     .
@@ -21,8 +21,18 @@ build_push() {
 if [ "$TRAVIS_BUILD_STAGE_NAME" = "build" ]; then
   if [ -n "$TRAVIS_TAG" ]; then
     BUILD_ARGS="--build-arg TARGET=release"
+    PLATFORM="linux/arm64,linux/amd64"
+  else
+    PLATFORM="linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64"
   fi
   BUILD_ARGS="$BUILD_ARGS -t $DOCKER_REPO:testing "
+  build_push
+
+elif [ "$TRAVIS_JOB_NAME" = "Test multiarch" ]; then
+  BUILD_ARGS="\
+    --build-arg TARGET=release \
+    -t $DOCKER_REPO:multiarch_test"
+  PLATFORM="linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64"
   build_push
 
 # tagged version
@@ -36,6 +46,7 @@ elif [[ -n "$TRAVIS_TAG" ]]; then
     -t $DOCKER_REPO:v$LYCHEE_TAG \
     -t $OLD_DOCKER_REPO:latest \
     -t $OLD_DOCKER_REPO:$LYCHEE_TAG"
+  PLATFORM="linux/arm64,linux/amd64"
   build_push
 
 # new commit to master or nightly build
@@ -44,6 +55,7 @@ elif [[ "$TRAVIS_BRANCH" == "master" && "$TRAVIS_PULL_REQUEST" == "false" ]]; th
   BUILD_ARGS="\
     -t $DOCKER_REPO:dev \
     -t $OLD_DOCKER_REPO:dev"
+  PLATFORM="linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64"
   build_push
 
 # anything else
