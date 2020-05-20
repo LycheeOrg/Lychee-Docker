@@ -1,11 +1,12 @@
 [![Build Status][build-status-shield]](https://travis-ci.com/LycheeOrg/Lychee-Docker)
-[![Docker Pulls (old)][docker-pulls-shield-old]](https://hub.docker.com/r/lycheeorg/lychee-laravel)
-[![Docker Pulls (new)][docker-pulls-shield]](https://hub.docker.com/r/lycheeorg/lychee)
+[![Last Commit][last-commit-shield]](https://github.com/LycheeOrg/Lychee-Docker/commits/master)
 [![Release][release-shield]](https://github.com/LycheeOrg/Lychee-Docker/releases)
-![Last Commit][last-commit-shield]
-
+[![Lychee Version][lychee-version-shield]](https://hub.docker.com/r/lycheeorg/lychee)
+[![Docker Pulls (new)][docker-pulls-shield]](https://hub.docker.com/r/lycheeorg/lychee)
+[![Docker Pulls (old)][docker-pulls-shield-old]](https://hub.docker.com/r/lycheeorg/lychee-laravel)
+<br>
 ![Supports amd64 Architecture][amd64-shield]
-![Supports aarch64 Architecture][aarch64-shield]
+![Supports arm64/aarch64 Architecture][arm64-shield]
 ![Supports armv6 Architecture][armv6-shield]
 ![Supports armv7 Architecture][armv7-shield]
 
@@ -33,6 +34,8 @@ The following tags are available :
 * `v[NUMBER]`: Stable version tag for a Lychee release
 * `dev`: Current master branch tag (Lychee operates on a stable master, so this should usually be safe)
 * `testing`: Tag for testing new branches and pull requests. Designed for internal use by LycheeOrg.
+
+Note that only the `:dev` tag is available for armv6 and armv7 systems. This is due to an issue with the build environment and is hopefully temporary.
 
 ## Setup
 
@@ -109,12 +112,13 @@ Instead, we recommend to use the `PHP_VALUE` directive of PHP-FPM to override sp
 3. Add a new line and set your new parameter
 4. Mount your new file to `/etc/nginx/nginx.conf`
 
-[aarch64-shield]: https://img.shields.io/badge/aarch64-yes-success.svg?style=flat
+[arm64-shield]: https://img.shields.io/badge/arm64-yes-success.svg?style=flat
 [amd64-shield]: https://img.shields.io/badge/amd64-yes-success.svg?style=flat
-[armv6-shield]: https://img.shields.io/badge/armv6-yes-success.svg?style=flat
-[armv7-shield]: https://img.shields.io/badge/armv7-yes-success.svg?style=flat
+[armv6-shield]: https://img.shields.io/badge/armv6-partial-yellow.svg?style=flat
+[armv7-shield]: https://img.shields.io/badge/armv7-partial-yellow.svg?style=flat
 [build-status-shield]: https://img.shields.io/travis/com/LycheeOrg/Lychee-Docker/master.svg?style=flat
 [docker-pulls-shield-old]: https://img.shields.io/docker/pulls/lycheeorg/lychee-laravel.svg?style=flat&label=Docker%20Pulls%20(lychee-laravel)
 [docker-pulls-shield]: https://img.shields.io/docker/pulls/lycheeorg/lychee.svg?style=flat&label=Docker%20Pulls%20(lychee)
+[lychee-version-shield]: https://img.shields.io/docker/v/lycheeorg/lychee/latest?style=flat&label=Lychee%20Version%20(:latest)
 [last-commit-shield]: https://img.shields.io/github/last-commit/LycheeOrg/Lychee-Docker.svg?style=flat
 [release-shield]: https://img.shields.io/github/release/LycheeOrg/Lychee-Docker.svg?style=flat
