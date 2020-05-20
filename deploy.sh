@@ -38,14 +38,14 @@ elif [ "$TRAVIS_JOB_NAME" = "Test multiarch" ]; then
 # tagged version
 elif [[ -n "$TRAVIS_TAG" ]]; then
   echo "Checking for latest Lychee version"
-  LYCHEE_TAG="v$(curl -s https://raw.githubusercontent.com/LycheeOrg/Lychee/master/version.md)"
+  LYCHEE_TAG="$(curl -s https://raw.githubusercontent.com/LycheeOrg/Lychee/master/version.md)"
   echo "Building multi arch and pushing tagged version (:v$LYCHEE_TAG) and :latest"
   BUILD_ARGS="\
     --build-arg TARGET=release \
     -t $DOCKER_REPO:latest \
     -t $DOCKER_REPO:v$LYCHEE_TAG \
     -t $OLD_DOCKER_REPO:latest \
-    -t $OLD_DOCKER_REPO:$LYCHEE_TAG"
+    -t $OLD_DOCKER_REPO:v$LYCHEE_TAG"
   PLATFORM="linux/arm64,linux/amd64"
   build_push
 
