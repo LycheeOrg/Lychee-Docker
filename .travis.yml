@@ -92,6 +92,8 @@ jobs:
       deploy:
         - provider: script
           script: ./deploy.sh
+          on:
+            all_branches: true
 
     - name: "Test multiarch"
       arch: amd64
