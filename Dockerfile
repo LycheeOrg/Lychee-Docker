@@ -38,6 +38,8 @@ RUN \
     curl \
     libimage-exiftool-perl \
     ffmpeg \
+    ufraw \
+    ufraw-batch \
     git \
     composer && \
     cd /var/www/html && \
