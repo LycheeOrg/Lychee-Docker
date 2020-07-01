@@ -48,7 +48,9 @@ RUN \
     mv Lychee/.git/refs/heads/master Lychee/master || cp Lychee/.git/HEAD Lychee/master && \
     mv Lychee/.git/HEAD Lychee/HEAD && \
     rm -r Lychee/.git/* && \
+    mkdir -p Lychee/.git/refs/heads && \
     mv Lychee/HEAD Lychee/.git/HEAD && \
+    mv Lychee/master Lychee/.git/refs/heads/master && \
     echo "$TARGET" > /var/www/html/Lychee/docker_target && \
     cd /var/www/html/Lychee && \
     echo "Last release: $(cat version.md)" && \
