@@ -41,6 +41,11 @@ RUN \
     ufraw \
     ufraw-batch \
     git \
+    jpegoptim \
+    optipng \
+    pngquant \
+    gifsicle \
+    webp \
     composer && \
     cd /var/www/html && \
     if [ "$TARGET" = "release" ] ; then RELEASE_TAG="-b v$(curl -s https://raw.githubusercontent.com/LycheeOrg/Lychee/master/version.md)" ; fi && \
