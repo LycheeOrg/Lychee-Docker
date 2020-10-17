@@ -108,7 +108,7 @@ chown "$USER":"$USER" /conf/.env
 chown -R "$USER":"$USER" /uploads
 chown -R "$USER":"$USER" /sym
 usermod -a -G "$USER" www-data
-chmod -R 775 /uploads
+chmod -R 775 /uploads /sym
 
 echo "**** Setup complete, starting the server. ****"
 php-fpm7.3
