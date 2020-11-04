@@ -17,6 +17,7 @@
 <!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 - [Image content](#image-content)
 - [Setup](#setup)
+	- [Quick Start](#quick-start)
 	- [Prerequisites](#prerequisites)
 	- [Run with Docker](#run-with-docker)
 	- [Run with Docker Compose](#run-with-docker-compose)
@@ -39,9 +40,15 @@ Note that only the `:dev` tag is available for armv6 and armv7 systems. This is 
 
 ## Setup
 
+### Quick Start
+
+To use the built-in SQLite support, no external dependencies are required. At its simplest, `docker run -p 80 lycheeorg/lychee:dev` will start Lychee listening on a random port on the local host.
+
+For more runtime options, look below in [Run with Docker](#run-with-docker) and [Available environment variables and defaults](#available-environment-variables-and-defaults).
+
 ### Prerequisites
 
-You must have a database docker running **OR** create one in your `docker-compose.yml`.
+To use this image with MySQL, MariaDB or PostgreSQL you will need a suitable database running externally. This may be through a Docker image, possibly in your `docker-compose.yml`.
 
 1.  Create the db, username, password.
 2.  Edit the environment variables (db credentials, language...) by :
@@ -52,7 +59,7 @@ You must have a database docker running **OR** create one in your `docker-compos
 
 **Make sure that you link to the container running your database !!**  
 
-The example below shows `--net` and `--link` for these purposes. `--net` connects to the name of the network your database is on and  `--link` connects to the database container.
+The example below shows `--net` and `--link` for these purposes. `--net` connects to the name of the network your database is on and `--link` connects to the database container.
 
 ```bash
 docker run -d \
