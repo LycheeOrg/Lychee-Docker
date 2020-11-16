@@ -95,6 +95,12 @@ echo "**** Inject .env values ****" && \
 	./artisan migrate --force && \
 	touch /tmp/first_run
 
+echo "**** Check user.css exists and symlink it ****" && \
+touch /conf/user.css
+[ ! -L /var/www/html/Lychee/public/dist/user.css ] && \
+	rm /var/www/html/Lychee/public/dist/user.css && \
+	ln -s /conf/user.css /var/www/html/Lychee/public/dist/user.css
+
 echo "**** Create user and use PUID/PGID ****"
 PUID=${PUID:-1000}
 PGID=${PGID:-1000}
@@ -104,11 +110,11 @@ echo -e " \tUser UID :\t$(id -u "$USER")"
 echo -e " \tUser GID :\t$(id -g "$USER")"
 
 echo "**** Set Permissions ****" && \
-chown "$USER":"$USER" /conf/.env
-chown -R "$USER":"$USER" /uploads
-chown -R "$USER":"$USER" /sym
+chown -R "$USER":"$USER" /conf/.env /conf/user.css /uploads /sym
+# Laravel needs to be able to chmod user.css for no good reason
+chown www-data:lychee /conf/user.css
 usermod -a -G "$USER" www-data
-chmod -R 775 /uploads /sym
+chmod -R ug+w,ugo+rX /conf/user.css /uploads /sym
 
 echo "**** Setup complete, starting the server. ****"
 php-fpm7.3
