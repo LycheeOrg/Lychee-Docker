@@ -90,7 +90,7 @@ echo "**** Inject .env values ****" && \
 
 [ ! -e /tmp/first_run ] && \
 	echo "**** Generate the key (to make sure that cookies cannot be decrypted etc) ****" && \
-	./artisan key:generate && \
+	./artisan key:generate -n && \
 	echo "**** Migrate the database ****" && \
 	./artisan migrate --force && \
 	touch /tmp/first_run
@@ -114,7 +114,7 @@ chown -R "$USER":"$USER" /conf/.env /conf/user.css /uploads /sym
 # Laravel needs to be able to chmod user.css for no good reason
 chown www-data:lychee /conf/user.css
 usermod -a -G "$USER" www-data
-chmod -R ug+w,ugo+rX /conf/user.css /uploads /sym
+chmod -R ug+w,ugo+rX /conf/user.css /conf/.env /uploads /sym
 
 echo "**** Setup complete, starting the server. ****"
 php-fpm7.3
