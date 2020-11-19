@@ -1,6 +1,5 @@
 [![Build Status][build-status-shield]](https://travis-ci.com/LycheeOrg/Lychee-Docker)
 [![Last Commit][last-commit-shield]](https://github.com/LycheeOrg/Lychee-Docker/commits/master)
-[![Release][release-shield]](https://github.com/LycheeOrg/Lychee-Docker/releases)
 [![Lychee Version][lychee-version-shield]](https://hub.docker.com/r/lycheeorg/lychee)
 [![Docker Pulls (new)][docker-pulls-shield]](https://hub.docker.com/r/lycheeorg/lychee)
 [![Docker Pulls (old)][docker-pulls-shield-old]](https://hub.docker.com/r/lycheeorg/lychee-laravel)
@@ -129,4 +128,3 @@ Instead, we recommend to use the `PHP_VALUE` directive of PHP-FPM to override sp
 [docker-pulls-shield]: https://img.shields.io/docker/pulls/lycheeorg/lychee.svg?style=flat&label=Docker%20Pulls%20(lychee)
 [lychee-version-shield]: https://img.shields.io/docker/v/lycheeorg/lychee/latest?style=flat&label=Lychee%20Version%20(:latest)
 [last-commit-shield]: https://img.shields.io/github/last-commit/LycheeOrg/Lychee-Docker.svg?style=flat
-[release-shield]: https://img.shields.io/github/release/LycheeOrg/Lychee-Docker.svg?style=flat
