@@ -38,8 +38,6 @@ RUN \
     curl \
     libimage-exiftool-perl \
     ffmpeg \
-    ufraw \
-    ufraw-batch \
     git \
     jpegoptim \
     optipng \
