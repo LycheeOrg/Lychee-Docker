@@ -117,5 +117,5 @@ usermod -a -G "$USER" www-data
 chmod -R ug+w,ugo+rX /conf/user.css /conf/.env /uploads /sym
 
 echo "**** Setup complete, starting the server. ****"
-php-fpm7.3
+php-fpm7.4
 exec $@

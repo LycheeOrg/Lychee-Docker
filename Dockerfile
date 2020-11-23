@@ -1,4 +1,4 @@
-FROM debian:buster-slim
+FROM debian:bullseye-slim
 
 # Set version label
 LABEL maintainer="lycheeorg"
@@ -24,17 +24,17 @@ RUN \
     apt-get update && \
     apt-get install -qy \
     nginx-light \
-    php7.3-mysql \
-    php7.3-pgsql \
-    php7.3-sqlite3 \
-    php7.3-imagick \
-    php7.3-mbstring \
-    php7.3-json \
-    php7.3-gd \
-    php7.3-xml \
-    php7.3-zip \
-    php7.3-fpm \
-    php7.3-redis \
+    php7.4-mysql \
+    php7.4-pgsql \
+    php7.4-sqlite3 \
+    php7.4-imagick \
+    php7.4-mbstring \
+    php7.4-json \
+    php7.4-gd \
+    php7.4-xml \
+    php7.4-zip \
+    php7.4-fpm \
+    php7.4-redis \
     curl \
     libimage-exiftool-perl \
     ffmpeg \
