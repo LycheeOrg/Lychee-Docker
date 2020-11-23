@@ -58,6 +58,14 @@ elif [[ "$TRAVIS_BRANCH" == "master" && "$TRAVIS_PULL_REQUEST" == "false" ]]; th
   PLATFORM="linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64"
   build_push
 
+# temporary block
+elif [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then
+  echo "Building multi arch and pushing test tag"
+  BUILD_ARGS="\
+    -t $DOCKER_REPO:test_$TRAVIS_BRANCH"
+  PLATFORM="linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64"
+  build_push
+
 # anything else
 else
   echo "Nothing to push"
