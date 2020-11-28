@@ -38,6 +38,8 @@ RUN \
     curl \
     libimage-exiftool-perl \
     ffmpeg \
+    libraw20 \
+    libraw-bin \
     git \
     jpegoptim \
     optipng \
