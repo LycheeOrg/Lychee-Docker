@@ -29,7 +29,7 @@ stages:
 before_install:
   - if [ "$ENVFILE" = "mysql" ] ; then docker run -d --name=db --network=bridge -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=lychee mariadb:latest ; sleep 20 ; docker ps ; docker container logs db ; fi
   - if [ "$ENVFILE" = "postgres" ] ; then docker run -d --name=db --network=bridge -e POSTGRES_PASSWORD=password -e POSTGRES_DB=lychee postgres:latest ; sleep 20 ; docker ps ; docker container logs db ; fi
-  - if [ -n "$TRAVIS_PULL_REQUEST_SLUG" ] && echo "$TRAVIS_PULL_REQUEST_SLUG" | grep -v '^LycheeOrg/' ; then docker build -t lychee . ; LYCHEE_IMAGE="lychee" ; else LYCHEE_IMAGE="$DOCKER_REPO:testing" ; fi
+  - if [ -n "$TRAVIS_PULL_REQUEST_SLUG" ] && echo "$TRAVIS_PULL_REQUEST_SLUG" | grep -v '^LycheeOrg/' ; then docker build -t lychee . ; LYCHEE_IMAGE="lychee" ; else LYCHEE_IMAGE="$DOCKER_REPO:testing_$TRAVIS_BUILD_NUMBER" ; fi
 script:
   - if [ "$ENVFILE" = "mysql" ] || [ "$ENVFILE" = "postgres" ] ; then LINK_DB="--link db" ; fi ; docker run -d --name=$NAME --env-file=env.$ENVFILE $LINK_DB -p 127.0.0.1:80:80 $LYCHEE_IMAGE && sleep 45 && docker ps -a | grep -w $NAME && curl -sSw "%{stderr}%{http_code}" http://localhost/ > /dev/null && curl -f http://localhost/
 after_script:
@@ -64,7 +64,7 @@ jobs:
       before_install:
         - sed -i 's/<.*_PASSWORD>/password/g' docker-compose.yml
         - >-
-            sed -i 's|image: lycheeorg/lychee|image: lycheeorg/lychee:testing|' docker-compose.yml
+            sed -i 's|image: lycheeorg/lychee|image: lycheeorg/lychee:testing_$TRAVIS_BUILD_NUMBER|' docker-compose.yml
       script: docker-compose up -d && sleep 45 && docker-compose ps && curl -sSw "%{stderr}%{http_code}" http://localhost:90/ > /dev/null && curl -f http://localhost:90/
       after_script:
         - docker-compose logs

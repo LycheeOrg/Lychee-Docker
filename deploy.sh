@@ -25,7 +25,7 @@ if [ "$TRAVIS_BUILD_STAGE_NAME" = "build" ]; then
   else
     PLATFORM="linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64"
   fi
-  BUILD_ARGS="$BUILD_ARGS -t $DOCKER_REPO:testing "
+  BUILD_ARGS="$BUILD_ARGS -t $DOCKER_REPO:testing_$TRAVIS_BUILD_NUMBER "
   build_push
 
 elif [ "$TRAVIS_JOB_NAME" = "Test multiarch" ] && [ -n "$TRAVIS_TAG" ] ; then
@@ -39,24 +39,25 @@ elif [ "$TRAVIS_JOB_NAME" = "Test multiarch" ] && [ -n "$TRAVIS_TAG" ] ; then
 elif [[ -n "$TRAVIS_TAG" ]]; then
   echo "Checking for latest Lychee version"
   LYCHEE_TAG="$(curl -s https://raw.githubusercontent.com/LycheeOrg/Lychee/master/version.md)"
-  echo "Building multi arch and pushing tagged version (:v$LYCHEE_TAG) and :latest"
-  BUILD_ARGS="\
-    --build-arg TARGET=release \
-    -t $DOCKER_REPO:latest \
-    -t $DOCKER_REPO:v$LYCHEE_TAG \
-    -t $OLD_DOCKER_REPO:latest \
-    -t $OLD_DOCKER_REPO:v$LYCHEE_TAG"
-  PLATFORM="linux/arm64,linux/amd64"
-  build_push
+  echo "Retagging docker testing image as (:v$LYCHEE_TAG) and :latest"
+  docker pull $DOCKER_REPO:testing_$TRAVIS_BUILD_NUMBER
+  docker tag $DOCKER_REPO:testing_$TRAVIS_BUILD_NUMBER $DOCKER_REPO:latest
+  docker tag $DOCKER_REPO:testing_$TRAVIS_BUILD_NUMBER $OLD_DOCKER_REPO:latest
+  docker tag $DOCKER_REPO:testing_$TRAVIS_BUILD_NUMBER $DOCKER_REPO:v$LYCHEE_TAG
+  docker tag $DOCKER_REPO:testing_$TRAVIS_BUILD_NUMBER $OLD_DOCKER_REPO:v$LYCHEE_TAG
+  docker push $DOCKER_REPO:latest
+  docker push $OLD_DOCKER_REPO:latest
+  docker push $DOCKER_REPO:v$LYCHEE_TAG
+  docker push $OLD_DOCKER_REPO:v$LYCHEE_TAG
 
 # new commit to master or nightly build
 elif [[ "$TRAVIS_BRANCH" == "master" && "$TRAVIS_PULL_REQUEST" == "false" ]]; then
-  echo "Building multi arch and pushing :dev"
-  BUILD_ARGS="\
-    -t $DOCKER_REPO:dev \
-    -t $OLD_DOCKER_REPO:dev"
-  PLATFORM="linux/arm/v7,linux/arm/v6,linux/arm64,linux/amd64"
-  build_push
+  echo "Retagging docker testing image as :dev"
+  docker pull $DOCKER_REPO:testing_$TRAVIS_BUILD_NUMBER
+  docker tag $DOCKER_REPO:testing_$TRAVIS_BUILD_NUMBER $DOCKER_REPO:dev
+  docker tag $DOCKER_REPO:testing_$TRAVIS_BUILD_NUMBER $OLD_DOCKER_REPO:dev
+  docker push $DOCKER_REPO:dev
+  docker push $OLD_DOCKER_REPO:dev
 
 # anything else
 else
