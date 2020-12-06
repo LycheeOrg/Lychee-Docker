@@ -28,7 +28,7 @@ if [ "$TRAVIS_BUILD_STAGE_NAME" = "build" ]; then
   BUILD_ARGS="$BUILD_ARGS -t $DOCKER_REPO:testing "
   build_push
 
-elif [ "$TRAVIS_JOB_NAME" = "Test multiarch" ]; then
+elif [ "$TRAVIS_JOB_NAME" = "Test multiarch" ] && [ -n "$TRAVIS_TAG" ] ; then
   BUILD_ARGS="\
     --build-arg TARGET=release \
     -t $DOCKER_REPO:multiarch_test"
