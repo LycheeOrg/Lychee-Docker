@@ -116,6 +116,10 @@ chown www-data:lychee /conf/user.css
 usermod -a -G "$USER" www-data
 chmod -R ug+w,ugo+rX /conf/user.css /conf/.env /uploads /sym
 
+echo "**** Update SSL certificates" 
+# Fixes issue of missing certificates on armv7
+update-ca-certificates -f -v
+
 echo "**** Setup complete, starting the server. ****"
 php-fpm7.4
 exec $@
