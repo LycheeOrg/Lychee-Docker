@@ -116,6 +116,11 @@ chown www-data:lychee /conf/user.css
 usermod -a -G "$USER" www-data
 chmod -R ug+w,ugo+rX /conf/user.css /conf/.env /uploads /sym
 
+# Update CA Certificates if we're using armv7 because armv7 is weird (#76)
+if [[ $(uname -a) == *"armv7"* ]]; then
+  update-ca-certificates -f
+fi
+
 echo "**** Setup complete, starting the server. ****"
 php-fpm7.4
 exec $@
