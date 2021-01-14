@@ -35,6 +35,7 @@ RUN \
     php7.4-zip \
     php7.4-fpm \
     php7.4-redis \
+    php7.4-bcmath \
     curl \
     libimage-exiftool-perl \
     ffmpeg \
