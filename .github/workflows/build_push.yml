@@ -37,4 +37,5 @@ jobs:
           push: true
           tags: |
             lycheeorg/lychee:${{ github.event.inputs.tagname }}
+            lycheeorg/lychee-laravel:${{ github.event.inputs.tagname }}
     
