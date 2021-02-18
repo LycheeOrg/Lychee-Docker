@@ -36,5 +36,5 @@ jobs:
           platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
           push: true
           tags: |
-            lycheeorg/lychee:gha-${{ github.event.inputs.tagname }}
+            lycheeorg/lychee:${{ github.event.inputs.tagname }}
     
