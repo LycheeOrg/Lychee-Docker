@@ -108,9 +108,9 @@ Some variables are specific to Docker, and the default values are :
 
 ## Advanced configuration
 
-Note that nginx will accept by default images up to 100MB (`client_max_body_size 100M`) and that PHP parameters are overridden according to the [recommendations of the Lychee FAQ](https://lycheeorg.github.io/docs/faq.html#i-cant-upload-photos).
+Note that nginx will accept by default images up to 100MB (`client_max_body_size 100M`) and that PHP parameters are overridden according to the [recommendations of the Lychee FAQ](https://lycheeorg.github.io/docs/faq.html#i-cant-upload-large-photos).
 
-You may still want to further customize PHP configuration. The first method is to mount a custom `php.ini` to `/etc/php/7.3/fpm/php.ini` when starting the container. However, this method is kind of brutal as it will override all parameters.
+You may still want to further customize PHP configuration. The first method is to mount a custom `php.ini` to `/etc/php/7.4/fpm/php.ini` when starting the container. However, this method is kind of brutal as it will override all parameters. It will also need to be remapped whenever an image is released with a new version of PHP.
 
 Instead, we recommend to use the `PHP_VALUE` directive of PHP-FPM to override specific parameters. To do so, you will need to mount a custom `nginx.conf` in your container :
 
