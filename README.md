@@ -120,6 +120,8 @@ Instead, we recommend to use the `PHP_VALUE` directive of PHP-FPM to override sp
 4. Add or change any other parameters (e.g. `client_max_body_size`)
 5. Mount your new file to `/etc/nginx/nginx.conf`
 
+If you need to add (not change) nginx directives, files mounted in `/etc/nginx/conf.d/` will be included in the `http` context.
+
 [arm64-shield]: https://img.shields.io/badge/arm64-yes-success.svg?style=flat
 [amd64-shield]: https://img.shields.io/badge/amd64-yes-success.svg?style=flat
 [armv6-shield]: https://img.shields.io/badge/armv6-partial-yellow.svg?style=flat
