@@ -70,7 +70,7 @@ RUN \
     apt-get purge -y --autoremove git composer && \
     rm -rf /var/lib/apt/lists/*
 
-# Add custom site to apache
+# Add custom Nginx configuration
 COPY default.conf /etc/nginx/nginx.conf
 
 EXPOSE 80
