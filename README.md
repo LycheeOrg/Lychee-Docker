@@ -35,8 +35,6 @@ The following tags are available :
 * `dev`: Current master branch tag (Lychee operates on a stable master, so this should usually be safe)
 * `testing`: Tag for testing new branches and pull requests. Designed for internal use by LycheeOrg.
 
-Note that only the `:dev` tag is available for armv6 and armv7 systems. This is due to an issue with the build environment and is hopefully temporary.
-
 ## Setup
 
 ### Quick Start
@@ -124,8 +122,8 @@ If you need to add (not change) nginx directives, files mounted in `/etc/nginx/c
 
 [arm64-shield]: https://img.shields.io/badge/arm64-yes-success.svg?style=flat
 [amd64-shield]: https://img.shields.io/badge/amd64-yes-success.svg?style=flat
-[armv6-shield]: https://img.shields.io/badge/armv6-partial-yellow.svg?style=flat
-[armv7-shield]: https://img.shields.io/badge/armv7-partial-yellow.svg?style=flat
+[armv6-shield]: https://img.shields.io/badge/armv6-yes-success.svg?style=flat
+[armv7-shield]: https://img.shields.io/badge/armv7-yes-success.svg?style=flat
 [build-status-shield]: https://img.shields.io/github/workflow/status/LycheeOrg/Lychee-Docker/Scheduled%20Build?label=%3Adev%20build
 [docker-pulls-shield-old]: https://img.shields.io/docker/pulls/lycheeorg/lychee-laravel.svg?style=flat&label=Docker%20Pulls%20(lychee-laravel)
 [docker-pulls-shield]: https://img.shields.io/docker/pulls/lycheeorg/lychee.svg?style=flat&label=Docker%20Pulls%20(lychee)
