@@ -96,5 +96,5 @@ if [ "$PUSHER_APP_CLUSTER" != '' ]; then
     sed -i "s|PUSHER_APP_CLUSTER=.*|PUSHER_APP_CLUSTER=${PUSHER_APP_CLUSTER}|i" /conf/.env
 fi
 if [ "$PHP_TZ" != '' ]; then
-    sed -i "s|;*date.timezone =.*|date.timezone = ${PHP_TZ}|i" /etc/php/7.4/cli/php.ini
+    sed -i "s|;*date.timezone =.*|date.timezone = ${PHP_TZ}|i" /etc/php/8.1/cli/php.ini
 fi

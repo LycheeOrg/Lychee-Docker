@@ -1,4 +1,4 @@
-FROM debian:bullseye-slim
+FROM debian:bookworm-slim
 
 # Set version label
 LABEL maintainer="lycheeorg"
@@ -22,21 +22,20 @@ RUN \
 RUN \
     set -ev && \
     apt-get update && \
-    apt-get install -qy \
+    apt-get install -qy --no-install-recommends\
     nginx-light \
-    php7.4-mysql \
-    php7.4-pgsql \
-    php7.4-sqlite3 \
-    php7.4-imagick \
-    php7.4-mbstring \
-    php7.4-json \
-    php7.4-gd \
-    php7.4-xml \
-    php7.4-zip \
-    php7.4-fpm \
-    php7.4-redis \
-    php7.4-bcmath \
-    php7.4-intl \
+    php8.1-mysql \
+    php8.1-pgsql \
+    php8.1-sqlite3 \
+    php8.1-imagick \
+    php8.1-mbstring \
+    php8.1-gd \
+    php8.1-xml \
+    php8.1-zip \
+    php8.1-fpm \
+    php8.1-redis \
+    php8.1-bcmath \
+    php8.1-intl \
     curl \
     libimage-exiftool-perl \
     ffmpeg \
