@@ -112,7 +112,7 @@ echo -e " \tUser GID :\t$(id -g "$USER")"
 echo "**** Set Permissions ****" && \
 chown -R "$USER":"$USER" /conf/.env /conf/user.css /uploads /sym
 # Laravel needs to be able to chmod user.css for no good reason
-chown www-data:lychee /conf/user.css
+chown www-data:"$USER" /conf/user.css
 usermod -a -G "$USER" www-data
 chmod -R ug+w,ugo+rX /conf/user.css /conf/.env /uploads /sym
 
