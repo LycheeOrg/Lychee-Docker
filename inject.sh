@@ -38,6 +38,9 @@ fi
 if [ "$DB_OLD_LYCHEE_PREFIX" != '' ]; then
     sed -i "s|DB_OLD_LYCHEE_PREFIX=.*|DB_OLD_LYCHEE_PREFIX=${DB_OLD_LYCHEE_PREFIX}|i" /conf/.env
 fi
+if [ "$TIMEZONE" != '' ]; then
+    sed -i "s|TIMEZONE=.*|TIMEZONE=${TIMEZONE}|i" /conf/.env
+fi
 if [ "$BROADCAST_DRIVER" != '' ]; then
     sed -i "s|BROADCAST_DRIVER=.*|BROADCAST_DRIVER=${BROADCAST_DRIVER}|i" /conf/.env
 fi
@@ -97,4 +100,5 @@ if [ "$PUSHER_APP_CLUSTER" != '' ]; then
 fi
 if [ "$PHP_TZ" != '' ]; then
     sed -i "s|;*date.timezone =.*|date.timezone = ${PHP_TZ}|i" /etc/php/8.1/cli/php.ini
+    sed -i "s|;*date.timezone =.*|date.timezone = ${PHP_TZ}|i" /etc/php/8.1/fpm/php.ini
 fi

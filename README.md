@@ -68,6 +68,7 @@ docker run -d \
 -e PUID=1000 \
 -e PGID=1000 \
 -e PHP_TZ=America/New_York \
+-e TIMEZONE=America/New_York \
 -e DB_CONNECTION=mysql \
 -e DB_HOST=mariadb \
 -e DB_PORT=3306 \

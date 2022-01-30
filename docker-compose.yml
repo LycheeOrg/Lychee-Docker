@@ -39,6 +39,7 @@ services:
       #- PGID=1000
       # PHP timezone e.g. PHP_TZ=America/New_York
       - PHP_TZ=UTC
+      - TIMEZONE=UTC
       #- APP_NAME=Laravel
       #- APP_ENV=local
       #- APP_DEBUG=true
