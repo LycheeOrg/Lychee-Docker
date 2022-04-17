@@ -22,6 +22,7 @@ RUN \
 RUN \
     set -ev && \
     apt-get update && \
+    apt-get upgrade -qy && \
     apt-get install -qy --no-install-recommends\
     nginx-light \
     php8.1-mysql \
@@ -45,7 +46,8 @@ RUN \
     pngquant \
     gifsicle \
     webp \
-    composer && \
+    composer \
+    unzip && \
     cd /var/www/html && \
     if [ "$TARGET" = "release" ] ; then RELEASE_TAG="-b v$(curl -s https://raw.githubusercontent.com/LycheeOrg/Lychee/master/version.md)" ; fi && \
     git clone --depth 1 $RELEASE_TAG https://github.com/LycheeOrg/Lychee.git && \
@@ -67,6 +69,7 @@ RUN \
     rm    storage/logs/* 2> /dev/null || true && \
     chown -R www-data:www-data /var/www/html/Lychee && \
     apt-get purge -y --autoremove git composer && \
+    apt-get clean -qy &&\
     rm -rf /var/lib/apt/lists/*
 
 # Add custom Nginx configuration
