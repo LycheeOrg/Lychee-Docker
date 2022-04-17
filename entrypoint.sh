@@ -110,11 +110,14 @@ echo -e " \tUser UID :\t$(id -u "$USER")"
 echo -e " \tUser GID :\t$(id -g "$USER")"
 
 echo "**** Set Permissions ****" && \
-chown -R "$USER":"$USER" /conf/.env /conf/user.css /uploads /sym
+# Set ownership of directories, then files and only when required. See LycheeOrg/Lychee-Docker#120
+find /sym /uploads -type d \( ! -user "$USER" -o ! -group "$USER" \) -exec chown -R "$USER":"$USER" \{\} \;
+find /conf/.env /sym /uploads \( ! -user "$USER" -o ! -group "$USER" \) -exec chown "$USER":"$USER" \{\} \;
 # Laravel needs to be able to chmod user.css for no good reason
-chown www-data:"$USER" /conf/user.css
+find /conf/user.css \( ! -user "www-data" -o ! -group "$USER" \) -exec chown www-data:"$USER" \{\} \;
 usermod -a -G "$USER" www-data
-chmod -R ug+w,ugo+rX /conf/user.css /conf/.env /uploads /sym
+find /sym /uploads -type d \( ! -perm -ug+w -o ! -perm -ugo+rX \) -exec chmod -R ug+w,ugo+rX \{\} \;
+find /conf/user.css /conf/.env /sym /uploads \( ! -perm -ug+w -o ! -perm -ugo+rX \) -exec chmod ug+w,ugo+rX \{\} \;
 
 # Update CA Certificates if we're using armv7 because armv7 is weird (#76)
 if [[ $(uname -a) == *"armv7"* ]]; then
