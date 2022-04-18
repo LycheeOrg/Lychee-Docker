@@ -121,8 +121,12 @@ find /conf/user.css /conf/.env /sym /uploads \( ! -perm -ug+w -o ! -perm -ugo+rX
 
 # Update CA Certificates if we're using armv7 because armv7 is weird (#76)
 if [[ $(uname -a) == *"armv7"* ]]; then
+  echo "**** Updating CA certificates ****"
   update-ca-certificates -f
 fi
+
+echo "**** Start cron daemon ****"
+service cron start
 
 echo "**** Setup complete, starting the server. ****"
 php-fpm8.1
