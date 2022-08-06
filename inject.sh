@@ -11,8 +11,14 @@ fi
 if [ "$APP_URL" != '' ]; then
     sed -i "s|APP_URL=.*|APP_URL=${APP_URL}|i" /conf/.env
 fi
+if [ "$DEBUGBAR_ENABLED" != '' ]; then
+    sed -i "s|DEBUGBAR_ENABLED=.*|DEBUGBAR_ENABLED=${DEBUGBAR_ENABLED}|i" /conf/.env
+fi
 if [ "$LOG_CHANNEL" != '' ]; then
     sed -i "s|LOG_CHANNEL=.*|LOG_CHANNEL=${LOG_CHANNEL}|i" /conf/.env
+fi
+if [ "$DB_OLD_LYCHEE_PREFIX" != '' ]; then
+    sed -i "s|DB_OLD_LYCHEE_PREFIX=.*|DB_OLD_LYCHEE_PREFIX=${DB_OLD_LYCHEE_PREFIX}|i" /conf/.env
 fi
 if [ "$DB_CONNECTION" != '' ]; then
     sed -i "s|DB_CONNECTION=.*|DB_CONNECTION=${DB_CONNECTION}|i" /conf/.env
@@ -35,9 +41,6 @@ fi
 if [ "$DB_DROP_CLEAR_TABLES_ON_ROLLBACK" != '' ]; then
     sed -i "s|DB_DROP_CLEAR_TABLES_ON_ROLLBACK=.*|DB_DROP_CLEAR_TABLES_ON_ROLLBACK=${DB_DROP_CLEAR_TABLES_ON_ROLLBACK}|i" /conf/.env
 fi
-if [ "$DB_OLD_LYCHEE_PREFIX" != '' ]; then
-    sed -i "s|DB_OLD_LYCHEE_PREFIX=.*|DB_OLD_LYCHEE_PREFIX=${DB_OLD_LYCHEE_PREFIX}|i" /conf/.env
-fi
 if [ "$TIMEZONE" != '' ]; then
     sed -i "s|TIMEZONE=.*|TIMEZONE=${TIMEZONE}|i" /conf/.env
 fi
@@ -58,6 +61,9 @@ if [ "$QUEUE_DRIVER" != '' ]; then
 fi
 if [ "$SECURITY_HEADER_HSTS_ENABLE" != '' ]; then
     sed -i "s|SECURITY_HEADER_HSTS_ENABLE=.*|SECURITY_HEADER_HSTS_ENABLE=${SECURITY_HEADER_HSTS_ENABLE}|i" /conf/.env
+fi
+if [ "$SESSION_SECURE_COOKIE" != '' ]; then
+    sed -i "s|SESSION_SECURE_COOKIE=.*|SESSION_SECURE_COOKIE=${SESSION_SECURE_COOKIE}|i" /conf/.env
 fi
 if [ "$REDIS_HOST" != '' ]; then
     sed -i "s|REDIS_HOST=.*|REDIS_HOST=${REDIS_HOST}|i" /conf/.env
@@ -85,6 +91,12 @@ if [ "$MAIL_PASSWORD" != '' ]; then
 fi
 if [ "$MAIL_ENCRYPTION" != '' ]; then
     sed -i "s|MAIL_ENCRYPTION=.*|MAIL_ENCRYPTION=${MAIL_ENCRYPTION}|i" /conf/.env
+fi
+if [ "$MAIL_FROM_NAME" != '' ]; then
+    sed -i "s|MAIL_FROM_NAME=.*|MAIL_FROM_NAME=${MAIL_FROM_NAME}|i" /conf/.env
+fi
+if [ "$MAIL_FROM_ADDRESS" != '' ]; then
+    sed -i "s|MAIL_FROM_ADDRESS=.*|MAIL_FROM_ADDRESS=${MAIL_FROM_ADDRESS}|i" /conf/.env
 fi
 if [ "$PUSHER_APP_ID" != '' ]; then
     sed -i "s|PUSHER_APP_ID=.*|PUSHER_APP_ID=${PUSHER_APP_ID}|i" /conf/.env
