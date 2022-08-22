@@ -95,7 +95,7 @@ echo "**** Inject .env values ****" && \
 	./artisan migrate --force && \
 	touch /tmp/first_run
 
-echo "**** Check user.css exists and symlink it ****" && \
+echo "**** Make sure user.css exists and symlink it ****" && \
 touch /conf/user.css
 [ ! -L /var/www/html/Lychee/public/dist/user.css ] && \
 	rm /var/www/html/Lychee/public/dist/user.css && \
@@ -109,15 +109,18 @@ if [ ! "$(id -g "$USER")" -eq "$PGID" ]; then groupmod -o -g "$PGID" "$USER" ; f
 echo -e " \tUser UID :\t$(id -u "$USER")"
 echo -e " \tUser GID :\t$(id -g "$USER")"
 
+echo "**** Make sure Laravel's log exists ****" && \
+touch /var/www/html/Lychee/storage/logs/laravel.log
+
 echo "**** Set Permissions ****" && \
 # Set ownership of directories, then files and only when required. See LycheeOrg/Lychee-Docker#120
 find /sym /uploads -type d \( ! -user "$USER" -o ! -group "$USER" \) -exec chown -R "$USER":"$USER" \{\} \;
-find /conf/.env /sym /uploads \( ! -user "$USER" -o ! -group "$USER" \) -exec chown "$USER":"$USER" \{\} \;
+find /conf/.env /sym /uploads /var/www/html/Lychee/storage/logs/laravel.log \( ! -user "$USER" -o ! -group "$USER" \) -exec chown "$USER":"$USER" \{\} \;
 # Laravel needs to be able to chmod user.css for no good reason
-find /conf/user.css \( ! -user "www-data" -o ! -group "$USER" \) -exec chown www-data:"$USER" \{\} \;
+find /conf/user.css /var/www/html/Lychee/storage/logs/laravel.log \( ! -user "www-data" -o ! -group "$USER" \) -exec chown www-data:"$USER" \{\} \;
 usermod -a -G "$USER" www-data
 find /sym /uploads -type d \( ! -perm -ug+w -o ! -perm -ugo+rX \) -exec chmod -R ug+w,ugo+rX \{\} \;
-find /conf/user.css /conf/.env /sym /uploads \( ! -perm -ug+w -o ! -perm -ugo+rX \) -exec chmod ug+w,ugo+rX \{\} \;
+find /conf/user.css /conf/.env /sym /uploads /var/www/html/Lychee/storage/logs/laravel.log \( ! -perm -ug+w -o ! -perm -ugo+rX \) -exec chmod ug+w,ugo+rX \{\} \;
 
 # Update CA Certificates if we're using armv7 because armv7 is weird (#76)
 if [[ $(uname -a) == *"armv7"* ]]; then
