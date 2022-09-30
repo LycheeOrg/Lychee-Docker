@@ -86,7 +86,7 @@ COPY entrypoint.sh inject.sh /
 
 RUN chmod +x /entrypoint.sh && \
     chmod +x /inject.sh && \
-    mkdir /run/php
+    if [ ! -e /run/php ] ; then mkdir /run/php ; fi
 
 HEALTHCHECK CMD curl --fail http://localhost:80/ || exit 1
 
