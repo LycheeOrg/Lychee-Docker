@@ -119,7 +119,7 @@ find /conf/.env /sym /uploads /var/www/html/Lychee/storage/logs/laravel.log \( !
 # Laravel needs to be able to chmod user.css for no good reason
 find /conf/user.css /var/www/html/Lychee/storage/logs/laravel.log \( ! -user "www-data" -o ! -group "$USER" \) -exec chown www-data:"$USER" \{\} \;
 usermod -a -G "$USER" www-data
-find /sym /uploads -type d \( ! -perm -ug+w -o ! -perm -ugo+rX \) -exec chmod -R ug+w,ugo+rX \{\} \;
+find /sym /uploads -type d \( ! -perm -ug+w -o ! -perm -ugo+rX -o ! -perm -g+s \) -exec chmod -R ug+w,ugo+rX,g+s \{\} \;
 find /conf/user.css /conf/.env /sym /uploads /var/www/html/Lychee/storage/logs/laravel.log \( ! -perm -ug+w -o ! -perm -ugo+rX \) -exec chmod ug+w,ugo+rX \{\} \;
 
 # Update CA Certificates if we're using armv7 because armv7 is weird (#76)
