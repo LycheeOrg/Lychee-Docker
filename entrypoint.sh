@@ -115,7 +115,7 @@ touch /var/www/html/Lychee/storage/logs/laravel.log
 echo "**** Set Permissions ****" && \
 # Set ownership of directories, then files and only when required. See LycheeOrg/Lychee-Docker#120
 find /sym /uploads -type d \( ! -user "$USER" -o ! -group "$USER" \) -exec chown -R "$USER":"$USER" \{\} \;
-find /conf/.env /sym /uploads /var/www/html/Lychee/storage/logs/laravel.log \( ! -user "$USER" -o ! -group "$USER" \) -exec chown "$USER":"$USER" \{\} \;
+find /conf/.env /sym /uploads \( ! -user "$USER" -o ! -group "$USER" \) -exec chown "$USER":"$USER" \{\} \;
 # Laravel needs to be able to chmod user.css for no good reason
 find /conf/user.css /var/www/html/Lychee/storage/logs/laravel.log \( ! -user "www-data" -o ! -group "$USER" \) -exec chown www-data:"$USER" \{\} \;
 usermod -a -G "$USER" www-data
