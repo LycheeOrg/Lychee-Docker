@@ -149,7 +149,7 @@ jobs:
     steps:
       -
         name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       -
         name: Set Password
         run: "sed -i 's/<.*_PASSWORD>/password/g' docker-compose.yml"
