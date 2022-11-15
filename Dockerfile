@@ -13,17 +13,13 @@ ENV PHP_TZ=UTC
 # To use the latest Lychee release instead of master pass `--build-arg TARGET=release` to `docker build`
 ARG TARGET=dev
 
-# Add User and Group
-RUN \
-    addgroup --gid "$PGID" "$USER" && \
-    adduser --gecos '' --no-create-home --disabled-password --uid "$PUID" --gid "$PGID" "$USER"
-
-# Install base dependencies, clone the repo and install php libraries
+# Install base dependencies, add user and group, clone the repo and install php libraries
 RUN \
     set -ev && \
     apt-get update && \
     apt-get upgrade -qy && \
     apt-get install -qy --no-install-recommends\
+    adduser \
     nginx-light \
     php8.1-mysql \
     php8.1-pgsql \
@@ -49,6 +45,8 @@ RUN \
     cron \
     composer \
     unzip && \
+    addgroup --gid "$PGID" "$USER" && \
+    adduser --gecos '' --no-create-home --disabled-password --uid "$PUID" --gid "$PGID" "$USER" && \
     cd /var/www/html && \
     if [ "$TARGET" = "release" ] ; then RELEASE_TAG="-b v$(curl -s https://raw.githubusercontent.com/LycheeOrg/Lychee/master/version.md)" ; fi && \
     git clone --depth 1 $RELEASE_TAG https://github.com/LycheeOrg/Lychee.git && \
