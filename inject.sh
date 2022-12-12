@@ -65,14 +65,20 @@ fi
 if [ "$SESSION_SECURE_COOKIE" != '' ]; then
     sed -i "s|SESSION_SECURE_COOKIE=.*|SESSION_SECURE_COOKIE=${SESSION_SECURE_COOKIE}|i" /conf/.env
 fi
+if [ "$REDIS_SCHEME" != '' ]; then
+    sed -i "s|REDIS_SCHEME=.*|REDIS_SCHEME=${REDIS_SCHEME}|i" /conf/.env
+fi
+if [ "$REDIS_PATH" != '' ]; then
+    sed -i "s|REDIS_PATH=.*|REDIS_PATH=${REDIS_PATH}|i" /conf/.env
+fi
 if [ "$REDIS_HOST" != '' ]; then
     sed -i "s|REDIS_HOST=.*|REDIS_HOST=${REDIS_HOST}|i" /conf/.env
 fi
-if [ "$REDIS_PASSWORD" != '' ]; then
-    sed -i "s|REDIS_PASSWORD=.*|REDIS_PASSWORD=${REDIS_PASSWORD}|i" /conf/.env
-fi
 if [ "$REDIS_PORT" != '' ]; then
     sed -i "s|REDIS_PORT=.*|REDIS_PORT=${REDIS_PORT}|i" /conf/.env
+fi
+if [ "$REDIS_PASSWORD" != '' ]; then
+    sed -i "s|REDIS_PASSWORD=.*|REDIS_PASSWORD=${REDIS_PASSWORD}|i" /conf/.env
 fi
 if [ "$MAIL_DRIVER" != '' ]; then
     sed -i "s|MAIL_DRIVER=.*|MAIL_DRIVER=${MAIL_DRIVER}|i" /conf/.env
