@@ -42,6 +42,7 @@ services:
       - TIMEZONE=UTC
       #- APP_NAME=Laravel
       #- APP_ENV=local
+      #- APP_FORCE_HTTPS=false
       #- APP_DEBUG=true
       #- APP_URL=http://localhost
       #- LOG_CHANNEL=stack
