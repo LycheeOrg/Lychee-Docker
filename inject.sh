@@ -11,6 +11,9 @@ fi
 if [ "$APP_URL" != '' ]; then
     sed -i "s|APP_URL=.*|APP_URL=${APP_URL}|i" /conf/.env
 fi
+if [ "$APP_FORCE_HTTPS" != '' ]; then
+    sed -i "s|APP_FORCE_HTTPS=.*|APP_FORCE_HTTPS=${APP_FORCE_HTTPS}|i" /conf/.env
+fi
 if [ "$DEBUGBAR_ENABLED" != '' ]; then
     sed -i "s|DEBUGBAR_ENABLED=.*|DEBUGBAR_ENABLED=${DEBUGBAR_ENABLED}|i" /conf/.env
 fi
