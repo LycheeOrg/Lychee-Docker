@@ -47,6 +47,9 @@ fi
 if [ "$TIMEZONE" != '' ]; then
     sed -i "s|TIMEZONE=.*|TIMEZONE=${TIMEZONE}|i" /conf/.env
 fi
+if [ "$ENABLE_TOKEN_AUTH" != '' ]; then
+    sed -i "s|ENABLE_TOKEN_AUTH=.*|ENABLE_TOKEN_AUTH=${ENABLE_TOKEN_AUTH}|i" /conf/.env
+fi
 if [ "$BROADCAST_DRIVER" != '' ]; then
     sed -i "s|BROADCAST_DRIVER=.*|BROADCAST_DRIVER=${BROADCAST_DRIVER}|i" /conf/.env
 fi
