@@ -96,10 +96,16 @@ echo "**** Inject .env values ****" && \
 	touch /tmp/first_run
 
 echo "**** Make sure user.css exists and symlink it ****" && \
-touch /conf/user.css
+touch -a /conf/user.css
 [ ! -L /var/www/html/Lychee/public/dist/user.css ] && \
 	rm /var/www/html/Lychee/public/dist/user.css && \
 	ln -s /conf/user.css /var/www/html/Lychee/public/dist/user.css
+
+echo "**** Make sure custom.js exists and symlink it ****" && \
+touch -a /conf/custom.js
+[ ! -L /var/www/html/Lychee/public/dist/custom.js ] && \
+	rm /var/www/html/Lychee/public/dist/custom.js && \
+	ln -s /conf/custom.js /var/www/html/Lychee/public/dist/custom.js
 
 echo "**** Create user and use PUID/PGID ****"
 PUID=${PUID:-1000}
@@ -116,11 +122,11 @@ echo "**** Set Permissions ****" && \
 # Set ownership of directories, then files and only when required. See LycheeOrg/Lychee-Docker#120
 find /sym /uploads -type d \( ! -user "$USER" -o ! -group "$USER" \) -exec chown -R "$USER":"$USER" \{\} \;
 find /conf/.env /sym /uploads \( ! -user "$USER" -o ! -group "$USER" \) -exec chown "$USER":"$USER" \{\} \;
-# Laravel needs to be able to chmod user.css for no good reason
-find /conf/user.css /var/www/html/Lychee/storage/logs/laravel.log \( ! -user "www-data" -o ! -group "$USER" \) -exec chown www-data:"$USER" \{\} \;
+# Laravel needs to be able to chmod user.css and custom.js for no good reason
+find /conf/user.css /conf/custom.js /var/www/html/Lychee/storage/logs/laravel.log \( ! -user "www-data" -o ! -group "$USER" \) -exec chown www-data:"$USER" \{\} \;
 usermod -a -G "$USER" www-data
 find /sym /uploads -type d \( ! -perm -ug+w -o ! -perm -ugo+rX -o ! -perm -g+s \) -exec chmod -R ug+w,ugo+rX,g+s \{\} \;
-find /conf/user.css /conf/.env /sym /uploads /var/www/html/Lychee/storage/logs/laravel.log \( ! -perm -ug+w -o ! -perm -ugo+rX \) -exec chmod ug+w,ugo+rX \{\} \;
+find /conf/user.css /conf/custom.js /conf/.env /sym /uploads /var/www/html/Lychee/storage/logs/laravel.log \( ! -perm -ug+w -o ! -perm -ugo+rX \) -exec chmod ug+w,ugo+rX \{\} \;
 
 # Update CA Certificates if we're using armv7 because armv7 is weird (#76)
 if [[ $(uname -a) == *"armv7"* ]]; then
