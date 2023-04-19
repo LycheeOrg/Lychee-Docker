@@ -62,6 +62,9 @@ fi
 if [ "$SESSION_LIFETIME" != '' ]; then
     sed -i "s|SESSION_LIFETIME=.*|SESSION_LIFETIME=${SESSION_LIFETIME}|i" /conf/.env
 fi
+if [ "$QUEUE_CONNECTION" != '' ]; then
+    sed -i "s|QUEUE_DRIVER=.*|QUEUE_DRIVER=${QUEUE_DRIVER}|i" /conf/.env
+fi
 if [ "$QUEUE_DRIVER" != '' ]; then
     sed -i "s|QUEUE_DRIVER=.*|QUEUE_DRIVER=${QUEUE_DRIVER}|i" /conf/.env
 fi
