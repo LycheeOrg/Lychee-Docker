@@ -125,7 +125,7 @@ If you need to add (not change) nginx directives, files mounted in `/etc/nginx/c
 [amd64-shield]: https://img.shields.io/badge/amd64-yes-success.svg?style=flat
 [armv6-shield]: https://img.shields.io/badge/armv6-yes-success.svg?style=flat
 [armv7-shield]: https://img.shields.io/badge/armv7-yes-success.svg?style=flat
-[build-status-shield]: https://img.shields.io/github/workflow/status/LycheeOrg/Lychee-Docker/Scheduled%20Build?label=%3Adev%20build
+[build-status-shield]: https://img.shields.io/github/actions/workflow/status/LycheeOrg/Lychee-Docker/cron.yml?label=%3Adev%20build
 [docker-pulls-shield-old]: https://img.shields.io/docker/pulls/lycheeorg/lychee-laravel.svg?style=flat&label=Docker%20Pulls%20(lychee-laravel)
 [docker-pulls-shield]: https://img.shields.io/docker/pulls/lycheeorg/lychee.svg?style=flat&label=Docker%20Pulls%20(lychee)
 [lychee-version-shield]: https://img.shields.io/docker/v/lycheeorg/lychee/latest?style=flat&label=Lychee%20Version%20(:latest)
