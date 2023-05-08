@@ -40,6 +40,9 @@ if [ "$DB_USERNAME" != '' ]; then
 fi
 if [ "$DB_PASSWORD" != '' ]; then
     sed -i "s|DB_PASSWORD=.*|DB_PASSWORD=${DB_PASSWORD}|i" /conf/.env
+elif [ "$DB_PASSWORD_FILE" != '' ]; then
+    value=$(<$DB_PASSWORD_FILE)
+    sed -i "s|DB_PASSWORD=.*|DB_PASSWORD=${value}|i" /conf/.env
 fi
 if [ "$DB_DROP_CLEAR_TABLES_ON_ROLLBACK" != '' ]; then
     sed -i "s|DB_DROP_CLEAR_TABLES_ON_ROLLBACK=.*|DB_DROP_CLEAR_TABLES_ON_ROLLBACK=${DB_DROP_CLEAR_TABLES_ON_ROLLBACK}|i" /conf/.env
@@ -88,6 +91,9 @@ if [ "$REDIS_PORT" != '' ]; then
 fi
 if [ "$REDIS_PASSWORD" != '' ]; then
     sed -i "s|REDIS_PASSWORD=.*|REDIS_PASSWORD=${REDIS_PASSWORD}|i" /conf/.env
+elif [ "$REDIS_PASSWORD_FILE" != '' ]; then
+    value=$(<$REDIS_PASSWORD_FILE)
+    sed -i "s|REDIS_PASSWORD=.*|REDIS_PASSWORD=${value}|i" /conf/.env
 fi
 if [ "$MAIL_DRIVER" != '' ]; then
     sed -i "s|MAIL_DRIVER=.*|MAIL_DRIVER=${MAIL_DRIVER}|i" /conf/.env
@@ -103,6 +109,9 @@ if [ "$MAIL_USERNAME" != '' ]; then
 fi
 if [ "$MAIL_PASSWORD" != '' ]; then
     sed -i "s|MAIL_PASSWORD=.*|MAIL_PASSWORD=${MAIL_PASSWORD}|i" /conf/.env
+elif [ "$MAIL_PASSWORD_FILE" != '' ]; then
+    value=$(<$MAIL_PASSWORD_FILE)
+    sed -i "s|MAIL_PASSWORD=.*|MAIL_PASSWORD=${value}|i" /conf/.env
 fi
 if [ "$MAIL_ENCRYPTION" != '' ]; then
     sed -i "s|MAIL_ENCRYPTION=.*|MAIL_ENCRYPTION=${MAIL_ENCRYPTION}|i" /conf/.env
@@ -118,9 +127,15 @@ if [ "$PUSHER_APP_ID" != '' ]; then
 fi
 if [ "$PUSHER_APP_KEY" != '' ]; then
     sed -i "s|PUSHER_APP_KEY=.*|PUSHER_APP_KEY=${PUSHER_APP_KEY}|i" /conf/.env
+elif [ "$PUSHER_APP_KEY_FILE" != '' ]; then
+    value=$(<$PUSHER_APP_KEY_FILE)
+    sed -i "s|PUSHER_APP_KEY=.*|PUSHER_APP_KEY=${value}|i" /conf/.env
 fi
 if [ "$PUSHER_APP_SECRET" != '' ]; then
     sed -i "s|PUSHER_APP_SECRET=.*|PUSHER_APP_SECRET=${PUSHER_APP_SECRET}|i" /conf/.env
+elif [ "$PUSHER_APP_SECRET_FILE" != '' ]; then
+    value=$(<$PUSHER_APP_SECRET_FILE)
+    sed -i "s|PUSHER_APP_SECRET=.*|PUSHER_APP_SECRET=${value}|i" /conf/.env
 fi
 if [ "$PUSHER_APP_CLUSTER" != '' ]; then
     sed -i "s|PUSHER_APP_CLUSTER=.*|PUSHER_APP_CLUSTER=${PUSHER_APP_CLUSTER}|i" /conf/.env

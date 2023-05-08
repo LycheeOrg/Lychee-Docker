@@ -52,6 +52,7 @@ services:
       - DB_DATABASE=lychee
       - DB_USERNAME=lychee
       - DB_PASSWORD=<LYCHEE_PASSWORD>
+      #- DB_PASSWORD_FILE=<filename>
       #- DB_DROP_CLEAR_TABLES_ON_ROLLBACK=false
       #- DB_OLD_LYCHEE_PREFIX=''
       #- BROADCAST_DRIVER=log
@@ -62,16 +63,20 @@ services:
       #- SECURITY_HEADER_HSTS_ENABLE=false
       #- REDIS_HOST=127.0.0.1
       #- REDIS_PASSWORD=null
+      #- REDIS_PASSWORD_FILE=<filename>
       #- REDIS_PORT=6379
       #- MAIL_DRIVER=smtp
       #- MAIL_HOST=smtp.mailtrap.io
       #- MAIL_PORT=2525
       #- MAIL_USERNAME=null
       #- MAIL_PASSWORD=null
+      #- MAIL_PASSWORD_FILE=<filename>
       #- MAIL_ENCRYPTION=null
       #- PUSHER_APP_ID=''
       #- PUSHER_APP_KEY=''
+      #- PUSHER_APP_KEY_FILE=<filename>
       #- PUSHER_APP_SECRET=''
+      #- PUSHER_APP_SECRET_FILE=<filename>
       #- PUSHER_APP_CLUSTER=mt1
       - STARTUP_DELAY=30
     restart: unless-stopped
