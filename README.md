@@ -99,6 +99,14 @@ As an alternative to passing sensitive information via environment variables, _F
 
 If both the original variable and the _FILE (e.g. both DB_PASSWORD and DB_PASSWORD_FILE) are set, the original variable will be used.
 
+The following _FILE variables are supported:
+
+* DB_PASSWORD_FILE
+* REDIS_PASSWORD_FILE 
+* MAIL_PASSWORD_FILE
+* PUSHER_APP_KEY_FILE 
+* PUSHER_APP_SECRET_FILE
+
 ## Available environment variables and defaults
 
 If you do not provide environment variables or `.env` file, the [example .env file](https://github.com/LycheeOrg/Lychee/blob/master/.env.example) will be used with some values already set by default.
