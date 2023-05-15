@@ -104,8 +104,6 @@ The following _FILE variables are supported:
 * DB_PASSWORD_FILE
 * REDIS_PASSWORD_FILE 
 * MAIL_PASSWORD_FILE
-* PUSHER_APP_KEY_FILE 
-* PUSHER_APP_SECRET_FILE
 
 ## Available environment variables and defaults
 

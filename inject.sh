@@ -17,9 +17,6 @@ fi
 if [ "$DEBUGBAR_ENABLED" != '' ]; then
     sed -i "s|DEBUGBAR_ENABLED=.*|DEBUGBAR_ENABLED=${DEBUGBAR_ENABLED}|i" /conf/.env
 fi
-if [ "$LOG_CHANNEL" != '' ]; then
-    sed -i "s|LOG_CHANNEL=.*|LOG_CHANNEL=${LOG_CHANNEL}|i" /conf/.env
-fi
 if [ "$DB_OLD_LYCHEE_PREFIX" != '' ]; then
     sed -i "s|DB_OLD_LYCHEE_PREFIX=.*|DB_OLD_LYCHEE_PREFIX=${DB_OLD_LYCHEE_PREFIX}|i" /conf/.env
 fi
@@ -44,17 +41,11 @@ elif [ "$DB_PASSWORD_FILE" != '' ]; then
     value=$(<$DB_PASSWORD_FILE)
     sed -i "s|DB_PASSWORD=.*|DB_PASSWORD=${value}|i" /conf/.env
 fi
-if [ "$DB_DROP_CLEAR_TABLES_ON_ROLLBACK" != '' ]; then
-    sed -i "s|DB_DROP_CLEAR_TABLES_ON_ROLLBACK=.*|DB_DROP_CLEAR_TABLES_ON_ROLLBACK=${DB_DROP_CLEAR_TABLES_ON_ROLLBACK}|i" /conf/.env
-fi
 if [ "$TIMEZONE" != '' ]; then
     sed -i "s|TIMEZONE=.*|TIMEZONE=${TIMEZONE}|i" /conf/.env
 fi
 if [ "$ENABLE_TOKEN_AUTH" != '' ]; then
     sed -i "s|ENABLE_TOKEN_AUTH=.*|ENABLE_TOKEN_AUTH=${ENABLE_TOKEN_AUTH}|i" /conf/.env
-fi
-if [ "$BROADCAST_DRIVER" != '' ]; then
-    sed -i "s|BROADCAST_DRIVER=.*|BROADCAST_DRIVER=${BROADCAST_DRIVER}|i" /conf/.env
 fi
 if [ "$CACHE_DRIVER" != '' ]; then
     sed -i "s|CACHE_DRIVER=.*|CACHE_DRIVER=${CACHE_DRIVER}|i" /conf/.env
@@ -66,9 +57,6 @@ if [ "$SESSION_LIFETIME" != '' ]; then
     sed -i "s|SESSION_LIFETIME=.*|SESSION_LIFETIME=${SESSION_LIFETIME}|i" /conf/.env
 fi
 if [ "$QUEUE_CONNECTION" != '' ]; then
-    sed -i "s|QUEUE_DRIVER=.*|QUEUE_DRIVER=${QUEUE_DRIVER}|i" /conf/.env
-fi
-if [ "$QUEUE_DRIVER" != '' ]; then
     sed -i "s|QUEUE_DRIVER=.*|QUEUE_DRIVER=${QUEUE_DRIVER}|i" /conf/.env
 fi
 if [ "$SECURITY_HEADER_HSTS_ENABLE" != '' ]; then
@@ -121,24 +109,6 @@ if [ "$MAIL_FROM_NAME" != '' ]; then
 fi
 if [ "$MAIL_FROM_ADDRESS" != '' ]; then
     sed -i "s|MAIL_FROM_ADDRESS=.*|MAIL_FROM_ADDRESS=${MAIL_FROM_ADDRESS}|i" /conf/.env
-fi
-if [ "$PUSHER_APP_ID" != '' ]; then
-    sed -i "s|PUSHER_APP_ID=.*|PUSHER_APP_ID=${PUSHER_APP_ID}|i" /conf/.env
-fi
-if [ "$PUSHER_APP_KEY" != '' ]; then
-    sed -i "s|PUSHER_APP_KEY=.*|PUSHER_APP_KEY=${PUSHER_APP_KEY}|i" /conf/.env
-elif [ "$PUSHER_APP_KEY_FILE" != '' ]; then
-    value=$(<$PUSHER_APP_KEY_FILE)
-    sed -i "s|PUSHER_APP_KEY=.*|PUSHER_APP_KEY=${value}|i" /conf/.env
-fi
-if [ "$PUSHER_APP_SECRET" != '' ]; then
-    sed -i "s|PUSHER_APP_SECRET=.*|PUSHER_APP_SECRET=${PUSHER_APP_SECRET}|i" /conf/.env
-elif [ "$PUSHER_APP_SECRET_FILE" != '' ]; then
-    value=$(<$PUSHER_APP_SECRET_FILE)
-    sed -i "s|PUSHER_APP_SECRET=.*|PUSHER_APP_SECRET=${value}|i" /conf/.env
-fi
-if [ "$PUSHER_APP_CLUSTER" != '' ]; then
-    sed -i "s|PUSHER_APP_CLUSTER=.*|PUSHER_APP_CLUSTER=${PUSHER_APP_CLUSTER}|i" /conf/.env
 fi
 if [ "$TRUSTED_PROXIES" != '' ]; then
     sed -i "s|TRUSTED_PROXIES=.*|TRUSTED_PROXIES=${TRUSTED_PROXIES}|i" /conf/.env
