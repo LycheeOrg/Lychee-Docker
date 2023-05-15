@@ -93,6 +93,18 @@ Change the environment variables in the [provided example](./docker-compose.yml)
 
 Note that in order to avoid writing credentials directly into the file, you can create a `db_secrets.env` and use the `env_file` directive (see the [docs](https://docs.docker.com/compose/environment-variables/#the-env_file-configuration-option)).
 
+### Docker secrets
+
+As an alternative to passing sensitive information via environment variables, _FILE may be appended to some of the environment variables, causing the initialization script to load the values for those variables from files present in the container. In particular, this can be used to load passwords from Docker secrets stored in /run/secrets/<secret_name> files.
+
+If both the original variable and the _FILE (e.g. both DB_PASSWORD and DB_PASSWORD_FILE) are set, the original variable will be used.
+
+The following _FILE variables are supported:
+
+* DB_PASSWORD_FILE
+* REDIS_PASSWORD_FILE 
+* MAIL_PASSWORD_FILE
+
 ## Available environment variables and defaults
 
 If you do not provide environment variables or `.env` file, the [example .env file](https://github.com/LycheeOrg/Lychee/blob/master/.env.example) will be used with some values already set by default.
