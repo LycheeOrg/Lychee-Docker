@@ -33,10 +33,11 @@ if [ -n "$STARTUP_DELAY" ]
 fi
 
 
-echo "**** Make sure the /conf and /uploads folders exist ****"
+echo "**** Make sure the /conf /uploads /sym /logs folders exist ****"
 [ ! -d /conf ]    && mkdir -p /conf
 [ ! -d /uploads ] && mkdir -p /uploads
 [ ! -d /sym ]     && mkdir -p /sym
+[ ! -d /logs]     && mkdir -p /logs
 
 echo "**** Create the symbolic link for the /uploads folder ****"
 [ ! -L /var/www/html/Lychee/public/uploads ] && \
@@ -50,6 +51,13 @@ echo "**** Create the symbolic link for the /sym folder ****"
 	cp -r /var/www/html/Lychee/public/sym/* /sym && \
 	rm -r /var/www/html/Lychee/public/sym && \
 	ln -s /sym /var/www/html/Lychee/public/sym
+
+echo "**** Create the symbolic link for the /logs folder ****"
+[ ! -L /var/www/html/Lychee/storage/logs ] && \
+	touch /var/www/html/Lychee/storage/logs/empty_file && \
+	cp -r /var/www/html/Lychee/storage/logs/* /logs && \
+	rm -r /var/www/html/Lychee/storage/logs && \
+	ln -s /sym /var/www/html/Lychee/storage/logs
 
 echo "**** Create the symbolic link to the old Lychee-Laravel folder ****"
 [ ! -L /var/www/html/Lychee-Laravel ] && \

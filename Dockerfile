@@ -76,7 +76,7 @@ RUN \
 COPY default.conf /etc/nginx/nginx.conf
 
 EXPOSE 80
-VOLUME /conf /uploads /sym
+VOLUME /conf /uploads /sym /logs
 
 WORKDIR /var/www/html/Lychee
 
