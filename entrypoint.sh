@@ -33,10 +33,11 @@ if [ -n "$STARTUP_DELAY" ]
 fi
 
 
-echo "**** Make sure the /conf and /uploads folders exist ****"
+echo "**** Make sure the /conf /uploads /sym /logs folders exist ****"
 [ ! -d /conf ]    && mkdir -p /conf
 [ ! -d /uploads ] && mkdir -p /uploads
 [ ! -d /sym ]     && mkdir -p /sym
+[ ! -d /logs]     && mkdir -p /logs
 
 echo "**** Create the symbolic link for the /uploads folder ****"
 [ ! -L /var/www/html/Lychee/public/uploads ] && \
@@ -50,6 +51,13 @@ echo "**** Create the symbolic link for the /sym folder ****"
 	cp -r /var/www/html/Lychee/public/sym/* /sym && \
 	rm -r /var/www/html/Lychee/public/sym && \
 	ln -s /sym /var/www/html/Lychee/public/sym
+
+echo "**** Create the symbolic link for the /logs folder ****"
+[ ! -L /var/www/html/Lychee/storage/logs ] && \
+	touch /var/www/html/Lychee/storage/logs/empty_file && \
+	cp -r /var/www/html/Lychee/storage/logs/* /logs && \
+	rm -r /var/www/html/Lychee/storage/logs && \
+	ln -s /sym /var/www/html/Lychee/storage/logs
 
 echo "**** Create the symbolic link to the old Lychee-Laravel folder ****"
 [ ! -L /var/www/html/Lychee-Laravel ] && \
@@ -116,17 +124,17 @@ echo -e " \tUser UID :\t$(id -u "$USER")"
 echo -e " \tUser GID :\t$(id -g "$USER")"
 
 echo "**** Make sure Laravel's log exists ****" && \
-touch /var/www/html/Lychee/storage/logs/laravel.log
+touch /logs/laravel.log
 
 echo "**** Set Permissions ****" && \
 # Set ownership of directories, then files and only when required. See LycheeOrg/Lychee-Docker#120
-find /sym /uploads -type d \( ! -user "$USER" -o ! -group "$USER" \) -exec chown -R "$USER":"$USER" \{\} \;
-find /conf/.env /sym /uploads \( ! -user "$USER" -o ! -group "$USER" \) -exec chown "$USER":"$USER" \{\} \;
+find /sym /uploads /logs -type d \( ! -user "$USER" -o ! -group "$USER" \) -exec chown -R "$USER":"$USER" \{\} \;
+find /conf/.env /sym /uploads /logs \( ! -user "$USER" -o ! -group "$USER" \) -exec chown "$USER":"$USER" \{\} \;
 # Laravel needs to be able to chmod user.css and custom.js for no good reason
-find /conf/user.css /conf/custom.js /var/www/html/Lychee/storage/logs/laravel.log \( ! -user "www-data" -o ! -group "$USER" \) -exec chown www-data:"$USER" \{\} \;
+find /conf/user.css /conf/custom.js /logs/laravel.log \( ! -user "www-data" -o ! -group "$USER" \) -exec chown www-data:"$USER" \{\} \;
 usermod -a -G "$USER" www-data
-find /sym /uploads -type d \( ! -perm -ug+w -o ! -perm -ugo+rX -o ! -perm -g+s \) -exec chmod -R ug+w,ugo+rX,g+s \{\} \;
-find /conf/user.css /conf/custom.js /conf/.env /sym /uploads /var/www/html/Lychee/storage/logs/laravel.log \( ! -perm -ug+w -o ! -perm -ugo+rX \) -exec chmod ug+w,ugo+rX \{\} \;
+find /sym /uploads /logs -type d \( ! -perm -ug+w -o ! -perm -ugo+rX -o ! -perm -g+s \) -exec chmod -R ug+w,ugo+rX,g+s \{\} \;
+find /conf/user.css /conf/custom.js /conf/.env /sym /uploads /logs \( ! -perm -ug+w -o ! -perm -ugo+rX \) -exec chmod ug+w,ugo+rX \{\} \;
 
 # Update CA Certificates if we're using armv7 because armv7 is weird (#76)
 if [[ $(uname -a) == *"armv7"* ]]; then
