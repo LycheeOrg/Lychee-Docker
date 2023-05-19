@@ -124,7 +124,7 @@ echo -e " \tUser UID :\t$(id -u "$USER")"
 echo -e " \tUser GID :\t$(id -g "$USER")"
 
 echo "**** Make sure Laravel's log exists ****" && \
-touch /var/www/html/Lychee/storage/logs/laravel.log
+touch /logs/laravel.log
 
 echo "**** Set Permissions ****" && \
 # Set ownership of directories, then files and only when required. See LycheeOrg/Lychee-Docker#120
