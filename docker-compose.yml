@@ -70,6 +70,9 @@ services:
       #- MAIL_PASSWORD_FILE=<filename>
       #- MAIL_ENCRYPTION=null
       - STARTUP_DELAY=30
+      # - ADMIN_USER=admin
+      # - ADMIN_PASSWORD=<ADMIN_PASSWORD>
+      # - ADMIN_PASSWORD_FILE=<filename>
     restart: unless-stopped
     depends_on:
       - lychee_db
