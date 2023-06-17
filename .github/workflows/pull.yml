@@ -1,7 +1,7 @@
 name: Push Pull Requests
 
 on:
-  pull-request:
+  pull_request:
     paths-ignore:
       - 'README.md'
 
