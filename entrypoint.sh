@@ -105,7 +105,7 @@ create_admin_user() {
     fi
     if [ "$value" != '' ]; then
       echo "**** Creating admin account ****" && \
-      php artisan lychee:create_user $ADMIN_USER $value
+      php artisan lychee:create_user "$ADMIN_USER" "$value"
     fi
   fi
 }

@@ -95,7 +95,7 @@ Note that in order to avoid writing credentials directly into the file, you can 
 
 ### Create admin account during first run
 
-When the ADMIN_USER and ADMIN_PASSWORD (or ADMIN_PASSWORD_FILE) are set an admin user will be created during the first run.
+When ADMIN_USER and ADMIN_PASSWORD (or ADMIN_PASSWORD_FILE) are set an admin user will be created with those credentials during the first run. Otherwise Lychee will prompt in the browser when first loaded.
 
 ### Docker secrets
 
