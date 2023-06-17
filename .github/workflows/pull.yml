@@ -1,4 +1,4 @@
-name: Push Pull Requests
+name: Build Pull Request
 
 on:
   pull_request:
@@ -11,7 +11,7 @@ env:
   PHP_TZ: 'UTC'
 
 jobs:
-  multiarch:
+  build:
     runs-on: ubuntu-latest
     steps:
       -
@@ -24,150 +24,39 @@ jobs:
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
       -
-        name: Login to DockerHub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      -
-        name: Build and push
+        name: Test multiarch building
         uses: docker/build-push-action@v3
         with:
           context: .
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
-          push: true
+          load: false
+          push: false
           tags: |
             lycheeorg/lychee:testing-${{ github.run_id }}
-
-  default-env:
-    needs: multiarch
-    runs-on: ubuntu-latest
-    services:
-      lychee-docker:
-        image: lycheeorg/lychee:testing-${{ github.run_id }}
-        ports:
-          - 80:80
-    steps:
       -
-        name: GET
-        run: 'curl -sSw "%{stderr}%{http_code}" http://localhost/ > /dev/null && curl -f http://localhost/'
-
-  sqlite:
-    needs: multiarch
-    runs-on: ubuntu-latest
-    services:
-      lychee-docker:
-        image: lycheeorg/lychee:testing-${{ github.run_id }}
-        ports:
-          - 80:80
-    env:
-      DB_CONNECTION: sqlite
-    steps:
+        name: Save amd64 image to pass to testing
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64
+          load: true
+          push: false
+          tags: |
+            lycheeorg/lychee:testing-${{ github.run_id }}
       -
-        name: GET
-        run: 'curl -sSw "%{stderr}%{http_code}" http://localhost/ > /dev/null && curl -f http://localhost/'
-
-  sqlite2:
-    needs: multiarch
-    runs-on: ubuntu-latest
-    services:
-      lychee-docker:
-        image: lycheeorg/lychee:testing-${{ github.run_id }}
-        ports:
-          - 80:80
-    env:
-      DB_CONNECTION: sqlite
-      DB_DATABASE: '/var/www/html/Lychee/nonexistent'
-    steps:
-      -
-        name: GET
-        run: 'curl -sSw "%{stderr}%{http_code}" http://localhost/ > /dev/null && curl -f http://localhost/'
-
-  mysql:
-    needs: multiarch
-    runs-on: ubuntu-latest
-    services:
-      lychee-docker:
-        image: lycheeorg/lychee:testing-${{ github.run_id }}
-        ports:
-          - 80:80
-      db:
-        image: mariadb:latest
-        env:
-          MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: lychee
-    env:
-      DB_CONNECTION: mysql
-      DB_HOST: db
-      DB_PORT: '3306'
-      DB_DATABASE: lychee
-      DB_USERNAME: root
-      DB_PASSWORD: password
-    steps:
-      -
-        name: GET
-        run: 'curl -sSw "%{stderr}%{http_code}" http://localhost/ > /dev/null && curl -f http://localhost/'
-
-  postgres:
-    needs: multiarch
-    runs-on: ubuntu-latest
-    services:
-      lychee-docker:
-        image: lycheeorg/lychee:testing-${{ github.run_id }}
-        ports:
-          - 80:80
-      db:
-        image: postgres:latest
-        env:
-          POSTGRES_PASSWORD: password
-          POSTGRES_DB: lychee
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-    env:
-      DB_CONNECTION: pgsql
-      DB_HOST: db
-      DB_PORT: '5432'
-      DB_DATABASE: lychee
-      DB_USERNAME: postgres
-      DB_PASSWORD: password
-    steps:
-      -
-        name: GET
-        run: 'curl -sSw "%{stderr}%{http_code}" http://localhost/ > /dev/null && curl -f http://localhost/'
-
-  docker-compose:
-    needs: multiarch
-    runs-on: ubuntu-latest
-    services:
-      lychee-docker:
-        image: lycheeorg/lychee:testing-${{ github.run_id }}
-        ports:
-          - 80:80
-    steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v3
-      -
-        name: Set Password
-        run: "sed -i 's/<.*_PASSWORD>/password/g' docker-compose.yml"
-      -
-        name: Set Image
-        run: "sed -i 's|image: lycheeorg/lychee|image: lycheeorg/lychee:testing-${{ github.run_id }}|' docker-compose.yml"
-      -
-        name: Install docker-compose
-        run: "sudo apt install docker-compose"
-      -
-        name: Run docker-compose
-        run: 'docker-compose up -d && sleep 45 && docker-compose ps && curl -sSw "%{stderr}%{http_code}" http://localhost:90/ > /dev/null && curl -f http://localhost:90/'
-
-  retag:
-    needs: [default-env, sqlite, sqlite2, mysql, postgres, docker-compose]
-    runs-on: ubuntu-latest
-    container:
-      image: gcr.io/go-containerregistry/crane:debug
-    steps:
-      -
-        name: Retag image
+        name: Export Image and PR Number
         run: |
-          crane auth login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }} index.docker.io
-          crane tag lycheeorg/lychee:testing-${{ github.run_id }} testing-pull${{ github.event.pull_request.number }}
+          mkdir -p ./artifact
+          docker image save -o ./artifact/lychee.tar lycheeorg/lychee:testing-${{ github.run_id }}
+          echo "${{ github.event.number }}" > ./artifact/pr
+          echo "${{ github.sha }}" > ./artifact/sha
+          echo -e "PR: ${{ github.event.number }}\nSHA: ${{ github.sha }}\nBase ref: ${{ github.base_ref }}\nHead ref: ${{ github.head_ref }}"
+          sha256sum artifact/lychee.tar || echo 0
+      -
+        name: Store as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: artifact
+          path: ./artifact
