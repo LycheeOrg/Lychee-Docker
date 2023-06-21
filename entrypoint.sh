@@ -96,11 +96,26 @@ echo "**** Copy the .env to /conf ****" && \
 echo "**** Inject .env values ****" && \
 	/inject.sh
 
+create_admin_user() {
+  if [ "$ADMIN_USER" != '' ]; then
+    if [ "$ADMIN_PASSWORD" != '' ]; then
+      value=$ADMIN_PASSWORD
+    elif [ -e "$ADMIN_PASSWORD_FILE" ] ; then
+      value=$(<$ADMIN_PASSWORD_FILE)
+    fi
+    if [ "$value" != '' ]; then
+      echo "**** Creating admin account ****" && \
+      php artisan lychee:create_user "$ADMIN_USER" "$value"
+    fi
+  fi
+}
+
 [ ! -e /tmp/first_run ] && \
 	echo "**** Generate the key (to make sure that cookies cannot be decrypted etc) ****" && \
 	./artisan key:generate -n && \
 	echo "**** Migrate the database ****" && \
 	./artisan migrate --force && \
+	create_admin_user && \
 	touch /tmp/first_run
 
 echo "**** Make sure user.css exists and symlink it ****" && \

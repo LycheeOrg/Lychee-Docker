@@ -93,6 +93,10 @@ Change the environment variables in the [provided example](./docker-compose.yml)
 
 Note that in order to avoid writing credentials directly into the file, you can create a `db_secrets.env` and use the `env_file` directive (see the [docs](https://docs.docker.com/compose/environment-variables/#the-env_file-configuration-option)).
 
+### Create admin account during first run
+
+When ADMIN_USER and ADMIN_PASSWORD (or ADMIN_PASSWORD_FILE) are set an admin user will be created with those credentials during the first run. Otherwise Lychee will prompt in the browser when first loaded.
+
 ### Docker secrets
 
 As an alternative to passing sensitive information via environment variables, _FILE may be appended to some of the environment variables, causing the initialization script to load the values for those variables from files present in the container. In particular, this can be used to load passwords from Docker secrets stored in /run/secrets/<secret_name> files.
@@ -104,6 +108,7 @@ The following _FILE variables are supported:
 * DB_PASSWORD_FILE
 * REDIS_PASSWORD_FILE 
 * MAIL_PASSWORD_FILE
+* ADMIN_PASSWORD_FILE
 
 ## Available environment variables and defaults
 
