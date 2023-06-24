@@ -41,6 +41,12 @@ elif [ "$DB_PASSWORD_FILE" != '' ]; then
     value=$(<$DB_PASSWORD_FILE)
     sed -i "s|DB_PASSWORD=.*|DB_PASSWORD=${value}|i" /conf/.env
 fi
+if [ "$DB_LOG_SQL" != '' ]; then
+    sed -i "s|DB_LOG_SQL=.*|DB_LOG_SQL=${DB_LOG_SQL}|i" /conf/.env
+fi
+if [ "$DB_LOG_SQL_EXPLAIN" != '' ]; then
+    sed -i "s|DB_LOG_SQL_EXPLAIN=.*|DB_LOG_SQL_EXPLAIN=${DB_LOG_SQL_EXPLAIN}|i" /conf/.env
+fi
 if [ "$TIMEZONE" != '' ]; then
     sed -i "s|TIMEZONE=.*|TIMEZONE=${TIMEZONE}|i" /conf/.env
 fi
