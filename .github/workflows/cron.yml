@@ -170,4 +170,5 @@ jobs:
         run: |
           crane auth login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }} index.docker.io
           crane tag lycheeorg/lychee:testing-${{ github.run_id }} dev
+          crane tag lycheeorg/lychee:testing-${{ github.run_id }} nightly
           crane cp lycheeorg/lychee:testing-${{ github.run_id }} lycheeorg/lychee-laravel:dev
