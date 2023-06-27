@@ -12,6 +12,8 @@ ENV PHP_TZ=UTC
 # Arguments
 # To use the latest Lychee release instead of master pass `--build-arg TARGET=release` to `docker build`
 ARG TARGET=dev
+# To install composer development dependencies, pass `--build-arg COMPOSER_NO_DEV=0` to `docker build`
+ARG COMPOSER_NO_DEV=1
 
 # Install base dependencies, add user and group, clone the repo and install php libraries
 RUN \
