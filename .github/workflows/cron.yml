@@ -3,6 +3,7 @@ name: Scheduled Build
 on:
   schedule:
     - cron: '46 18 * * *'
+  workflow_dispatch:
 
 env:
   PUID: '1000'

@@ -61,7 +61,7 @@ RUN \
     echo "$TARGET" > /var/www/html/Lychee/docker_target && \
     cd /var/www/html/Lychee && \
     echo "Last release: $(cat version.md)" && \
-    composer install --no-dev --prefer-dist && \
+    composer install --prefer-dist && \
     find . -wholename '*/[Tt]ests/*' -delete && \
     find . -wholename '*/[Tt]est/*' -delete && \
     rm -r storage/framework/cache/data/* 2> /dev/null || true && \
