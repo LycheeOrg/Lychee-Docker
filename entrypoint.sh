@@ -37,7 +37,7 @@ echo "**** Make sure the /conf /uploads /sym /logs folders exist ****"
 [ ! -d /conf ]    && mkdir -p /conf
 [ ! -d /uploads ] && mkdir -p /uploads
 [ ! -d /sym ]     && mkdir -p /sym
-[ ! -d /logs]     && mkdir -p /logs
+[ ! -d /logs ]    && mkdir -p /logs
 
 echo "**** Create the symbolic link for the /uploads folder ****"
 [ ! -L /var/www/html/Lychee/public/uploads ] && \
