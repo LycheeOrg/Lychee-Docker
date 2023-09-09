@@ -123,6 +123,8 @@ Some variables are specific to Docker, and the default values are :
 * `PHP_TZ=UTC`
 * `STARTUP_DELAY=0`
 
+Additionally, if `SKIP_PERMISSIONS_CHECKS` is set to "yes", the entrypoint script will not check or set the permissions of files and directories on startup. Users are strongly advised **against** using this option, and efforts have been made to keep the checks as fast as possible. Nonetheless, it may be suitable for some advanced use cases.
+
 ## Advanced configuration
 
 Note that nginx will accept by default images up to 100MB (`client_max_body_size 100M`) and that PHP parameters are overridden according to the [recommendations of the Lychee FAQ](https://lycheeorg.github.io/docs/faq.html#i-cant-upload-large-photos).
