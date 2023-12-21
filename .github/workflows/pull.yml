@@ -12,6 +12,7 @@ env:
 
 jobs:
   build:
+    name: build ${{ matrix.arch }}
     strategy:
         matrix:
             arch: [linux/arm/v6,linux/arm/v7,linux/arm64]
@@ -38,6 +39,7 @@ jobs:
           tags: |
             lycheeorg/lychee:testing-${{ github.run_id }}
   build_amd64:
+    name: build amd64
     runs-on: ubuntu-latest
     steps:
       -
