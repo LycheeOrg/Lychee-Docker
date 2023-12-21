@@ -15,26 +15,37 @@ ARG TARGET=dev
 # To install composer development dependencies, pass `--build-arg COMPOSER_NO_DEV=0` to `docker build`
 ARG COMPOSER_NO_DEV=1
 
+
 # Install base dependencies, add user and group, clone the repo and install php libraries
 RUN \
     set -ev && \
     apt-get update && \
     apt-get upgrade -qy && \
     apt-get install -qy --no-install-recommends\
+    apt-transport-https
+
+# Add PHP repo
+COPY apt/deb.sury.org-php.gpg /usr/share/keyrings/deb.sury.org-php.gpg
+COPY apt/php.list /etc/apt/sources.list.d/php.list
+
+RUN \
+    set -ev && \
+    apt-get update && \
+    apt-get install -qy --no-install-recommends\
     adduser \
     nginx-light \
-    php8.2-mysql \
-    php8.2-pgsql \
-    php8.2-sqlite3 \
-    php8.2-imagick \
-    php8.2-mbstring \
-    php8.2-gd \
-    php8.2-xml \
-    php8.2-zip \
-    php8.2-fpm \
-    php8.2-redis \
-    php8.2-bcmath \
-    php8.2-intl \
+    php8.3-mysql \
+    php8.3-pgsql \
+    php8.3-sqlite3 \
+    php8.3-imagick \
+    php8.3-mbstring \
+    php8.3-gd \
+    php8.3-xml \
+    php8.3-zip \
+    php8.3-fpm \
+    php8.3-redis \
+    php8.3-bcmath \
+    php8.3-intl \
     curl \
     libimage-exiftool-perl \
     ffmpeg \
