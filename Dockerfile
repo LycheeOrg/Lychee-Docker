@@ -22,7 +22,7 @@ RUN \
     apt-get update && \
     apt-get upgrade -qy && \
     apt-get install -qy --no-install-recommends\
-    apt-transport-https && \
+    apt-transport-https \
     ca-certificates
 
 # Add PHP repo
