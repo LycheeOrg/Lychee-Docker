@@ -77,7 +77,7 @@ RUN \
 
 # Multi-stage build: Build static assets
 # This allows us to not include Node within the final container
-FROM node:20-alpine as node_modules_go_brrr
+FROM node:20 as node_modules_go_brrr
 
 RUN mkdir /app
 
@@ -89,25 +89,9 @@ COPY --from=base /var/www/html/Lychee /app
 # lock file we might find. Defaults to
 # NPM if no lock file is found.
 # Note: We run "production" for Mix and "build" for Vite
-RUN if [ -f "vite.config.js" ]; then \
-        ASSET_CMD="build"; \
-    else \
-        ASSET_CMD="production"; \
-    fi; \
-    if [ -f "yarn.lock" ]; then \
-        yarn install --frozen-lockfile; \
-        yarn $ASSET_CMD; \
-    elif [ -f "pnpm-lock.yaml" ]; then \
-        corepack enable && corepack prepare pnpm@latest-8 --activate; \
-        pnpm install --frozen-lockfile; \
-        pnpm run $ASSET_CMD; \
-    elif [ -f "package-lock.json" ]; then \
-        npm ci --no-audit; \
-        npm run $ASSET_CMD; \
-    else \
-        npm install; \
-        npm run $ASSET_CMD; \
-    fi;
+RUN \
+    npm ci --no-audit \
+    npm run build
 
 # From our base container created above, we
 # create our final image, adding in static

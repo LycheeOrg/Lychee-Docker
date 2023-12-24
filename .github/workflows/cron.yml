@@ -35,7 +35,8 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-          platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
+          platforms: linux/amd64,linux/arm/v7,linux/arm64
+          # platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
           push: true
           tags: |
             lycheeorg/lychee:testing-${{ github.run_id }}
@@ -64,7 +65,8 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-          platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
+          platforms: linux/amd64,linux/arm/v7,linux/arm64
+          # platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
           push: true
           build-args: |
             COMPOSER_NO_DEV=0
