@@ -85,10 +85,6 @@ RUN mkdir -p  /app
 WORKDIR /app
 COPY --from=base /var/www/html/Lychee /app
 
-# Use yarn or npm depending on what type of
-# lock file we might find. Defaults to
-# NPM if no lock file is found.
-# Note: We run "production" for Mix and "build" for Vite
 RUN \
     npm ci --no-audit \
     npm run build
