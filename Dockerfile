@@ -30,6 +30,10 @@ RUN \
     php82-iconv \
     php82-cli \
     php82-curl \
+    php82-gd \
+    php82-bcmath \
+    php82-session \
+    php82-exif \
     php82-pecl-imagick \
     php82-openssl \
     php82-mbstring \
@@ -55,16 +59,9 @@ RUN \
     libwebp \
     rsync \
     composer \
-    unzip
-
-RUN \
-    addgroup --gid "$PGID" "$USER"
-
-RUN \
-    adduser -g '' -H -D -u "$PUID" -G "$USER" "$USER" 
-    
-
-RUN \
+    unzip && \
+    addgroup --gid "$PGID" "$USER" && \
+    adduser -g '' -H -D -u "$PUID" -G "$USER" "$USER" && \
     cd /var/www/html && \
     if [ "$TARGET" = "release" ] ; then RELEASE_TAG="-b v$(curl -s https://raw.githubusercontent.com/LycheeOrg/Lychee/master/version.md)" ; fi && \
     git clone --depth 1 $RELEASE_TAG https://github.com/LycheeOrg/Lychee.git && \
@@ -93,8 +90,6 @@ RUN \
 # Multi-stage build: Build static assets
 # This allows us to not include Node within the final container
 FROM node:20-alpine as node_modules_go_brrr
-
-RUN mkdir /app
 
 RUN mkdir -p  /app
 WORKDIR /app
