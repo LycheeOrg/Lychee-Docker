@@ -97,7 +97,7 @@ FROM base
 # Packages like Laravel Nova may have added assets to the public directory
 # or maybe some custom assets were added manually! Either way, we merge
 # in the assets we generated above rather than overwrite them
-COPY --from=node_modules_go_brrr /app/public /var/www/html/Lychee/public-npm
+COPY --from=node_modules_go_brrr --chown=www-data:www-data /app/public /var/www/html/Lychee/public-npm
 RUN rsync -ar /var/www/html/Lychee/public-npm/ /var/www/html/Lychee/public/ \
     && rm -rf /var/www/html/Lychee/public-npm \
     && chown -R www-data:www-data /var/www/html/Lychee/public
