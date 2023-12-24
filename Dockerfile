@@ -77,7 +77,7 @@ RUN \
 
 # Multi-stage build: Build static assets
 # This allows us to not include Node within the final container
-FROM node:18 as node_modules_go_brrr
+FROM node:20-bookworm-slim as node_modules_go_brrr
 
 RUN mkdir /app
 
