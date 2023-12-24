@@ -1,4 +1,4 @@
-FROM debian:bookworm-slim
+FROM debian:bookworm-slim as base
 
 # Set version label
 LABEL maintainer="lycheeorg"
@@ -45,6 +45,7 @@ RUN \
     gifsicle \
     webp \
     cron \
+    rsync \
     composer \
     unzip && \
     addgroup --gid "$PGID" "$USER" && \
@@ -73,6 +74,33 @@ RUN \
     apt-get purge -y --autoremove git composer && \
     apt-get clean -qy &&\
     rm -rf /var/lib/apt/lists/*
+
+# Multi-stage build: Build static assets
+# This allows us to not include Node within the final container
+FROM node:20 as node_modules_go_brrr
+
+RUN mkdir /app
+
+RUN mkdir -p  /app
+WORKDIR /app
+COPY --from=base /var/www/html/Lychee /app
+
+RUN \
+    npm ci --no-audit \
+    npm run build
+
+# From our base container created above, we
+# create our final image, adding in static
+# assets that we generated above
+FROM base
+
+# Packages like Laravel Nova may have added assets to the public directory
+# or maybe some custom assets were added manually! Either way, we merge
+# in the assets we generated above rather than overwrite them
+COPY --from=node_modules_go_brrr --chown=www-data:www-data /app/public /var/www/html/Lychee/public-npm
+RUN rsync -ar /var/www/html/Lychee/public-npm/ /var/www/html/Lychee/public/ \
+    && rm -rf /var/www/html/Lychee/public-npm \
+    && chown -R www-data:www-data /var/www/html/Lychee/public
 
 # Add custom Nginx configuration
 COPY default.conf /etc/nginx/nginx.conf
