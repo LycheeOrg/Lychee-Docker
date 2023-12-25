@@ -16,11 +16,7 @@ echo '
  | |  | | | |/ __|  _ \ / _ \/ _ \ 
  | |__| |_| | (__| | | |  __/  __/ 
  |_____\__, |\___|_| |_|\___|\___| 
- | |   |___/ _ __ __ ___   _____| |
- | |   / _'\'' | '\''__/ _'\'' \ \ / / _ \ |
- | |__| (_| | | | (_| |\ V /  __/ |
- |_____\__,_|_|  \__,_| \_/ \___|_|
-
+       |___/                       
 -------------------------------------
 Lychee Version: '$lycheeversion' ('$target')
 Lychee Commit:  '$shorthash'
@@ -58,10 +54,6 @@ echo "**** Create the symbolic link for the /logs folder ****"
 	cp -r /var/www/html/Lychee/storage/logs/* /logs && \
 	rm -r /var/www/html/Lychee/storage/logs && \
 	ln -s /sym /var/www/html/Lychee/storage/logs
-
-echo "**** Create the symbolic link to the old Lychee-Laravel folder ****"
-[ ! -L /var/www/html/Lychee-Laravel ] && \
-	ln -s /var/www/html/Lychee /var/www/html/Lychee-Laravel
 
 cd /var/www/html/Lychee
 

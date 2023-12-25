@@ -86,7 +86,7 @@ WORKDIR /app
 COPY --from=base /var/www/html/Lychee /app
 
 RUN \
-    npm ci --no-audit \
+    npm ci --no-audit && \
     npm run build
 
 # From our base container created above, we
