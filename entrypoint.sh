@@ -17,6 +17,7 @@ echo '
  | |__| |_| | (__| | | |  __/  __/ 
  |_____\__, |\___|_| |_|\___|\___| 
        |___/                       
+
 -------------------------------------
 Lychee Version: '$lycheeversion' ('$target')
 Lychee Commit:  '$shorthash'

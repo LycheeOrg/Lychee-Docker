@@ -6,7 +6,6 @@
 <br>
 ![Supports amd64 Architecture][amd64-shield]
 ![Supports arm64/aarch64 Architecture][arm64-shield]
-![Supports armv6 Architecture][armv6-shield]
 ![Supports armv7 Architecture][armv7-shield]
 
 ## Notice: Dockerhub repository has been migrated to [lycheeorg/lychee](https://hub.docker.com/r/lycheeorg/lychee)  
@@ -143,7 +142,6 @@ If you need to add (not change) nginx directives, files mounted in `/etc/nginx/c
 
 [arm64-shield]: https://img.shields.io/badge/arm64-yes-success.svg?style=flat
 [amd64-shield]: https://img.shields.io/badge/amd64-yes-success.svg?style=flat
-[armv6-shield]: https://img.shields.io/badge/armv6-yes-success.svg?style=flat
 [armv7-shield]: https://img.shields.io/badge/armv7-yes-success.svg?style=flat
 [build-status-shield]: https://img.shields.io/github/actions/workflow/status/LycheeOrg/Lychee-Docker/cron.yml?label=%3Adev%20build
 [docker-pulls-shield-old]: https://img.shields.io/docker/pulls/lycheeorg/lychee-laravel.svg?style=flat&label=Docker%20Pulls%20(lychee-laravel)
