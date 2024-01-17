@@ -62,8 +62,7 @@ RUN \
     cd /var/www/html/Lychee && \
     echo "Last release: $(cat version.md)" && \
     composer install --prefer-dist && \
-    find . -wholename '*/[Tt]ests/*' -delete && \
-    find . -wholename '*/[Tt]est/*' -delete && \
+    find /var/www/html/Lychee -regex '.*/[Tt]ests?/.*' -delete && \
     rm -r storage/framework/cache/data/* 2> /dev/null || true && \
     rm    storage/framework/sessions/* 2> /dev/null || true && \
     rm    storage/framework/views/* 2> /dev/null || true && \
