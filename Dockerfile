@@ -77,9 +77,7 @@ RUN \
 # This allows us to not include Node within the final container
 FROM node:20 as static_builder
 
-RUN mkdir /app
-
-RUN mkdir -p  /app
+RUN mkdir -p /app
 WORKDIR /app
 COPY --from=base /var/www/html/Lychee /app
 
