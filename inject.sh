@@ -14,8 +14,14 @@ fi
 if [ "$APP_FORCE_HTTPS" != '' ]; then
     sed -i "s|APP_FORCE_HTTPS=.*|APP_FORCE_HTTPS=${APP_FORCE_HTTPS}|i" /conf/.env
 fi
+if [ "$APP_DIR" != '' ]; then
+    sed -i "s|APP_DIR=.*|APP_DIR=${APP_DIR}|i" /conf/.env
+fi
 if [ "$DEBUGBAR_ENABLED" != '' ]; then
     sed -i "s|DEBUGBAR_ENABLED=.*|DEBUGBAR_ENABLED=${DEBUGBAR_ENABLED}|i" /conf/.env
+fi
+if [ "$LEGACY_V4_REDIRECT" != '' ]; then
+    sed -i "s|LEGACY_V4_REDIRECT=.*|LEGACY_V4_REDIRECT=${LEGACY_V4_REDIRECT}|i" /conf/.env
 fi
 if [ "$DB_OLD_LYCHEE_PREFIX" != '' ]; then
     sed -i "s|DB_OLD_LYCHEE_PREFIX=.*|DB_OLD_LYCHEE_PREFIX=${DB_OLD_LYCHEE_PREFIX}|i" /conf/.env
