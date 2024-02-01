@@ -1,7 +1,12 @@
-name: Build and Push Alpha
+name: Build and Push branch
 
 on:
   workflow_dispatch:
+    inputs:
+      branchname:
+        description: 'Branch name'
+        required: true
+        default: 'alpha'
 
 env:
   PUID: '1000'
@@ -36,7 +41,7 @@ jobs:
           platforms: linux/amd64,linux/arm/v7,linux/arm64
           push: true
           build-args: |
-            BRANCH=alpha
+            BRANCH=${{ github.event.inputs.branchname }}
           tags: |
             lycheeorg/lychee:testing-${{ github.run_id }}
 
@@ -128,4 +133,4 @@ jobs:
         name: Retag image
         run: |
           crane auth login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }} index.docker.io
-          crane tag lycheeorg/lychee:testing-${{ github.run_id }} alpha
+          crane tag lycheeorg/lychee:testing-${{ github.run_id }} ${{ github.event.inputs.branchname }}
