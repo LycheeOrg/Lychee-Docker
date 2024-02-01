@@ -1,0 +1,131 @@
+name: Build and Push Alpha
+
+on:
+  workflow_dispatch:
+
+env:
+  PUID: '1000'
+  PGID: '1000'
+  PHP_TZ: 'UTC'
+
+jobs:
+  multiarch:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v3.0.0
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3.0.0
+      -
+        name: Login to DockerHub
+        uses: docker/login-action@v3.0.0
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Build and push
+        uses: docker/build-push-action@v5.1.0
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64,linux/arm/v7,linux/arm64
+          push: true
+          build-args: |
+            BRANCH=alpha
+          tags: |
+            lycheeorg/lychee:testing-${{ github.run_id }}
+
+  default-env:
+    needs: multiarch
+    runs-on: ubuntu-latest
+    services:
+      lychee-docker:
+        image: lycheeorg/lychee:testing-${{ github.run_id }}
+        ports:
+          - 80:80
+    steps:
+      -
+        name: GET
+        run: 'curl -sSw "%{stderr}%{http_code}" http://localhost/ > /dev/null && curl -f http://localhost/'
+
+  sqlite:
+    needs: multiarch
+    runs-on: ubuntu-latest
+    services:
+      lychee-docker:
+        image: lycheeorg/lychee:testing-${{ github.run_id }}
+        ports:
+          - 80:80
+    env:
+      DB_CONNECTION: sqlite
+    steps:
+      -
+        name: GET
+        run: 'curl -sSw "%{stderr}%{http_code}" http://localhost/ > /dev/null && curl -f http://localhost/'
+
+  mysql:
+    needs: multiarch
+    runs-on: ubuntu-latest
+    services:
+      lychee-docker:
+        image: lycheeorg/lychee:testing-${{ github.run_id }}
+        ports:
+          - 80:80
+      db:
+        image: mariadb:latest
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: lychee
+    env:
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: '3306'
+      DB_DATABASE: lychee
+      DB_USERNAME: root
+      DB_PASSWORD: password
+    steps:
+      -
+        name: GET
+        run: 'curl -sSw "%{stderr}%{http_code}" http://localhost/ > /dev/null && curl -f http://localhost/'
+
+  docker-compose:
+    needs: multiarch
+    runs-on: ubuntu-latest
+    services:
+      lychee-docker:
+        image: lycheeorg/lychee:testing-${{ github.run_id }}
+        ports:
+          - 80:80
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+      -
+        name: Set Password
+        run: "sed -i 's/<.*_PASSWORD>/password/g' docker-compose.yml"
+      -
+        name: Set Image
+        run: "sed -i 's|image: lycheeorg/lychee|image: lycheeorg/lychee:testing-${{ github.run_id }}|' docker-compose.yml"
+      -
+        name: Install docker-compose
+        run: "sudo apt install docker-compose"
+      -
+        name: Run docker-compose
+        run: 'docker-compose up -d && sleep 45 && docker-compose ps && curl -sSw "%{stderr}%{http_code}" http://localhost:90/ > /dev/null && curl -f http://localhost:90/'
+
+  retag:
+    needs: [default-env, sqlite, mysql, docker-compose]
+    runs-on: ubuntu-latest
+    container:
+      image: gcr.io/go-containerregistry/crane:debug
+    steps:
+      -
+        name: Retag image
+        run: |
+          crane auth login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }} index.docker.io
+          crane tag lycheeorg/lychee:testing-${{ github.run_id }} alpha
