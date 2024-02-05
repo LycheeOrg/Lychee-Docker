@@ -31,9 +31,11 @@ The following tags are available :
 
 * `latest`: Latest Lychee release
 * `v[NUMBER]`: Stable version tag for a Lychee release
-* `nightly` (also `dev`): Current master branch tag (Lychee operates on a stable master, so this should usually be safe)
+* `nightly` (also `dev`): Current master branch tag (Lychee operates on a stable master, so this should usually be safe.)
 * `devtools`: As above, but includes development dependencies
 * `testing`: Tag for testing new branches and pull requests. Designed for internal use by LycheeOrg.
+* `alpha`: Current alpha branch tag. (This branch contains bleeding edge changes but are not peer-reviewed.)
+* `alpha-devops`: As above, but includes development dependencies
 
 ## Setup
 
