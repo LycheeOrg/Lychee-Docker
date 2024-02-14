@@ -4,7 +4,7 @@ set -e
 
 # Read Last commit hash from .git
 # This prevents installing git, and allows display of commit
-branch=$(echo $(ls /var/www/html/Lychee/.git/refs/heads))
+branch=$(ls /var/www/html/Lychee/.git/refs/heads)
 read -r longhash < /var/www/html/Lychee/.git/refs/heads/$branch
 shorthash=$(echo $longhash |cut -c1-7)
 lycheeversion=$(</var/www/html/Lychee/version.md)
@@ -21,8 +21,8 @@ echo '
 
 -------------------------------------
 Lychee Version: '$lycheeversion' ('$target')
-Lychee Commit:  '$shorthash'
 Lychee Branch:  '$branch'
+Lychee Commit:  '$shorthash'
 https://github.com/LycheeOrg/Lychee/commit/'$longhash'
 -------------------------------------'
 

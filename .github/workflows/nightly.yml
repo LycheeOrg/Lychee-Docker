@@ -1,12 +1,9 @@
-name: Build and Push branch
+name: Nightly Build
 
 on:
+  schedule:
+    - cron: '46 18 * * *'
   workflow_dispatch:
-    inputs:
-      branchname:
-        description: 'Branch name'
-        required: true
-        default: 'alpha'
 
 env:
   PUID: '1000'
@@ -14,16 +11,7 @@ env:
   PHP_TZ: 'UTC'
 
 jobs:
-  validate-inputs:
-    runs-on: ubuntu-latest
-    if: ${{ ! contains(fromJson( '["nightly", "dev", "devtools"]'), github.event.inputs.branchname) }}
-    steps:
-      -
-        name: Validate
-        run: '[ $(printf "%c" "$test") != "v" ]'
-
-  multiarch:
-    needs: validate-inputs
+  build-nightly:
     runs-on: ubuntu-latest
     steps:
       -
@@ -46,16 +34,43 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./Dockerfile
           platforms: linux/amd64,linux/arm/v7,linux/arm64
           push: true
-          build-args: |
-            BRANCH=${{ github.event.inputs.branchname }}
           tags: |
             lycheeorg/lychee:testing-${{ github.run_id }}
 
+  devtools:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v4
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      -
+        name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm/v7,linux/arm64
+          push: true
+          build-args: |
+            COMPOSER_NO_DEV=0
+          tags: |
+            lycheeorg/lychee:testing-${{ github.run_id }}-devtools
+
   default-env:
-    needs: multiarch
+    needs: build-nightly
     runs-on: ubuntu-latest
     services:
       lychee-docker:
@@ -68,7 +83,7 @@ jobs:
         run: 'curl -sSw "%{stderr}%{http_code}" http://localhost/ > /dev/null && curl -f http://localhost/'
 
   sqlite:
-    needs: multiarch
+    needs: build-nightly
     runs-on: ubuntu-latest
     services:
       lychee-docker:
@@ -82,8 +97,24 @@ jobs:
         name: GET
         run: 'curl -sSw "%{stderr}%{http_code}" http://localhost/ > /dev/null && curl -f http://localhost/'
 
+  sqlite2:
+    needs: build-nightly
+    runs-on: ubuntu-latest
+    services:
+      lychee-docker:
+        image: lycheeorg/lychee:testing-${{ github.run_id }}
+        ports:
+          - 80:80
+    env:
+      DB_CONNECTION: sqlite
+      DB_DATABASE: '/var/www/html/Lychee/nonexistent'
+    steps:
+      -
+        name: GET
+        run: 'curl -sSw "%{stderr}%{http_code}" http://localhost/ > /dev/null && curl -f http://localhost/'
+
   mysql:
-    needs: multiarch
+    needs: build-nightly
     runs-on: ubuntu-latest
     services:
       lychee-docker:
@@ -107,8 +138,34 @@ jobs:
         name: GET
         run: 'curl -sSw "%{stderr}%{http_code}" http://localhost/ > /dev/null && curl -f http://localhost/'
 
+  postgres:
+    needs: build-nightly
+    runs-on: ubuntu-latest
+    services:
+      lychee-docker:
+        image: lycheeorg/lychee:testing-${{ github.run_id }}
+        ports:
+          - 80:80
+      db:
+        image: postgres:latest
+        env:
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: lychee
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    env:
+      DB_CONNECTION: pgsql
+      DB_HOST: db
+      DB_PORT: '5432'
+      DB_DATABASE: lychee
+      DB_USERNAME: postgres
+      DB_PASSWORD: password
+    steps:
+      -
+        name: GET
+        run: 'curl -sSw "%{stderr}%{http_code}" http://localhost/ > /dev/null && curl -f http://localhost/'
+
   docker-compose:
-    needs: multiarch
+    needs: build-nightly
     runs-on: ubuntu-latest
     services:
       lychee-docker:
@@ -118,7 +175,7 @@ jobs:
     steps:
       -
         name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       -
         name: Set Password
         run: "sed -i 's/<.*_PASSWORD>/password/g' docker-compose.yml"
@@ -133,7 +190,7 @@ jobs:
         run: 'docker-compose up -d && sleep 45 && docker-compose ps && curl -sSw "%{stderr}%{http_code}" http://localhost:90/ > /dev/null && curl -f http://localhost:90/'
 
   retag:
-    needs: [default-env, sqlite, mysql, docker-compose]
+    needs: [default-env, sqlite, sqlite2, mysql, postgres, docker-compose, devtools]
     runs-on: ubuntu-latest
     container:
       image: gcr.io/go-containerregistry/crane:debug
@@ -142,4 +199,7 @@ jobs:
         name: Retag image
         run: |
           crane auth login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }} index.docker.io
-          crane tag lycheeorg/lychee:testing-${{ github.run_id }} ${{ github.event.inputs.branchname }}
+          crane tag lycheeorg/lychee:testing-${{ github.run_id }} dev
+          crane tag lycheeorg/lychee:testing-${{ github.run_id }} nightly
+          crane cp lycheeorg/lychee:testing-${{ github.run_id }} lycheeorg/lychee-laravel:dev
+          crane tag lycheeorg/lychee:testing-${{ github.run_id }}-devtools devtools
