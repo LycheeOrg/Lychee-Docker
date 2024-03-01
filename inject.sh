@@ -1,7 +1,7 @@
 #!/bin/bash
 function replace_or_insert() {
     # Voodoo magic: https://superuser.com/a/976712
-    grep -q "^${1}=" /conf/.env && sed "s/^${1}=.*/${1}=${2}/" -i /conf/.env || sed "$ a\\${1}=${2}" -i /conf/.env
+    grep -q "^${1}=" /conf/.env && sed "s|^${1}=.*|${1}=${2}|" -i /conf/.env || sed "$ a\\${1}=${2}" -i /conf/.env
 }
 
 if [ "$APP_NAME" != '' ]; then
@@ -59,7 +59,7 @@ if [ "$DB_LOG_SQL_EXPLAIN" != '' ]; then
     replace_or_insert "DB_LOG_SQL_EXPLAIN" "$DB_LOG_SQL_EXPLAIN"
  fi
 if [ "$TIMEZONE" != '' ]; then
-    replace_or_insert "TIMEZONE" "${TIMEZONE//\//\\\/}"
+    replace_or_insert "TIMEZONE" "$TIMEZONE"
  fi
 if [ "$ENABLE_TOKEN_AUTH" != '' ]; then
     replace_or_insert "ENABLE_TOKEN_AUTH" "$ENABLE_TOKEN_AUTH"
