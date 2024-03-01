@@ -74,6 +74,7 @@ RUN \
     rm    storage/framework/views/* 2> /dev/null || true && \
     rm    storage/logs/* 2> /dev/null || true && \
     chown -R www-data:www-data /var/www/html/Lychee && \
+    chmod -R g+ws storage/image-jobs storage/livewire-tmp && \
     echo "* * * * * www-data cd /var/www/html/Lychee && php artisan schedule:run >> /dev/null 2>&1" >> /etc/crontab && \
     apt-get purge -y --autoremove git composer && \
     apt-get clean -qy &&\
