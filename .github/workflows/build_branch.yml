@@ -20,7 +20,7 @@ jobs:
     steps:
       -
         name: Validate
-        run: '[ $(printf "%c" "$test") != "v" ]'
+        run: '[ $(printf "%c" "${{ github.event.inputs.branchname }}") != "v" ]'
 
   multiarch:
     needs: validate-inputs
