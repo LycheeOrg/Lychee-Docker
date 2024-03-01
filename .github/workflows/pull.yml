@@ -16,19 +16,18 @@ jobs:
     steps:
       -
         name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       -
         name: Set up QEMU
-        uses: docker/setup-qemu-action@v3.0.0
+        uses: docker/setup-qemu-action@v3
       -
         name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3.0.0
+        uses: docker/setup-buildx-action@v3
       -
         name: Test multiarch building
-        uses: docker/build-push-action@v5.1.0
+        uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./Dockerfile
           platforms: linux/amd64,linux/arm/v7,linux/arm64
           load: false
           push: false
@@ -36,10 +35,9 @@ jobs:
             lycheeorg/lychee:testing-${{ github.run_id }}
       -
         name: Save amd64 image to pass to testing
-        uses: docker/build-push-action@v5.1.0
+        uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./Dockerfile
           platforms: linux/amd64
           load: true
           push: false

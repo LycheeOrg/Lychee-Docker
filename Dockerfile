@@ -11,13 +11,17 @@ ENV PHP_TZ=UTC
 
 # Arguments
 # To use the latest Lychee release instead of master pass `--build-arg TARGET=release` to `docker build`
-ARG TARGET=dev
+ARG TARGET=nightly
 # To install composer development dependencies, pass `--build-arg COMPOSER_NO_DEV=0` to `docker build`
 ARG COMPOSER_NO_DEV=1
+# To use another branch instead of master pass `--build-arg BRANCH=some-branch` to `docker build`
+# This is NOT compatible with the release target above
+ARG BRANCH=master
 
 # Install base dependencies, add user and group, clone the repo and install php libraries
 RUN \
     set -ev && \
+    [ "$TARGET" != "release" -o "$BRANCH" = "master" ] && \
     apt-get update && \
     apt-get upgrade -qy && \
     apt-get install -qy --no-install-recommends\
@@ -50,14 +54,15 @@ RUN \
     addgroup --gid "$PGID" "$USER" && \
     adduser --gecos '' --no-create-home --disabled-password --uid "$PUID" --gid "$PGID" "$USER" && \
     cd /var/www/html && \
-    if [ "$TARGET" = "release" ] ; then RELEASE_TAG="-b v$(curl -s https://raw.githubusercontent.com/LycheeOrg/Lychee/master/version.md)" ; fi && \
+    if [ "$TARGET" = "release" ] ; then RELEASE_TAG="-b v$(curl -s https://raw.githubusercontent.com/LycheeOrg/Lychee/master/version.md)" ; \
+    elif [ "$BRANCH" != "master" ] ; then RELEASE_TAG="-b $BRANCH" ; fi && \
     git clone --depth 1 $RELEASE_TAG https://github.com/LycheeOrg/Lychee.git && \
-    mv Lychee/.git/refs/heads/master Lychee/master || cp Lychee/.git/HEAD Lychee/master && \
+    mv Lychee/.git/refs/heads/$BRANCH Lychee/$BRANCH || cp Lychee/.git/HEAD Lychee/$BRANCH && \
     mv Lychee/.git/HEAD Lychee/HEAD && \
     rm -r Lychee/.git/* && \
     mkdir -p Lychee/.git/refs/heads && \
     mv Lychee/HEAD Lychee/.git/HEAD && \
-    mv Lychee/master Lychee/.git/refs/heads/master && \
+    mv Lychee/$BRANCH Lychee/.git/refs/heads/$BRANCH && \
     echo "$TARGET" > /var/www/html/Lychee/docker_target && \
     cd /var/www/html/Lychee && \
     echo "Last release: $(cat version.md)" && \

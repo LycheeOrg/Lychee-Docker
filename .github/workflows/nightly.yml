@@ -1,12 +1,9 @@
-name: Build and Push
+name: Nightly Build
 
 on:
+  schedule:
+    - cron: '46 18 * * *'
   workflow_dispatch:
-    inputs:
-      tagname:
-        description: 'Tag name'
-        required: true
-        default: 'temp'
 
 env:
   PUID: '1000'
@@ -14,7 +11,7 @@ env:
   PHP_TZ: 'UTC'
 
 jobs:
-  multiarch:
+  build-nightly:
     runs-on: ubuntu-latest
     steps:
       -
@@ -42,8 +39,38 @@ jobs:
           tags: |
             lycheeorg/lychee:testing-${{ github.run_id }}
 
+  devtools:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v4
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      -
+        name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm/v7,linux/arm64
+          push: true
+          build-args: |
+            COMPOSER_NO_DEV=0
+          tags: |
+            lycheeorg/lychee:testing-${{ github.run_id }}-devtools
+
   default-env:
-    needs: multiarch
+    needs: build-nightly
     runs-on: ubuntu-latest
     services:
       lychee-docker:
@@ -56,7 +83,7 @@ jobs:
         run: 'curl -sSw "%{stderr}%{http_code}" http://localhost/ > /dev/null && curl -f http://localhost/'
 
   sqlite:
-    needs: multiarch
+    needs: build-nightly
     runs-on: ubuntu-latest
     services:
       lychee-docker:
@@ -71,7 +98,7 @@ jobs:
         run: 'curl -sSw "%{stderr}%{http_code}" http://localhost/ > /dev/null && curl -f http://localhost/'
 
   sqlite2:
-    needs: multiarch
+    needs: build-nightly
     runs-on: ubuntu-latest
     services:
       lychee-docker:
@@ -87,7 +114,7 @@ jobs:
         run: 'curl -sSw "%{stderr}%{http_code}" http://localhost/ > /dev/null && curl -f http://localhost/'
 
   mysql:
-    needs: multiarch
+    needs: build-nightly
     runs-on: ubuntu-latest
     services:
       lychee-docker:
@@ -112,7 +139,7 @@ jobs:
         run: 'curl -sSw "%{stderr}%{http_code}" http://localhost/ > /dev/null && curl -f http://localhost/'
 
   postgres:
-    needs: multiarch
+    needs: build-nightly
     runs-on: ubuntu-latest
     services:
       lychee-docker:
@@ -138,7 +165,7 @@ jobs:
         run: 'curl -sSw "%{stderr}%{http_code}" http://localhost/ > /dev/null && curl -f http://localhost/'
 
   docker-compose:
-    needs: multiarch
+    needs: build-nightly
     runs-on: ubuntu-latest
     services:
       lychee-docker:
@@ -163,7 +190,7 @@ jobs:
         run: 'docker-compose up -d && sleep 45 && docker-compose ps && curl -sSw "%{stderr}%{http_code}" http://localhost:90/ > /dev/null && curl -f http://localhost:90/'
 
   retag:
-    needs: [default-env, sqlite, sqlite2, mysql, postgres, docker-compose]
+    needs: [default-env, sqlite, sqlite2, mysql, postgres, docker-compose, devtools]
     runs-on: ubuntu-latest
     container:
       image: gcr.io/go-containerregistry/crane:debug
@@ -172,5 +199,7 @@ jobs:
         name: Retag image
         run: |
           crane auth login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }} index.docker.io
-          crane tag lycheeorg/lychee:testing-${{ github.run_id }} ${{ github.event.inputs.tagname }}
-          crane cp lycheeorg/lychee:testing-${{ github.run_id }} lycheeorg/lychee-laravel:${{ github.event.inputs.tagname }}
+          crane tag lycheeorg/lychee:testing-${{ github.run_id }} dev
+          crane tag lycheeorg/lychee:testing-${{ github.run_id }} nightly
+          crane cp lycheeorg/lychee:testing-${{ github.run_id }} lycheeorg/lychee-laravel:dev
+          crane tag lycheeorg/lychee:testing-${{ github.run_id }}-devtools devtools

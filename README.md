@@ -1,4 +1,4 @@
-[![Build Status][build-status-shield]](https://github.com/LycheeOrg/Lychee-Docker/actions/workflows/cron.yml)
+[![Build Status][build-status-shield]](https://github.com/LycheeOrg/Lychee-Docker/actions/workflows/nightly.yml)
 [![Last Commit][last-commit-shield]](https://github.com/LycheeOrg/Lychee-Docker/commits/master)
 [![Lychee Version][lychee-version-shield]](https://hub.docker.com/r/lycheeorg/lychee)
 [![Docker Pulls (new)][docker-pulls-shield]](https://hub.docker.com/r/lycheeorg/lychee)
@@ -33,7 +33,9 @@ The following tags are available :
 * `v[NUMBER]`: Stable version tag for a Lychee release
 * `nightly` (also `dev`): Current master branch tag (Lychee operates on a stable master, so this should usually be safe)
 * `devtools`: As above, but includes development dependencies
-* `testing`: Tag for testing new branches and pull requests. Designed for internal use by LycheeOrg.
+* `testing`: Tag for testing new branches and pull requests. Designed for internal use by LycheeOrg
+* `alpha`: Current alpha branch tag (The alpha branch contains bleeding edge changes that are not peer-reviewed)
+* `alpha-devtools`: As above, but includes development dependencies
 
 ## Setup
 
@@ -143,7 +145,7 @@ If you need to add (not change) nginx directives, files mounted in `/etc/nginx/c
 [arm64-shield]: https://img.shields.io/badge/arm64-yes-success.svg?style=flat
 [amd64-shield]: https://img.shields.io/badge/amd64-yes-success.svg?style=flat
 [armv7-shield]: https://img.shields.io/badge/armv7-yes-success.svg?style=flat
-[build-status-shield]: https://img.shields.io/github/actions/workflow/status/LycheeOrg/Lychee-Docker/cron.yml?label=%3Adev%20build
+[build-status-shield]: https://img.shields.io/github/actions/workflow/status/LycheeOrg/Lychee-Docker/nightly.yml?label=nightly
 [docker-pulls-shield-old]: https://img.shields.io/docker/pulls/lycheeorg/lychee-laravel.svg?style=flat&label=Docker%20Pulls%20(lychee-laravel)
 [docker-pulls-shield]: https://img.shields.io/docker/pulls/lycheeorg/lychee.svg?style=flat&label=Docker%20Pulls%20(lychee)
 [lychee-version-shield]: https://img.shields.io/docker/v/lycheeorg/lychee/latest?style=flat&label=Lychee%20Version%20(:latest)
