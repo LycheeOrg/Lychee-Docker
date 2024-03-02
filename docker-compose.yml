@@ -43,9 +43,13 @@ services:
       - TIMEZONE=UTC
       #- APP_NAME=Laravel
       #- APP_ENV=local
-      #- APP_FORCE_HTTPS=false
       #- APP_DEBUG=true
+      #- APP_FORCE_HTTPS=false
       #- APP_URL=http://localhost
+      #- APP_DIR=
+      #- DEBUGBAR_ENABLEd=false
+      #- LEGACY_V4_REDIRECT=false
+      #- DB_OLD_LYCHEE_PREFIX=''
       - DB_CONNECTION=mysql
       - DB_HOST=lychee_db
       - DB_PORT=3306
@@ -53,15 +57,17 @@ services:
       - DB_USERNAME=lychee
       - DB_PASSWORD=<LYCHEE_PASSWORD>
       #- DB_PASSWORD_FILE=<filename>
-      #- DB_OLD_LYCHEE_PREFIX=''
+      #- DB_LOG_SQL=false
+      #- DB_LOG_SQL_EXPLAIN=false
+      #- ENABLE_TOKEN_AUTH=true
       #- CACHE_DRIVER=file
       #- SESSION_DRIVER=file
       #- SESSION_LIFETIME=120
+      #- QUEUE_CONNECTION=sync
       #- SECURITY_HEADER_HSTS_ENABLE=false
-      #- REDIS_HOST=127.0.0.1
-      #- REDIS_PASSWORD=null
-      #- REDIS_PASSWORD_FILE=<filename>
-      #- REDIS_PORT=6379
+      #- SECURITY_HEADER_CSP_CONNECT_SRC=
+      #- SECURITY_HEADER_SCRIPT_SRC_ALLOW=
+      #- SESSION_SECURE_COOKIE=false
       #- MAIL_DRIVER=smtp
       #- MAIL_HOST=smtp.mailtrap.io
       #- MAIL_PORT=2525
@@ -69,10 +75,19 @@ services:
       #- MAIL_PASSWORD=null
       #- MAIL_PASSWORD_FILE=<filename>
       #- MAIL_ENCRYPTION=null
+      #- MAIL_FROM_NAME=
+      #- MAIL_FROM_ADDRESS=
+      #- TRUSTED_PROXIES=
+      #- SKIP_PERMISSIONS_CHECKS
       - STARTUP_DELAY=30
-      # - ADMIN_USER=admin
-      # - ADMIN_PASSWORD=<ADMIN_PASSWORD>
-      # - ADMIN_PASSWORD_FILE=<filename>
+      #- ADMIN_USER=admin
+      #- ADMIN_PASSWORD=<ADMIN_PASSWORD>
+      #- ADMIN_PASSWORD_FILE=<filename>
+      ### Unused in Lychee
+      #- REDIS_HOST=127.0.0.1
+      #- REDIS_PASSWORD=null
+      #- REDIS_PASSWORD_FILE=<filename>
+      #- REDIS_PORT=6379
     restart: unless-stopped
     depends_on:
       - lychee_db
