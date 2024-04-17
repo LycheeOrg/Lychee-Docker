@@ -61,6 +61,9 @@ if [ "$DB_LOG_SQL_EXPLAIN" != '' ]; then
 if [ "$TIMEZONE" != '' ]; then
     replace_or_insert "TIMEZONE" "$TIMEZONE"
  fi
+if [ "$LYCHEE_UPLOADS" != '' ]; then
+    replace_or_insert "LYCHEE_UPLOADS" "$LYCHEE_UPLOADS"
+ fi
 if [ "$ENABLE_TOKEN_AUTH" != '' ]; then
     replace_or_insert "ENABLE_TOKEN_AUTH" "$ENABLE_TOKEN_AUTH"
  fi
