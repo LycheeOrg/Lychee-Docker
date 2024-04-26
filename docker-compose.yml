@@ -4,8 +4,6 @@
 # Repo : https://github.com/LycheeOrg/Lychee-Docker
 #-------------------------------------------
 
-version: '3'
-
 services:
   lychee_db:
     container_name: lychee_db
