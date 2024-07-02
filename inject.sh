@@ -6,9 +6,12 @@ function replace_or_insert() {
 
 if [ "$APP_NAME" != '' ]; then
     replace_or_insert "APP_NAME" "$APP_NAME"
-  fi
+ fi
 if [ "$APP_ENV" != '' ]; then
     replace_or_insert "APP_ENV" "$APP_ENV"
+ fi
+if [ "$APP_KEY" != '' ]; then
+    replace_or_insert "APP_KEY" "$APP_KEY"
  fi
 if [ "$APP_DEBUG" != '' ]; then
     replace_or_insert "APP_DEBUG" "$APP_DEBUG"
@@ -25,8 +28,20 @@ if [ "$APP_DIR" != '' ]; then
 if [ "$DEBUGBAR_ENABLED" != '' ]; then
     replace_or_insert "DEBUGBAR_ENABLED" "$DEBUGBAR_ENABLED"
  fi
+if [ "$LIVEWIRE_ENABLED" != '' ]; then
+    replace_or_insert "LIVEWIRE_ENABLED" "$LIVEWIRE_ENABLED"
+ fi
+if [ "$LOG_VIEWER_ENABLED" != '' ]; then
+    replace_or_insert "LOG_VIEWER_ENABLED" "$LOG_VIEWER_ENABLED"
+ fi
+if [ "$S3_ENABLED" != '' ]; then
+    replace_or_insert "S3_ENABLED" "$S3_ENABLED"
+ fi
 if [ "$LEGACY_V4_REDIRECT" != '' ]; then
     replace_or_insert "LEGACY_V4_REDIRECT" "$LEGACY_V4_REDIRECT"
+ fi
+if [ "$PHOTO_PIPES" != '' ]; then
+    replace_or_insert "PHOTO_PIPES" "$PHOTO_PIPES"
  fi
 if [ "$DB_OLD_LYCHEE_PREFIX" != '' ]; then
     replace_or_insert "DB_OLD_LYCHEE_PREFIX" "$DB_OLD_LYCHEE_PREFIX"
@@ -58,11 +73,32 @@ if [ "$DB_LOG_SQL" != '' ]; then
 if [ "$DB_LOG_SQL_EXPLAIN" != '' ]; then
     replace_or_insert "DB_LOG_SQL_EXPLAIN" "$DB_LOG_SQL_EXPLAIN"
  fi
+if [ "$DB_LIST_FOREIGN_KEYS" != '' ]; then
+    replace_or_insert "DB_LIST_FOREIGN_KEYS" "$DB_LIST_FOREIGN_KEYS"
+ fi
 if [ "$TIMEZONE" != '' ]; then
     replace_or_insert "TIMEZONE" "$TIMEZONE"
  fi
+if [ "$LYCHEE_IMAGE_VISIBILITY" != '' ]; then
+    replace_or_insert "LYCHEE_IMAGE_VISIBILITY" "$LYCHEE_IMAGE_VISIBILITY"
+ fi
 if [ "$LYCHEE_UPLOADS" != '' ]; then
     replace_or_insert "LYCHEE_UPLOADS" "$LYCHEE_UPLOADS"
+ fi
+if [ "$LYCHEE_DIST" != '' ]; then
+    replace_or_insert "LYCHEE_DIST" "$LYCHEE_DIST"
+ fi
+if [ "$LYCHEE_SYM" != '' ]; then
+    replace_or_insert "LYCHEE_SYM" "$LYCHEE_SYM"
+ fi
+if [ "$LYCHEE_UPLOADS_URL" != '' ]; then
+    replace_or_insert "LYCHEE_UPLOADS_URL" "$LYCHEE_UPLOADS_URL"
+ fi
+if [ "$LYCHEE_DIST_URL" != '' ]; then
+    replace_or_insert "LYCHEE_DIST_URL" "$LYCHEE_DIST_URL"
+ fi
+if [ "$LYCHEE_SYM_URL" != '' ]; then
+    replace_or_insert "LYCHEE_SYM_URL" "$LYCHEE_SYM_URL"
  fi
 if [ "$ENABLE_TOKEN_AUTH" != '' ]; then
     replace_or_insert "ENABLE_TOKEN_AUTH" "$ENABLE_TOKEN_AUTH"
@@ -111,35 +147,161 @@ if [ "$SESSION_SECURE_COOKIE" != '' ]; then
 # fi
 if [ "$MAIL_DRIVER" != '' ]; then
     replace_or_insert "MAIL_DRIVER" "$MAIL_DRIVER"
-fi
+ fi
 if [ "$MAIL_HOST" != '' ]; then
     replace_or_insert "MAIL_HOST" "$MAIL_HOST"
-fi
+ fi
 if [ "$MAIL_PORT" != '' ]; then
     replace_or_insert "MAIL_PORT" "$MAIL_PORT"
-fi
+ fi
 if [ "$MAIL_USERNAME" != '' ]; then
     replace_or_insert "MAIL_USERNAME" "$MAIL_USERNAME"
-fi
+ fi
 if [ "$MAIL_PASSWORD" != '' ]; then
     replace_or_insert "MAIL_PASSWORD" "$MAIL_PASSWORD"
 elif [ "$MAIL_PASSWORD_FILE" != '' ]; then
     value=$(<$MAIL_PASSWORD_FILE)
     replace_or_insert "MAIL_PASSWORD" "$value"
-fi
+ fi
 if [ "$MAIL_ENCRYPTION" != '' ]; then
     replace_or_insert "MAIL_ENCRYPTION" "$MAIL_ENCRYPTION"
-fi
+ fi
 if [ "$MAIL_FROM_NAME" != '' ]; then
     replace_or_insert "MAIL_FROM_NAME" "$MAIL_FROM_NAME"
-fi
+ fi
 if [ "$MAIL_FROM_ADDRESS" != '' ]; then
     replace_or_insert "MAIL_FROM_ADDRESS" "$MAIL_FROM_ADDRESS"
-fi
+ fi
 if [ "$TRUSTED_PROXIES" != '' ]; then
     replace_or_insert "TRUSTED_PROXIES" "$TRUSTED_PROXIES"
-fi
+ fi
+if [ "$SKIP_DIAGNOSTICS_CHECKS" != '' ]; then
+    replace_or_insert "SKIP_DIAGNOSTICS_CHECKS" "$SKIP_DIAGNOSTICS_CHECKS"
+ fi
+if [ "$VITE_PUSHER_APP_KEY" != '' ]; then
+    replace_or_insert "VITE_PUSHER_APP_KEY" "$VITE_PUSHER_APP_KEY"
+ fi
+if [ "$VITE_PUSHER_APP_CLUSTER" != '' ]; then
+    replace_or_insert "VITE_PUSHER_APP_CLUSTER" "$VITE_PUSHER_APP_CLUSTER"
+ fi
+if [ "$AMAZON_SIGNIN_CLIENT_ID" != '' ]; then
+    replace_or_insert "AMAZON_SIGNIN_CLIENT_ID" "$AMAZON_SIGNIN_CLIENT_ID"
+ fi
+if [ "$AMAZON_SIGNIN_SECRET" != '' ]; then
+    replace_or_insert "AMAZON_SIGNIN_SECRET" "$AMAZON_SIGNIN_SECRET"
+ fi
+if [ "$AMAZON_SIGNIN_REDIRECT_URI" != '' ]; then
+    replace_or_insert "AMAZON_SIGNIN_REDIRECT_URI" "$AMAZON_SIGNIN_REDIRECT_URI"
+ fi
+if [ "$APPLE_CLIENT_ID" != '' ]; then
+    replace_or_insert "APPLE_CLIENT_ID" "$APPLE_CLIENT_ID"
+ fi
+if [ "$APPLE_CLIENT_SECRET" != '' ]; then
+    replace_or_insert "APPLE_CLIENT_SECRET" "$APPLE_CLIENT_SECRET"
+ fi
+if [ "$APPLE_REDIRECT_URI" != '' ]; then
+    replace_or_insert "APPLE_REDIRECT_URI" "$APPLE_REDIRECT_URI"
+ fi
+if [ "$FACEBOOK_CLIENT_ID" != '' ]; then
+    replace_or_insert "FACEBOOK_CLIENT_ID" "$FACEBOOK_CLIENT_ID"
+ fi
+if [ "$FACEBOOK_CLIENT_SECRET" != '' ]; then
+    replace_or_insert "FACEBOOK_CLIENT_SECRET" "$FACEBOOK_CLIENT_SECRET"
+ fi
+if [ "$FACEBOOK_REDIRECT_URI" != '' ]; then
+    replace_or_insert "FACEBOOK_REDIRECT_URI" "$FACEBOOK_REDIRECT_URI"
+ fi
+if [ "$GITHUB_CLIENT_ID" != '' ]; then
+    replace_or_insert "GITHUB_CLIENT_ID" "$GITHUB_CLIENT_ID"
+ fi
+if [ "$GITHUB_CLIENT_SECRET" != '' ]; then
+    replace_or_insert "GITHUB_CLIENT_SECRET" "$GITHUB_CLIENT_SECRET"
+ fi
+if [ "$GITHUB_REDIRECT_URI" != '' ]; then
+    replace_or_insert "GITHUB_REDIRECT_URI" "$GITHUB_REDIRECT_URI"
+ fi
+if [ "$GOOGLE_CLIENT_ID" != '' ]; then
+    replace_or_insert "GOOGLE_CLIENT_ID" "$GOOGLE_CLIENT_ID"
+ fi
+if [ "$GOOGLE_CLIENT_SECRET" != '' ]; then
+    replace_or_insert "GOOGLE_CLIENT_SECRET" "$GOOGLE_CLIENT_SECRET"
+ fi
+if [ "$GOOGLE_REDIRECT_URI" != '' ]; then
+    replace_or_insert "GOOGLE_REDIRECT_URI" "$GOOGLE_REDIRECT_URI"
+ fi
+if [ "$MASTODON_DOMAIN" != '' ]; then
+    replace_or_insert "MASTODON_DOMAIN" "$MASTODON_DOMAIN"
+ fi
+if [ "$MASTODON_ID" != '' ]; then
+    replace_or_insert "MASTODON_ID" "$MASTODON_ID"
+ fi
+if [ "$MASTODON_SECRET" != '' ]; then
+    replace_or_insert "MASTODON_SECRET" "$MASTODON_SECRET"
+ fi
+if [ "$MASTODON_REDIRECT_URI" != '' ]; then
+    replace_or_insert "MASTODON_REDIRECT_URI" "$MASTODON_REDIRECT_URI"
+ fi
+if [ "$MICROSOFT_CLIENT_ID" != '' ]; then
+    replace_or_insert "MICROSOFT_CLIENT_ID" "$MICROSOFT_CLIENT_ID"
+ fi
+if [ "$MICROSOFT_CLIENT_SECRET" != '' ]; then
+    replace_or_insert "MICROSOFT_CLIENT_SECRET" "$MICROSOFT_CLIENT_SECRET"
+ fi
+if [ "$MICROSOFT_REDIRECT_URI" != '' ]; then
+    replace_or_insert "MICROSOFT_REDIRECT_URI" "$MICROSOFT_REDIRECT_URI"
+ fi
+if [ "$NEXTCLOUD_CLIENT_ID" != '' ]; then
+    replace_or_insert "NEXTCLOUD_CLIENT_ID" "$NEXTCLOUD_CLIENT_ID"
+ fi
+if [ "$NEXTCLOUD_CLIENT_SECRET" != '' ]; then
+    replace_or_insert "NEXTCLOUD_CLIENT_SECRET" "$NEXTCLOUD_CLIENT_SECRET"
+ fi
+if [ "$NEXTCLOUD_REDIRECT_URI" != '' ]; then
+    replace_or_insert "NEXTCLOUD_REDIRECT_URI" "$NEXTCLOUD_REDIRECT_URI"
+ fi
+if [ "$NEXTCLOUD_BASE_URI" != '' ]; then
+    replace_or_insert "NEXTCLOUD_BASE_URI" "$NEXTCLOUD_BASE_URI"
+ fi
+if [ "$KEYCLOAK_CLIENT_ID" != '' ]; then
+    replace_or_insert "KEYCLOAK_CLIENT_ID" "$KEYCLOAK_CLIENT_ID"
+ fi
+if [ "$KEYCLOAK_CLIENT_SECRET" != '' ]; then
+    replace_or_insert "KEYCLOAK_CLIENT_SECRET" "$KEYCLOAK_CLIENT_SECRET"
+ fi
+if [ "$KEYCLOAK_REDIRECT_URI" != '' ]; then
+    replace_or_insert "KEYCLOAK_REDIRECT_URI" "$KEYCLOAK_REDIRECT_URI"
+ fi
+if [ "$KEYCLOAK_BASE_URL" != '' ]; then
+    replace_or_insert "KEYCLOAK_BASE_URL" "$KEYCLOAK_BASE_URL"
+ fi
+if [ "$KEYCLOAK_REALM" != '' ]; then
+    replace_or_insert "KEYCLOAK_REALM" "$KEYCLOAK_REALM"
+ fi
+if [ "$AWS_ACCESS_KEY_ID" != '' ]; then
+    replace_or_insert "AWS_ACCESS_KEY_ID" "$AWS_ACCESS_KEY_ID"
+ fi
+if [ "$AWS_SECRET_ACCESS_KEY" != '' ]; then
+    replace_or_insert "AWS_SECRET_ACCESS_KEY" "$AWS_SECRET_ACCESS_KEY"
+ fi
+if [ "$AWS_DEFAULT_REGION" != '' ]; then
+    replace_or_insert "AWS_DEFAULT_REGION" "$AWS_DEFAULT_REGION"
+ fi
+if [ "$AWS_BUCKET" != '' ]; then
+    replace_or_insert "AWS_BUCKET" "$AWS_BUCKET"
+ fi
+if [ "$AWS_URL" != '' ]; then
+    replace_or_insert "AWS_URL" "$AWS_URL"
+ fi
+if [ "$AWS_ENDPOINT" != '' ]; then
+    replace_or_insert "AWS_ENDPOINT" "$AWS_ENDPOINT"
+ fi
+if [ "$AWS_IMAGE_VISIBILITY" != '' ]; then
+    replace_or_insert "AWS_IMAGE_VISIBILITY" "$AWS_IMAGE_VISIBILITY"
+ fi
+if [ "$AWS_USE_PATH_STYLE_ENDPOINT" != '' ]; then
+    replace_or_insert "AWS_USE_PATH_STYLE_ENDPOINT" "$AWS_USE_PATH_STYLE_ENDPOINT"
+ fi
 if [ "$PHP_TZ" != '' ]; then
     sed -i "s|;*date.timezone =.*|date.timezone = ${PHP_TZ}|i" /etc/php/8.2/cli/php.ini
     sed -i "s|;*date.timezone =.*|date.timezone = ${PHP_TZ}|i" /etc/php/8.2/fpm/php.ini
-fi
+ fi
