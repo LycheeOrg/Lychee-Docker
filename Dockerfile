@@ -104,7 +104,7 @@ COPY --from=static_builder --chown=www-data:www-data /app/public /var/www/html/L
 COPY default.conf /etc/nginx/nginx.conf
 
 EXPOSE 80
-VOLUME /conf /uploads /sym /logs
+VOLUME /conf /uploads /sym /logs /image-tmp /image-jobs /extract-jobs
 
 WORKDIR /var/www/html/Lychee
 

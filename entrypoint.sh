@@ -33,10 +33,13 @@ fi
 
 
 echo "**** Make sure the /conf /uploads /sym /logs folders exist ****"
-[ ! -d /conf ]    && mkdir -p /conf
-[ ! -d /uploads ] && mkdir -p /uploads
-[ ! -d /sym ]     && mkdir -p /sym
-[ ! -d /logs ]    && mkdir -p /logs
+[ ! -d /conf ]         && mkdir -p /conf
+[ ! -d /uploads ]      && mkdir -p /uploads
+[ ! -d /sym ]          && mkdir -p /sym
+[ ! -d /logs ]         && mkdir -p /logs
+[ ! -d /image-tmp ]    && mkdir -p /image-tmp
+[ ! -d /image-jobs ]   && mkdir -p /image-jobs
+[ ! -d /extract-jobs ] && mkdir -p /extract-jobs
 
 echo "**** Create the symbolic link for the /uploads folder ****"
 [ ! -L /var/www/html/Lychee/public/uploads ] && \
@@ -57,6 +60,27 @@ echo "**** Create the symbolic link for the /logs folder ****"
 	cp -r /var/www/html/Lychee/storage/logs/* /logs && \
 	rm -r /var/www/html/Lychee/storage/logs && \
 	ln -s /logs /var/www/html/Lychee/storage/logs
+
+echo "**** Create the symbolic link for the /logs folder ****"
+[ ! -L /var/www/html/Lychee/storage/image-tmp ] && \
+	touch /var/www/html/Lychee/storage/image-tmp/empty_file && \
+	cp -r /var/www/html/Lychee/storage/image-tmp/* /image-tmp && \
+	rm -r /var/www/html/Lychee/storage/image-tmp && \
+	ln -s /image-tmp /var/www/html/Lychee/storage/image-tmp
+
+echo "**** Create the symbolic link for the /image-jobs folder ****"
+[ ! -L /var/www/html/Lychee/storage/image-jobs ] && \
+	touch /var/www/html/Lychee/storage/image-jobs/empty_file && \
+	cp -r /var/www/html/Lychee/storage/image-jobs/* /image-jobs && \
+	rm -r /var/www/html/Lychee/storage/image-jobs && \
+	ln -s /image-jobs /var/www/html/Lychee/storage/image-jobs
+
+echo "**** Create the symbolic link for the /extract-jobs folder ****"
+[ ! -L /var/www/html/Lychee/storage/extract-jobs ] && \
+	touch /var/www/html/Lychee/storage/extract-jobs/empty_file && \
+	cp -r /var/www/html/Lychee/storage/extract-jobs/* /extract-jobs && \
+	rm -r /var/www/html/Lychee/storage/extract-jobs && \
+	ln -s /extract-jobs /var/www/html/Lychee/storage/extract-jobs
 
 cd /var/www/html/Lychee
 
