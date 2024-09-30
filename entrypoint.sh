@@ -61,7 +61,7 @@ echo "**** Create the symbolic link for the /logs folder ****"
 	rm -r /var/www/html/Lychee/storage/logs && \
 	ln -s /logs /var/www/html/Lychee/storage/logs
 
-echo "**** Create the symbolic link for the /logs folder ****"
+echo "**** Create the symbolic link for the /image-tmp folder ****"
 [ ! -L /var/www/html/Lychee/storage/image-tmp ] && \
 	touch /var/www/html/Lychee/storage/image-tmp/empty_file && \
 	cp -r /var/www/html/Lychee/storage/image-tmp/* /image-tmp && \
