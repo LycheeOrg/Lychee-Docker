@@ -31,6 +31,12 @@ if [ "$DEBUGBAR_ENABLED" != '' ]; then
 if [ "$LIVEWIRE_ENABLED" != '' ]; then
     replace_or_insert "LIVEWIRE_ENABLED" "$LIVEWIRE_ENABLED"
  fi
+if [ "$VUEJS_ENABLED" != '' ]; then
+    replace_or_insert "VUEJS_ENABLED" "$VUEJS_ENABLED"
+ fi
+if [ "$LEGACY_API_ENABLED" != '' ]; then
+    replace_or_insert "LEGACY_API_ENABLED" "$LEGACY_API_ENABLED"
+ fi
 if [ "$LOG_VIEWER_ENABLED" != '' ]; then
     replace_or_insert "LOG_VIEWER_ENABLED" "$LOG_VIEWER_ENABLED"
  fi
