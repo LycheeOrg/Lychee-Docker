@@ -32,11 +32,12 @@ if [ -n "$STARTUP_DELAY" ]
 fi
 
 
-echo "**** Make sure the /conf /uploads /sym /logs folders exist ****"
-[ ! -d /conf ]    && mkdir -p /conf
-[ ! -d /uploads ] && mkdir -p /uploads
-[ ! -d /sym ]     && mkdir -p /sym
-[ ! -d /logs ]    && mkdir -p /logs
+echo "**** Make sure the /conf /uploads /sym /logs /lychee-tmp folders exist ****"
+[ ! -d /conf ]         && mkdir -p /conf
+[ ! -d /uploads ]      && mkdir -p /uploads
+[ ! -d /sym ]          && mkdir -p /sym
+[ ! -d /logs ]         && mkdir -p /logs
+[ ! -d /lychee-tmp ]   && mkdir -p /lychee-tmp
 
 echo "**** Create the symbolic link for the /uploads folder ****"
 [ ! -L /var/www/html/Lychee/public/uploads ] && \
@@ -57,6 +58,13 @@ echo "**** Create the symbolic link for the /logs folder ****"
 	cp -r /var/www/html/Lychee/storage/logs/* /logs && \
 	rm -r /var/www/html/Lychee/storage/logs && \
 	ln -s /logs /var/www/html/Lychee/storage/logs
+
+echo "**** Create the symbolic link for the /lychee-tmp folder ****"
+[ ! -L /var/www/html/Lychee/storage/tmp ] && \
+	touch /var/www/html/Lychee/storage/tmp/empty_file && \
+	cp -r /var/www/html/Lychee/storage/tmp/* /lychee-tmp && \
+	rm -r /var/www/html/Lychee/storage/tmp && \
+	ln -s /lychee-tmp /var/www/html/Lychee/storage/tmp
 
 cd /var/www/html/Lychee
 
@@ -142,12 +150,12 @@ if [ -n "$SKIP_PERMISSIONS_CHECKS" ] && [ "${SKIP_PERMISSIONS_CHECKS,,}" = "yes"
 else
 	echo "**** Set Permissions ****"
 	# Set ownership of directories, then files and only when required. See LycheeOrg/Lychee-Docker#120
-	find /sym /uploads /logs -type d \( ! -user "$USER" -o ! -group "$USER" \) -exec chown -R "$USER":"$USER" \{\} \;
-	find /conf/.env /sym /uploads /logs \( ! -user "$USER" -o ! -group "$USER" \) -exec chown "$USER":"$USER" \{\} \;
+	find /sym /uploads /logs /lychee-tmp -type d \( ! -user "$USER" -o ! -group "$USER" \) -exec chown -R "$USER":"$USER" \{\} \;
+	find /conf/.env /sym /uploads /logs /lychee-tmp \( ! -user "$USER" -o ! -group "$USER" \) -exec chown "$USER":"$USER" \{\} \;
 	# Laravel needs to be able to chmod user.css and custom.js for no good reason
 	find /conf/user.css /conf/custom.js /logs/laravel.log \( ! -user "www-data" -o ! -group "$USER" \) -exec chown www-data:"$USER" \{\} \;
-	find /sym /uploads /logs -type d \( ! -perm -ug+w -o ! -perm -ugo+rX -o ! -perm -g+s \) -exec chmod -R ug+w,ugo+rX,g+s \{\} \;
-	find /conf/user.css /conf/custom.js /conf/.env /sym /uploads /logs \( ! -perm -ug+w -o ! -perm -ugo+rX \) -exec chmod ug+w,ugo+rX \{\} \;
+	find /sym /uploads /logs /lychee-tmp -type d \( ! -perm -ug+w -o ! -perm -ugo+rX -o ! -perm -g+s \) -exec chmod -R ug+w,ugo+rX,g+s \{\} \;
+	find /conf/user.css /conf/custom.js /conf/.env /sym /uploads /logs /lychee-tmp \( ! -perm -ug+w -o ! -perm -ugo+rX \) -exec chmod ug+w,ugo+rX \{\} \;
 fi
 
 # Update CA Certificates if we're using armv7 because armv7 is weird (#76)

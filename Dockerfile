@@ -74,7 +74,10 @@ RUN \
     rm    storage/framework/views/* 2> /dev/null || true && \
     rm    storage/logs/* 2> /dev/null || true && \
     chown -R www-data:www-data /var/www/html/Lychee && \
-    chmod -R g+ws storage/image-jobs storage/livewire-tmp && \
+    chmod -R g+ws storage/image-jobs || true && \
+    chmod -R g+ws storage/livewire-tmp || true && \
+    chmod -R g+ws storage/lychee-tmp || true && \
+
     echo "* * * * * www-data cd /var/www/html/Lychee && php artisan schedule:run >> /dev/null 2>&1" >> /etc/crontab && \
     apt-get purge -y --autoremove git composer && \
     apt-get clean -qy &&\
@@ -102,7 +105,7 @@ COPY --from=static_builder --chown=www-data:www-data /app/public /var/www/html/L
 COPY default.conf /etc/nginx/nginx.conf
 
 EXPOSE 80
-VOLUME /conf /uploads /sym /logs
+VOLUME /conf /uploads /sym /logs /lychee-tmp
 
 WORKDIR /var/www/html/Lychee
 
