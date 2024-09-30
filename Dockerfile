@@ -76,7 +76,8 @@ RUN \
     chown -R www-data:www-data /var/www/html/Lychee && \
     chmod -R g+ws storage/image-jobs || true && \
     chmod -R g+ws storage/livewire-tmp || true && \
-    chmod -R g+ws storage/lychee-tmp && \
+    chmod -R g+ws storage/lychee-tmp || true && \
+
     echo "* * * * * www-data cd /var/www/html/Lychee && php artisan schedule:run >> /dev/null 2>&1" >> /etc/crontab && \
     apt-get purge -y --autoremove git composer && \
     apt-get clean -qy &&\
