@@ -46,6 +46,8 @@ services:
       #- APP_URL=http://localhost
       #- APP_DIR=
       #- DEBUGBAR_ENABLEd=false
+      #- VUEJS_ENABLED=true
+      #- LEGACY_API_ENABLED=false
       #- LEGACY_V4_REDIRECT=false
       #- DB_OLD_LYCHEE_PREFIX=''
       - DB_CONNECTION=mysql
