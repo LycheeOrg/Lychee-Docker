@@ -166,12 +166,12 @@ if [ -n "$SKIP_PERMISSIONS_CHECKS" ] && [ "${SKIP_PERMISSIONS_CHECKS,,}" = "yes"
 else
 	echo "**** Set Permissions ****"
 	# Set ownership of directories, then files and only when required. See LycheeOrg/Lychee-Docker#120
-	find /sym /uploads /logs -type d \( ! -user "$USER" -o ! -group "$USER" \) -exec chown -R "$USER":"$USER" \{\} \;
-	find /conf/.env /sym /uploads /logs \( ! -user "$USER" -o ! -group "$USER" \) -exec chown "$USER":"$USER" \{\} \;
+	find /sym /uploads /logs /image-tmp /image-jobs /extract-jobs -type d \( ! -user "$USER" -o ! -group "$USER" \) -exec chown -R "$USER":"$USER" \{\} \;
+	find /conf/.env /sym /uploads /logs /image-tmp /image-jobs /extract-jobs \( ! -user "$USER" -o ! -group "$USER" \) -exec chown "$USER":"$USER" \{\} \;
 	# Laravel needs to be able to chmod user.css and custom.js for no good reason
 	find /conf/user.css /conf/custom.js /logs/laravel.log \( ! -user "www-data" -o ! -group "$USER" \) -exec chown www-data:"$USER" \{\} \;
-	find /sym /uploads /logs -type d \( ! -perm -ug+w -o ! -perm -ugo+rX -o ! -perm -g+s \) -exec chmod -R ug+w,ugo+rX,g+s \{\} \;
-	find /conf/user.css /conf/custom.js /conf/.env /sym /uploads /logs \( ! -perm -ug+w -o ! -perm -ugo+rX \) -exec chmod ug+w,ugo+rX \{\} \;
+	find /sym /uploads /logs /image-tmp /image-jobs /extract-jobs -type d \( ! -perm -ug+w -o ! -perm -ugo+rX -o ! -perm -g+s \) -exec chmod -R ug+w,ugo+rX,g+s \{\} \;
+	find /conf/user.css /conf/custom.js /conf/.env /sym /uploads /logs /image-tmp /image-jobs /extract-jobs \( ! -perm -ug+w -o ! -perm -ugo+rX \) -exec chmod ug+w,ugo+rX \{\} \;
 fi
 
 # Update CA Certificates if we're using armv7 because armv7 is weird (#76)
