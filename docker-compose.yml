@@ -31,6 +31,7 @@ services:
       - ./lychee/uploads:/uploads
       - ./lychee/sym:/sym
       - ./lychee/logs:/logs
+      - ./lychee/tmp:/lychee-tmp
     networks:
       - lychee
     environment:
