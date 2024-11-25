@@ -1,4 +1,4 @@
-FROM debian:bookworm-slim as base
+FROM php:8.4-fpm-bookworm as base
 
 # Set version label
 LABEL maintainer="lycheeorg"
@@ -27,18 +27,18 @@ RUN \
     apt-get install -qy --no-install-recommends\
     adduser \
     nginx-light \
-    php8.2-mysql \
-    php8.2-pgsql \
-    php8.2-sqlite3 \
-    php8.2-imagick \
-    php8.2-mbstring \
-    php8.2-gd \
-    php8.2-xml \
-    php8.2-zip \
-    php8.2-fpm \
-    php8.2-redis \
-    php8.2-bcmath \
-    php8.2-intl \
+    php8.4-mysql \
+    php8.4-pgsql \
+    php8.4-sqlite3 \
+    php8.4-imagick \
+    php8.4-mbstring \
+    php8.4-gd \
+    php8.4-xml \
+    php8.4-zip \
+    php8.4-fpm \
+    php8.4-redis \
+    php8.4-bcmath \
+    php8.4-intl \
     curl \
     libimage-exiftool-perl \
     ffmpeg \
@@ -53,6 +53,7 @@ RUN \
     unzip && \
     addgroup --gid "$PGID" "$USER" && \
     adduser --gecos '' --no-create-home --disabled-password --uid "$PUID" --gid "$PGID" "$USER" && \
+    mkdir -p /var/www/html && \
     cd /var/www/html && \
     if [ "$TARGET" = "release" ] ; then RELEASE_TAG="-b v$(curl -s https://raw.githubusercontent.com/LycheeOrg/Lychee/master/version.md)" ; \
     elif [ "$BRANCH" != "master" ] ; then RELEASE_TAG="-b $BRANCH" ; fi && \
