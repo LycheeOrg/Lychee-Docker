@@ -27,18 +27,6 @@ RUN \
     apt-get install -qy --no-install-recommends\
     adduser \
     nginx-light \
-    php8.4-mysql \
-    php8.4-pgsql \
-    php8.4-sqlite3 \
-    php8.4-imagick \
-    php8.4-mbstring \
-    php8.4-gd \
-    php8.4-xml \
-    php8.4-zip \
-    php8.4-fpm \
-    php8.4-redis \
-    php8.4-bcmath \
-    php8.4-intl \
     curl \
     libimage-exiftool-perl \
     ffmpeg \
@@ -49,8 +37,11 @@ RUN \
     gifsicle \
     webp \
     cron \
-    composer \
     unzip && \
+    curl -sSLf -o /usr/local/bin/install-php-extensions \
+    https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions && \
+    chmod +x /usr/local/bin/install-php-extensions && \
+    install-php-extensions @composer bcmath gd imagick intl pgsql redis zip && \
     addgroup --gid "$PGID" "$USER" && \
     adduser --gecos '' --no-create-home --disabled-password --uid "$PUID" --gid "$PGID" "$USER" && \
     mkdir -p /var/www/html && \
@@ -80,7 +71,7 @@ RUN \
     chmod -R g+ws storage/lychee-tmp || true && \
 
     echo "* * * * * www-data cd /var/www/html/Lychee && php artisan schedule:run >> /dev/null 2>&1" >> /etc/crontab && \
-    apt-get purge -y --autoremove git composer && \
+    apt-get purge -y --autoremove git && \
     apt-get clean -qy &&\
     rm -rf /var/lib/apt/lists/*
 
