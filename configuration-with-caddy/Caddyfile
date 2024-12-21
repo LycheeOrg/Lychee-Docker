@@ -6,7 +6,7 @@
         }
 }
 
-lychee.mydomain.com {
+<YOUR_DOMAIN> {
         handle /* {
                 reverse_proxy lychee
         }
