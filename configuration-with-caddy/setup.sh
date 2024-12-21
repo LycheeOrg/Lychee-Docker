@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set variables
-REPO_URL="https://raw.githubusercontent.com/LycheeOrg/Lychee-Docker/refs/heads/master/configuration-with-caddy/"
+REPO_URL="https://raw.githubusercontent.com/LycheeOrg/Lychee-Docker/refs/heads/master/configuration-with-caddy"
 DOCKER_COMPOSE_FILE="docker-compose.yml"
 ENV_FILE=".env"
 CADDYFILE="Caddyfile"
@@ -15,8 +15,8 @@ curl -O "$REPO_URL/$ENV_FILE" || { echo "Failed to download $ENV_FILE"; exit 1; 
 curl -O "$REPO_URL/$CADDYFILE" || { echo "Failed to download $CADDYFILE"; exit 1; }
 
 # Set MYSQL_ROOT_PASSWORD and MYSQL_LYCHEE_PASSWORD in the .env file
-MYSQL_ROOT_PASSWORD="$(openssl rand -base64 12)"
-MYSQL_LYCHEE_PASSWORD="$(openssl rand -base64 12)"
+MYSQL_ROOT_PASSWORD="$(openssl rand -base64 24)"
+MYSQL_LYCHEE_PASSWORD="$(openssl rand -base64 24)"
 
 if [ -f "$ENV_FILE" ]; then
     sed -i "s/^MYSQL_ROOT_PASSWORD=.*/MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD/" "$ENV_FILE"
