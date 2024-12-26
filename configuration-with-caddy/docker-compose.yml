@@ -1,0 +1,67 @@
+
+services:
+
+  caddy:
+    container_name: caddy
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - 80:80
+      - 443:443
+      - 443:443/udp
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./caddy-config:/config
+      - ./caddy-data:/data
+    networks:
+      - lychee
+
+  lychee_db:
+    container_name: lychee_db
+    image: mariadb:10
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=lychee
+      - MYSQL_USER=lychee
+      - MYSQL_PASSWORD=${MYSQL_LYCHEE_PASSWORD}
+    expose: 
+      - 3306
+    volumes:
+      - mysql:/var/lib/mysql
+    networks:
+      - lychee
+
+  lychee:
+    container_name: lychee
+    image: lycheeorg/lychee:dev
+    restart: unless-stopped
+    environment:
+      - PHP_TZ=UTC
+      - TIMEZONE=UTC
+      - DB_CONNECTION=mysql
+      - DB_HOST=lychee_db
+      - DB_PORT=3306
+      - DB_DATABASE=lychee
+      - DB_USERNAME=lychee
+      - DB_PASSWORD=${MYSQL_LYCHEE_PASSWORD}
+      - STARTUP_DELAY=10
+      - TRUSTED_PROXIES=*
+    expose:
+      - 80
+    volumes:
+      - ./lychee/conf:/conf
+      - ./lychee/uploads:/uploads
+      - ./lychee/sym:/sym
+      - ./lychee/logs:/logs
+      - ./lychee/tmp:/lychee-tmp
+    depends_on:
+      - lychee_db
+    networks:
+      - lychee
+
+networks:
+  lychee:
+
+volumes:
+  mysql:

@@ -1,0 +1,14 @@
+(common) {
+        encode zstd gzip
+        header /* {
+                -Server
+                -x-powered-by
+        }
+}
+
+<YOUR_DOMAIN> {
+        handle /* {
+                reverse_proxy lychee
+        }
+        import common
+}
