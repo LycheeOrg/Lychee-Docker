@@ -168,5 +168,5 @@ echo "**** Start cron daemon ****"
 service cron start
 
 echo "**** Setup complete, starting the server. ****"
-php-fpm8.2
+php-fpm8.4
 exec $@
