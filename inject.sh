@@ -308,6 +308,6 @@ if [ "$AWS_USE_PATH_STYLE_ENDPOINT" != '' ]; then
     replace_or_insert "AWS_USE_PATH_STYLE_ENDPOINT" "$AWS_USE_PATH_STYLE_ENDPOINT"
  fi
 if [ "$PHP_TZ" != '' ]; then
-    sed -i "s|;*date.timezone =.*|date.timezone = ${PHP_TZ}|i" /etc/php/8.2/cli/php.ini
-    sed -i "s|;*date.timezone =.*|date.timezone = ${PHP_TZ}|i" /etc/php/8.2/fpm/php.ini
+    sed -i "s|;*date.timezone =.*|date.timezone = ${PHP_TZ}|i" /etc/php/8.4/cli/php.ini
+    sed -i "s|;*date.timezone =.*|date.timezone = ${PHP_TZ}|i" /etc/php/8.4/fpm/php.ini
  fi
