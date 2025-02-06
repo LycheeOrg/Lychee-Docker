@@ -132,25 +132,28 @@ if [ "$SECURITY_HEADER_SCRIPT_SRC_ALLOW" != '' ]; then
  fi
 if [ "$SESSION_SECURE_COOKIE" != '' ]; then
     replace_or_insert "SESSION_SECURE_COOKIE" "$SESSION_SECURE_COOKIE"
- fi
-# if [ "$REDIS_SCHEME" != '' ]; then
-#     sed -i "s|REDIS_SCHEME=.*|REDIS_SCHEME=${REDIS_SCHEME}|i" /conf/.env
-# fi
-# if [ "$REDIS_PATH" != '' ]; then
-#     sed -i "s|REDIS_PATH=.*|REDIS_PATH=${REDIS_PATH}|i" /conf/.env
-# fi
-# if [ "$REDIS_HOST" != '' ]; then
-#     sed -i "s|REDIS_HOST=.*|REDIS_HOST=${REDIS_HOST}|i" /conf/.env
-# fi
-# if [ "$REDIS_PORT" != '' ]; then
-#     sed -i "s|REDIS_PORT=.*|REDIS_PORT=${REDIS_PORT}|i" /conf/.env
-# fi
-# if [ "$REDIS_PASSWORD" != '' ]; then
-#     sed -i "s|REDIS_PASSWORD=.*|REDIS_PASSWORD=${REDIS_PASSWORD}|i" /conf/.env
-# elif [ "$REDIS_PASSWORD_FILE" != '' ]; then
-#     value=$(<$REDIS_PASSWORD_FILE)
-#     sed -i "s|REDIS_PASSWORD=.*|REDIS_PASSWORD=${value}|i" /conf/.env
-# fi
+fi
+if [ "$REDIS_URL" != '' ]; then
+    sed -i "s|REDIS_URL=.*|REDIS_URL=${REDIS_URL}|i" /conf/.env
+fi
+if [ "$REDIS_PATH" != '' ]; then
+    sed -i "s|REDIS_PATH=.*|REDIS_PATH=${REDIS_PATH}|i" /conf/.env
+fi
+if [ "$REDIS_HOST" != '' ]; then
+    sed -i "s|REDIS_HOST=.*|REDIS_HOST=${REDIS_HOST}|i" /conf/.env
+fi
+if [ "$REDIS_PORT" != '' ]; then
+    sed -i "s|REDIS_PORT=.*|REDIS_PORT=${REDIS_PORT}|i" /conf/.env
+fi
+if [ "$REDIS_USERNAME" != '' ]; then
+    sed -i "s|REDIS_USERNAME=.*|REDIS_USERNAME=${REDIS_USERNAME}|i" /conf/.env
+fi
+if [ "$REDIS_PASSWORD" != '' ]; then
+    sed -i "s|REDIS_PASSWORD=.*|REDIS_PASSWORD=${REDIS_PASSWORD}|i" /conf/.env
+elif [ "$REDIS_PASSWORD_FILE" != '' ]; then
+    value=$(<$REDIS_PASSWORD_FILE)
+    sed -i "s|REDIS_PASSWORD=.*|REDIS_PASSWORD=${value}|i" /conf/.env
+fi
 if [ "$MAIL_DRIVER" != '' ]; then
     replace_or_insert "MAIL_DRIVER" "$MAIL_DRIVER"
  fi

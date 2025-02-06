@@ -5,14 +5,33 @@
 #-------------------------------------------
 
 services:
+  lychee_cache:
+    image: redis:alpine
+    container_name: lychee_redis
+    hostname: lychee_redis
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping || exit 1"]
+    ports:
+      - ${REDIS_PORT:-6379}:${REDIS_PORT:-6379}
+    user: 1026:100
+    environment:
+      - TZ=${TIMEZONE:-UTC}
+    networks:
+      - lychee
+    volumes:
+      - cache:/data:rw
+    restart: on-failure:5
+
   lychee_db:
     container_name: lychee_db
     image: mariadb:10
     environment:
-      - MYSQL_ROOT_PASSWORD=<ROOT_PASSWORD>
-      - MYSQL_DATABASE=lychee
-      - MYSQL_USER=lychee
-      - MYSQL_PASSWORD=<LYCHEE_PASSWORD>
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD:-rootpassword}
+      - MYSQL_DATABASE=${DB_DATABASE:-lychee}
+      - MYSQL_USER=${DB_USERNAME:-lychee}
+      - MYSQL_PASSWORD=${DB_PASSWORD:-password}
     expose: 
       - 3306
     volumes:
@@ -22,7 +41,7 @@ services:
     restart: unless-stopped
 
   lychee:
-    image: lycheeorg/lychee
+    image: lycheeorg/lychee:nightly
     container_name: lychee
     ports:
       - 90:80
@@ -38,13 +57,13 @@ services:
       #- PUID=1000
       #- PGID=1000
       # PHP timezone e.g. PHP_TZ=America/New_York
-      - PHP_TZ=UTC
-      - TIMEZONE=UTC
+      - PHP_TZ=${TIMEZONE:-UTC}
+      - TIMEZONE=${TIMEZONE:-UTC}
       #- APP_NAME=Laravel
       #- APP_ENV=local
       #- APP_DEBUG=true
       #- APP_FORCE_HTTPS=false
-      #- APP_URL=http://localhost
+      - APP_URL=${APP_URL:-http://localhost}
       #- APP_DIR=
       #- DEBUGBAR_ENABLEd=false
       #- VUEJS_ENABLED=true
@@ -53,10 +72,10 @@ services:
       #- DB_OLD_LYCHEE_PREFIX=''
       - DB_CONNECTION=mysql
       - DB_HOST=lychee_db
-      - DB_PORT=3306
-      - DB_DATABASE=lychee
-      - DB_USERNAME=lychee
-      - DB_PASSWORD=<LYCHEE_PASSWORD>
+      - DB_PORT=${DB_PORT:-3306}
+      - DB_DATABASE=${DB_DATABASE:-lychee}
+      - DB_USERNAME=${DB_USERNAME:-lychee}
+      - DB_PASSWORD=${DB_PASSWORD:-password}
       #- DB_PASSWORD_FILE=<filename>
       #- DB_LOG_SQL=false
       #- DB_LOG_SQL_EXPLAIN=false
@@ -79,16 +98,17 @@ services:
       #- MAIL_FROM_NAME=
       #- MAIL_FROM_ADDRESS=
       #- TRUSTED_PROXIES=
-      #- SKIP_PERMISSIONS_CHECKS
+      - SKIP_PERMISSIONS_CHECKS=${SKIP_PERMISSIONS_CHECKS:-false}
       - STARTUP_DELAY=30
       #- ADMIN_USER=admin
       #- ADMIN_PASSWORD=<ADMIN_PASSWORD>
       #- ADMIN_PASSWORD_FILE=<filename>
-      ### Unused in Lychee
-      #- REDIS_HOST=127.0.0.1
-      #- REDIS_PASSWORD=null
-      #- REDIS_PASSWORD_FILE=<filename>
-      #- REDIS_PORT=6379
+      - CACHE_DRIVER=${CACHE_DRIVER:-redis}
+      - REDIS_URL=redis://${REDIS_USERNAME:-default}:${REDIS_PASSWORD:-}@${REDIS_HOST:-lychee_redis}:${REDIS_PORT:-6379}
+      - REDIS_HOST=${REDIS_HOST:-lychee_redis}
+      - REDIS_PORT=${REDIS_PORT:-6379}
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-}
+      - LOG_VIEWER_CACHE_DRIVER=${LOG_VIEWER_CACHE_DRIVER:-file}
     restart: unless-stopped
     depends_on:
       - lychee_db
@@ -98,3 +118,8 @@ networks:
 
 volumes:
   mysql:
+    name: lychee_prod_mysql
+    driver: local
+  cache:
+    name: lychee_prod_redis
+    driver: local
