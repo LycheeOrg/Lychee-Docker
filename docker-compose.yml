@@ -31,7 +31,7 @@ services:
       - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD:-rootpassword}
       - MYSQL_DATABASE=${DB_DATABASE:-lychee}
       - MYSQL_USER=${DB_USERNAME:-lychee}
-      - MYSQL_PASSWORD=${DB_PASSWORD:-password}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
     expose: 
       - 3306
     volumes:
@@ -75,7 +75,7 @@ services:
       - DB_PORT=${DB_PORT:-3306}
       - DB_DATABASE=${DB_DATABASE:-lychee}
       - DB_USERNAME=${DB_USERNAME:-lychee}
-      - DB_PASSWORD=${DB_PASSWORD:-password}
+      - DB_PASSWORD=${DB_PASSWORD}
       #- DB_PASSWORD_FILE=<filename>
       #- DB_LOG_SQL=false
       #- DB_LOG_SQL_EXPLAIN=false
