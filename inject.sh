@@ -112,6 +112,9 @@ if [ "$ENABLE_TOKEN_AUTH" != '' ]; then
 if [ "$CACHE_DRIVER" != '' ]; then
     replace_or_insert "CACHE_DRIVER" "$CACHE_DRIVER"
  fi
+if [ "$LOG_VIEWER_CACHE_DRIVER" != '' ]; then
+    replace_or_insert "LOG_VIEWER_CACHE_DRIVER" "$LOG_VIEWER_CACHE_DRIVER"
+ fi
 if [ "$SESSION_DRIVER" != '' ]; then
     replace_or_insert "SESSION_DRIVER" "$SESSION_DRIVER"
  fi
