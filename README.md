@@ -104,7 +104,7 @@ Those will then be injected in the Lychee configuration file (located in e.g. `l
 
 ![environment-loading.png](./environment-loading.png)
 
-:warning: If you later edit your `lychee/config/.env` file, restarting the container will overwrite with the variables provided in your docker-compose `.env` file.
+:warning: If you later edit your `lychee/config/.env` file, restarting the container will overwrite those variables with the ones provided in your docker-compose `.env` file.
 For this reason it is better to make your changes directly in `docker-compose.yml`/`.env` rather than in `lychee/config/.env` when the values are supported.
 Please refer to the [inject.sh](https://github.com/LycheeOrg/Lychee/blob/master/inject.sh) script for more details.
 
