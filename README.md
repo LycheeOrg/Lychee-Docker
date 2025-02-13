@@ -13,12 +13,16 @@
 
 ## Table of Contents
 <!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
-- [Image content](#image-content)
+- [Notice: Dockerhub repository has been migrated to lycheeorg/lychee](#notice-dockerhub-repository-has-been-migrated-to-lycheeorglychee)
+- [Table of Contents](#table-of-contents)
+- [Image Content](#image-content)
 - [Setup](#setup)
 	- [Quick Start](#quick-start)
 	- [Prerequisites](#prerequisites)
 	- [Run with Docker](#run-with-docker)
 	- [Run with Docker Compose](#run-with-docker-compose)
+	- [Create admin account during first run](#create-admin-account-during-first-run)
+	- [Docker secrets](#docker-secrets)
 - [Available environment variables and defaults](#available-environment-variables-and-defaults)
 - [Advanced configuration](#advanced-configuration)
 <!-- /TOC -->
@@ -91,9 +95,17 @@ alter user 'lychee' identified with mysql_native_password by '<your password>';
 
 ### Run with Docker Compose
 
-Change the environment variables in the [provided example](./docker-compose.yml) to reflect your database credentials.
+use the provided `.env.exanple` to create a `.env` at the root of your folder containing your `docker-compose.yml`.
+Populate your database credentials and other environment variables.
+This `.env` file will be loaded by docker compose and populate environment in the docker container.
+Those will then be injected in the Lychee configuration file (located in e.g. `lychee/config/.env`).
 
-Note that in order to avoid writing credentials directly into the file, you can create a `db_secrets.env` and use the `env_file` directive (see the [docs](https://docs.docker.com/compose/environment-variables/#the-env_file-configuration-option)).
+![environment-loading.png](./environment-loading.png)
+
+Note that if you later edit your `lychee/config/.env` file, restarting the container will overwrite with the variables provided in your docker-compose `.env` file.
+For this reason it is better to make your changes directly in docker-compose rather than in `lychee/config/.env` when the values are supported.
+Please refer to the [inject.sh](https://github.com/LycheeOrg/Lychee/blob/master/inject.sh) script for more details.
+
 
 ### Create admin account during first run
 
@@ -114,7 +126,7 @@ The following _FILE variables are supported:
 
 ## Available environment variables and defaults
 
-If you do not provide environment variables or `.env` file, the [example .env file](https://github.com/LycheeOrg/Lychee/blob/master/.env.example) will be used with some values already set by default.
+If you do not provide environment variables or `.env` file, the [example .env file](https://github.com/LycheeOrg/Lychee/blob/master/.env.example) will be used with some values already set by default inside the docker container.
 
 Some variables are specific to Docker, and the default values are :
 
