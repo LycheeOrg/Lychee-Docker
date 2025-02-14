@@ -127,7 +127,7 @@ The following _FILE variables are supported:
 
 ## Available environment variables and defaults
 
-If you do not provide environment variables or `.env` file, the [example .env file](https://github.com/LycheeOrg/Lychee/blob/master/.env.example) will be used with some values already set by default inside the docker container.
+If you do not provide environment variables or `.env` file, Lychee's [example .env file](https://github.com/LycheeOrg/Lychee/blob/master/.env.example) will be used with some values already set by default inside the docker container.
 
 Some variables are specific to Docker, and the default values are :
 
