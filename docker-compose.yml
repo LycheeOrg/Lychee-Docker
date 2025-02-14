@@ -41,7 +41,7 @@ services:
     restart: unless-stopped
 
   lychee:
-    image: lycheeorg/lychee:nightly
+    image: lycheeorg/lychee
     container_name: lychee
     ports:
       - 90:80
