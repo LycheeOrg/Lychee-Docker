@@ -9,7 +9,6 @@ env:
   PUID: '1000'
   PGID: '1000'
   PHP_TZ: 'UTC'
-  
 
 jobs:
   build:
