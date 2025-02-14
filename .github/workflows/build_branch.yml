@@ -121,7 +121,8 @@ jobs:
         uses: actions/checkout@v4
       -
         name: Set Password
-        run: "sed -i 's/<.*_PASSWORD>/password/g' docker-compose.yml"
+        run: 
+          echo "DB_PASSWORD=password" >> .env
       -
         name: Set Image
         run: "sed -i 's|image: lycheeorg/lychee|image: lycheeorg/lychee:testing-${{ github.run_id }}|' docker-compose.yml"
