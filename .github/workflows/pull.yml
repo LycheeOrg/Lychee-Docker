@@ -8,7 +8,7 @@ on:
 env:
   PUID: '1000'
   PGID: '1000'
-  TIMEZONE: 'UTC'
+  PHP_TZ: 'UTC'
   
 
 jobs:
