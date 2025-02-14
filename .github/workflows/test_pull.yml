@@ -28,7 +28,7 @@ jobs:
     steps:
       -
         name: 'Download artifact'
-        uses: actions/github-script@v3.1.0
+        uses: actions/github-script@v7
         with:
           script: |
             var artifacts = await github.actions.listWorkflowRunArtifacts({
@@ -59,7 +59,7 @@ jobs:
       -
         name: "Create check"
         id: create_check
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         env:
           parameter_url: '${{ github.event.workflow_run.html_url }}'
         with:
@@ -80,7 +80,7 @@ jobs:
         run: docker image load -i ./lychee.tar
       -
         name: Login to DockerHub
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -234,7 +234,7 @@ jobs:
     steps:
       -
         name: "Update check"
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             await github.rest.checks.update({

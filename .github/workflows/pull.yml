@@ -25,7 +25,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
       -
         name: Test multiarch building
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           platforms: linux/amd64,linux/arm/v7,linux/arm64
@@ -35,7 +35,7 @@ jobs:
             lycheeorg/lychee:testing-${{ github.run_id }}
       -
         name: Save amd64 image to pass to testing
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           platforms: linux/amd64
@@ -54,7 +54,7 @@ jobs:
           sha256sum artifact/lychee.tar || echo 0
       -
         name: Store as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: artifact
           path: ./artifact

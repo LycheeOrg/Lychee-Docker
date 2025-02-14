@@ -8,19 +8,18 @@
 ![Supports arm64/aarch64 Architecture][arm64-shield]
 ![Supports armv7 Architecture][armv7-shield]
 
-## Notice: Dockerhub repository has been migrated to [lycheeorg/lychee](https://hub.docker.com/r/lycheeorg/lychee)  
-**Make sure you update your docker-compose files accordingly**
-
 ## Table of Contents
 <!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
-- [Image content](#image-content)
+- [Table of Contents](#table-of-contents)
+- [Image Content](#image-content)
 - [Setup](#setup)
 	- [Quick Start](#quick-start)
 	- [Prerequisites](#prerequisites)
 	- [Run with Docker](#run-with-docker)
 	- [Run with Docker Compose](#run-with-docker-compose)
+	- [Create admin account during first run](#create-admin-account-during-first-run)
+	- [Docker secrets](#docker-secrets)
 - [Available environment variables and defaults](#available-environment-variables-and-defaults)
-- [Advanced configuration](#advanced-configuration)
 <!-- /TOC -->
 
 ## Image Content
@@ -91,9 +90,19 @@ alter user 'lychee' identified with mysql_native_password by '<your password>';
 
 ### Run with Docker Compose
 
-Change the environment variables in the [provided example](./docker-compose.yml) to reflect your database credentials.
+You can take the provided docker-compose.yml example as a start and edit it to enable more configuration variables.
 
-Note that in order to avoid writing credentials directly into the file, you can create a `db_secrets.env` and use the `env_file` directive (see the [docs](https://docs.docker.com/compose/environment-variables/#the-env_file-configuration-option)).
+Use the `.env.exanple` to create a `.env` at the root of your folder containing your `docker-compose.yml`.
+Populate your database credentials and other environment variables.
+
+This `.env` file will be loaded by docker compose and populate environment in the docker container.
+Those will then be injected in the Lychee configuration file (located in e.g. `lychee/config/.env`).
+
+![environment-loading.png](./environment-loading.png)
+
+:warning: If you later edit your `lychee/config/.env` file, restarting the container will overwrite those variables with the ones provided in your docker-compose `.env` file.
+For this reason it is better to make your changes directly in `docker-compose.yml`/`.env` rather than in `lychee/config/.env` when the values are supported.
+Please refer to the [inject.sh](https://github.com/LycheeOrg/Lychee/blob/master/inject.sh) script for more details.
 
 ### Create admin account during first run
 
@@ -114,7 +123,7 @@ The following _FILE variables are supported:
 
 ## Available environment variables and defaults
 
-If you do not provide environment variables or `.env` file, the [example .env file](https://github.com/LycheeOrg/Lychee/blob/master/.env.example) will be used with some values already set by default.
+If you do not provide environment variables or `.env` file, Lychee's [example .env file](https://github.com/LycheeOrg/Lychee/blob/master/.env.example) will be used with some values already set by default inside the docker container.
 
 Some variables are specific to Docker, and the default values are :
 
@@ -125,22 +134,6 @@ Some variables are specific to Docker, and the default values are :
 * `STARTUP_DELAY=0`
 
 Additionally, if `SKIP_PERMISSIONS_CHECKS` is set to "yes", the entrypoint script will not check or set the permissions of files and directories on startup. Users are strongly advised **against** using this option, and efforts have been made to keep the checks as fast as possible. Nonetheless, it may be suitable for some advanced use cases.
-
-## Advanced configuration
-
-Note that nginx will accept by default images up to 100MB (`client_max_body_size 100M`) and that PHP parameters are overridden according to the [recommendations of the Lychee FAQ](https://lycheeorg.github.io/docs/faq.html#i-cant-upload-large-photos).
-
-You may still want to further customize PHP configuration. The first method is to mount a custom `php.ini` to `/etc/php/8.2/fpm/php.ini` when starting the container. However, this method is kind of brutal as it will override all parameters. It will also need to be remapped whenever an image is released with a new version of PHP.
-
-Instead, we recommend to use the `PHP_VALUE` directive of PHP-FPM to override specific parameters. To do so, you will need to mount a custom `nginx.conf` in your container :
-
-1. Take the [default.conf](./default.conf) file as a base
-2. Find the line starting by `fastcgi_param PHP_VALUE [...]`
-3. Add a new line and set your new parameter
-4. Add or change any other parameters (e.g. `client_max_body_size`)
-5. Mount your new file to `/etc/nginx/nginx.conf`
-
-If you need to add (not change) nginx directives, files mounted in `/etc/nginx/conf.d/` will be included in the `http` context.
 
 [arm64-shield]: https://img.shields.io/badge/arm64-yes-success.svg?style=flat
 [amd64-shield]: https://img.shields.io/badge/amd64-yes-success.svg?style=flat

@@ -112,6 +112,9 @@ if [ "$ENABLE_TOKEN_AUTH" != '' ]; then
 if [ "$CACHE_DRIVER" != '' ]; then
     replace_or_insert "CACHE_DRIVER" "$CACHE_DRIVER"
  fi
+if [ "$LOG_VIEWER_CACHE_DRIVER" != '' ]; then
+    replace_or_insert "LOG_VIEWER_CACHE_DRIVER" "$LOG_VIEWER_CACHE_DRIVER"
+ fi
 if [ "$SESSION_DRIVER" != '' ]; then
     replace_or_insert "SESSION_DRIVER" "$SESSION_DRIVER"
  fi
@@ -133,24 +136,27 @@ if [ "$SECURITY_HEADER_SCRIPT_SRC_ALLOW" != '' ]; then
 if [ "$SESSION_SECURE_COOKIE" != '' ]; then
     replace_or_insert "SESSION_SECURE_COOKIE" "$SESSION_SECURE_COOKIE"
  fi
-# if [ "$REDIS_SCHEME" != '' ]; then
-#     sed -i "s|REDIS_SCHEME=.*|REDIS_SCHEME=${REDIS_SCHEME}|i" /conf/.env
-# fi
-# if [ "$REDIS_PATH" != '' ]; then
-#     sed -i "s|REDIS_PATH=.*|REDIS_PATH=${REDIS_PATH}|i" /conf/.env
-# fi
-# if [ "$REDIS_HOST" != '' ]; then
-#     sed -i "s|REDIS_HOST=.*|REDIS_HOST=${REDIS_HOST}|i" /conf/.env
-# fi
-# if [ "$REDIS_PORT" != '' ]; then
-#     sed -i "s|REDIS_PORT=.*|REDIS_PORT=${REDIS_PORT}|i" /conf/.env
-# fi
-# if [ "$REDIS_PASSWORD" != '' ]; then
-#     sed -i "s|REDIS_PASSWORD=.*|REDIS_PASSWORD=${REDIS_PASSWORD}|i" /conf/.env
-# elif [ "$REDIS_PASSWORD_FILE" != '' ]; then
-#     value=$(<$REDIS_PASSWORD_FILE)
-#     sed -i "s|REDIS_PASSWORD=.*|REDIS_PASSWORD=${value}|i" /conf/.env
-# fi
+if [ "$REDIS_URL" != '' ]; then
+    replace_or_insert "REDIS_URL" "$REDIS_URL"
+ fi
+if [ "$REDIS_PATH" != '' ]; then
+    replace_or_insert "REDIS_PATH" "$REDIS_PATH"
+ fi
+if [ "$REDIS_HOST" != '' ]; then
+    replace_or_insert "REDIS_HOST" "$REDIS_HOST"
+ fi
+if [ "$REDIS_PORT" != '' ]; then
+    replace_or_insert "REDIS_PORT" "$REDIS_PORT"
+ fi
+if [ "$REDIS_USERNAME" != '' ]; then
+    replace_or_insert "REDIS_USERNAME" "$REDIS_USERNAME"
+ fi
+if [ "$REDIS_PASSWORD" != '' ]; then
+    replace_or_insert "REDIS_PASSWORD" "$REDIS_PASSWORD"
+elif [ "$REDIS_PASSWORD_FILE" != '' ]; then
+    value=$(<$REDIS_PASSWORD_FILE)
+    replace_or_insert "REDIS_PASSWORD" "$value"
+fi
 if [ "$MAIL_DRIVER" != '' ]; then
     replace_or_insert "MAIL_DRIVER" "$MAIL_DRIVER"
  fi

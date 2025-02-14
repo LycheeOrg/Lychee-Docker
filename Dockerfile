@@ -1,4 +1,4 @@
-FROM debian:bookworm-slim as base
+FROM debian:bookworm-slim AS base
 
 # Set version label
 LABEL maintainer="lycheeorg"
@@ -93,7 +93,7 @@ RUN \
 
 # Multi-stage build: Build static assets
 # This allows us to not include Node within the final container
-FROM node:20 as static_builder
+FROM node:20 AS static_builder
 
 RUN mkdir /app
 
