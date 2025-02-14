@@ -54,8 +54,8 @@ services:
     networks:
       - lychee
     environment:
-      #- PUID=1000
-      #- PGID=1000
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
       # PHP timezone e.g. PHP_TZ=America/New_York
       - PHP_TZ=${TIMEZONE:-UTC}
       - TIMEZONE=${TIMEZONE:-UTC}
