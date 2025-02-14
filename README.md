@@ -8,12 +8,8 @@
 ![Supports arm64/aarch64 Architecture][arm64-shield]
 ![Supports armv7 Architecture][armv7-shield]
 
-## Notice: Dockerhub repository has been migrated to [lycheeorg/lychee](https://hub.docker.com/r/lycheeorg/lychee)  
-**Make sure you update your docker-compose files accordingly**
-
 ## Table of Contents
 <!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
-- [Notice: Dockerhub repository has been migrated to lycheeorg/lychee](#notice-dockerhub-repository-has-been-migrated-to-lycheeorglychee)
 - [Table of Contents](#table-of-contents)
 - [Image Content](#image-content)
 - [Setup](#setup)
