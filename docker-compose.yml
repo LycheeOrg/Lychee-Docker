@@ -16,6 +16,9 @@ services:
     ports:
       - ${REDIS_PORT:-6379}:${REDIS_PORT:-6379}
     user: 1026:100
+    env_file:
+      - path: ./.env
+        required: false
     environment:
       - TZ=${TIMEZONE:-UTC}
     networks:
@@ -27,6 +30,11 @@ services:
   lychee_db:
     container_name: lychee_db
     image: mariadb:10
+    security_opt:
+      - no-new-privileges:true
+    env_file:
+      - path: ./.env
+        required: false
     environment:
       - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD:-rootpassword}
       - MYSQL_DATABASE=${DB_DATABASE:-lychee}
@@ -43,6 +51,8 @@ services:
   lychee:
     image: lycheeorg/lychee
     container_name: lychee
+    security_opt:
+      - no-new-privileges:true
     ports:
       - 90:80
     volumes:
@@ -51,6 +61,9 @@ services:
       - ./lychee/sym:/sym
       - ./lychee/logs:/logs
       - ./lychee/tmp:/lychee-tmp
+    env_file:
+      - path: ./.env
+        required: false
     networks:
       - lychee
     environment:
