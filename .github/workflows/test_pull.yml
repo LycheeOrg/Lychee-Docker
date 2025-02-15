@@ -203,11 +203,8 @@ jobs:
         name: Set Image
         run: "sed -i 's|image: lycheeorg/lychee|image: lycheeorg/lychee:testing-${{ github.event.workflow_run.id }}|' docker-compose.yml"
       -
-        name: Install docker-compose
-        run: "sudo apt install docker-compose"
-      -
-        name: Run docker-compose
-        run: 'docker-compose up -d && sleep 45 && docker-compose ps && curl -sSw "%{stderr}%{http_code}" http://localhost:90/ > /dev/null && curl -f http://localhost:90/'
+        name: Run docker compose
+        run: 'docker compose up -d && sleep 45 && docker compose ps && curl -sSw "%{stderr}%{http_code}" http://localhost:90/ > /dev/null && curl -f http://localhost:90/'
 
   retag:
     needs: [upload, default-env, sqlite, sqlite2, mysql, postgres, docker-compose]
