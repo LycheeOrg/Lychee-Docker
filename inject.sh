@@ -317,3 +317,6 @@ if [ "$PHP_TZ" != '' ]; then
     sed -i "s|;*date.timezone =.*|date.timezone = ${PHP_TZ}|i" /etc/php/8.4/cli/php.ini
     sed -i "s|;*date.timezone =.*|date.timezone = ${PHP_TZ}|i" /etc/php/8.4/fpm/php.ini
  fi
+if [ "$VITE_HTTP_PROXY_ENABLED" != '' ]; then
+    replace_or_insert "VITE_HTTP_PROXY_ENABLED" "$VITE_HTTP_PROXY_ENABLED"
+ fi
