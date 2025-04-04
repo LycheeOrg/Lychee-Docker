@@ -31,7 +31,6 @@ RUN \
     curl -sSLo /tmp/debsuryorg-archive-keyring.deb https://packages.sury.org/debsuryorg-archive-keyring.deb && \
     dpkg -i /tmp/debsuryorg-archive-keyring.deb && \
     sh -c 'echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ bookworm main" > /etc/apt/sources.list.d/php.list' && \
-
     apt-get update && \
     apt-get install -qy --no-install-recommends \
     adduser \
@@ -85,10 +84,9 @@ RUN \
     chmod -R g+ws storage/image-jobs || true && \
     chmod -R g+ws storage/livewire-tmp || true && \
     chmod -R g+ws storage/lychee-tmp || true && \
-
     echo "* * * * * www-data cd /var/www/html/Lychee && php artisan schedule:run >> /dev/null 2>&1" >> /etc/crontab && \
     apt-get purge -y --autoremove git composer && \
-    apt-get clean -qy &&\
+    apt-get clean -qy && \
     rm -rf /var/lib/apt/lists/*
 
 # Multi-stage build: Build static assets
