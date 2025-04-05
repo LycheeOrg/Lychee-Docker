@@ -122,6 +122,7 @@ services:
       - REDIS_PORT=${REDIS_PORT:-6379}
       - REDIS_PASSWORD=${REDIS_PASSWORD:-}
       - LOG_VIEWER_CACHE_DRIVER=${LOG_VIEWER_CACHE_DRIVER:-file}
+      - VITE_HTTP_PROXY_ENABLED=${VITE_HTTP_PROXY_ENABLED:-false}
     restart: unless-stopped
     depends_on:
       - lychee_db
