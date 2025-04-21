@@ -119,7 +119,9 @@ create_admin_user() {
 	echo "**** Migrate the database ****" && \
 	./artisan migrate --force && \
 	create_admin_user && \
-	touch /tmp/first_run
+	touch /tmp/first_run && \
+	[ $target == "nightly" ] && \
+	./artisan cache:clear
 
 echo "**** Make sure user.css exists and symlink it ****" && \
 touch -a /conf/user.css
