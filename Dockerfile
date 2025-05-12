@@ -65,7 +65,7 @@ RUN \
     addgroup --gid "$PGID" "$USER" && \
     adduser --gecos '' --no-create-home --disabled-password --uid "$PUID" --gid "$PGID" "$USER" && \
     cd /var/www/html && \
-    if [ -f "$IMAGEMAGIC_CONFIG" ] ; then sed -i 's/<policy domain="coder" rights="none" pattern="PDF" \/>/<policy domain="coder" rights="read|write" pattern="PDF" \/>/g' $IMAGEMAGIC_CONFIG ; else echo "did not see file $IMAGEMAGIC_CONFIG" ; fi && \
+    sed -i 's/<policy domain="coder" rights="none" pattern="PDF" \/>/<policy domain="coder" rights="read|write" pattern="PDF" \/>/g' /etc/ImageMagick-6/policy.xml && \
     if [ "$TARGET" = "release" ] ; then RELEASE_TAG="-b v$(curl -s https://raw.githubusercontent.com/LycheeOrg/Lychee/master/version.md)" ; \
     elif [ "$BRANCH" != "master" ] ; then RELEASE_TAG="-b $BRANCH" ; fi && \
     git clone --depth 1 $RELEASE_TAG https://github.com/LycheeOrg/Lychee.git && \
