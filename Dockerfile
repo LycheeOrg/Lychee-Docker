@@ -18,9 +18,7 @@ ARG COMPOSER_NO_DEV=1
 # This is NOT compatible with the release target above
 ARG BRANCH=master
 
-# https://stackoverflow.com/questions/53377176/change-imagemagick-policy-on-a-dockerfile
-ARG IMAGEMAGIC_CONFIG=/etc/ImageMagick-6/policy.xml
-
+# https://stackoverflow.com/questions/53377176/change-imagemagick-policy-on-a-dockerfile (for the sed on policy.xml)
 # Install base dependencies, add user and group, clone the repo and install php libraries
 RUN \
     set -ev && \
