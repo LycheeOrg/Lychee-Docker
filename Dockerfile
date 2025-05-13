@@ -18,6 +18,7 @@ ARG COMPOSER_NO_DEV=1
 # This is NOT compatible with the release target above
 ARG BRANCH=master
 
+# https://stackoverflow.com/questions/53377176/change-imagemagick-policy-on-a-dockerfile (for the sed on policy.xml)
 # Install base dependencies, add user and group, clone the repo and install php libraries
 RUN \
     set -ev && \
@@ -57,10 +58,12 @@ RUN \
     webp \
     cron \
     composer \
+    ghostscript \
     unzip && \
     addgroup --gid "$PGID" "$USER" && \
     adduser --gecos '' --no-create-home --disabled-password --uid "$PUID" --gid "$PGID" "$USER" && \
     cd /var/www/html && \
+    sed -i 's/<policy domain="coder" rights="none" pattern="PDF" \/>/<policy domain="coder" rights="read|write" pattern="PDF" \/>/g' /etc/ImageMagick-6/policy.xml && \
     if [ "$TARGET" = "release" ] ; then RELEASE_TAG="-b v$(curl -s https://raw.githubusercontent.com/LycheeOrg/Lychee/master/version.md)" ; \
     elif [ "$BRANCH" != "master" ] ; then RELEASE_TAG="-b $BRANCH" ; fi && \
     git clone --depth 1 $RELEASE_TAG https://github.com/LycheeOrg/Lychee.git && \
