@@ -292,6 +292,18 @@ if [ "$KEYCLOAK_BASE_URL" != '' ]; then
 if [ "$KEYCLOAK_REALM" != '' ]; then
     replace_or_insert "KEYCLOAK_REALM" "$KEYCLOAK_REALM"
  fi
+if [ "$AUTHELIA_BASE_URL" != '' ]; then
+    replace_or_insert "AUTHELIA_BASE_URL" "$AUTHELIA_BASE_URL"
+ fi
+if [ "$AUTHELIA_CLIENT_ID" != '' ]; then
+    replace_or_insert "AUTHELIA_CLIENT_ID" "$AUTHELIA_CLIENT_ID"
+ fi
+if [ "$AUTHELIA_CLIENT_SECRET" != '' ]; then
+    replace_or_insert "AUTHELIA_CLIENT_SECRET" "$AUTHELIA_CLIENT_SECRET"
+ fi
+if [ "$AUTHELIA_REDIRECT_URI" != '' ]; then
+    replace_or_insert "AUTHELIA_REDIRECT_URI" "$AUTHELIA_REDIRECT_URI"
+ fi
 if [ "$AWS_ACCESS_KEY_ID" != '' ]; then
     replace_or_insert "AWS_ACCESS_KEY_ID" "$AWS_ACCESS_KEY_ID"
  fi
