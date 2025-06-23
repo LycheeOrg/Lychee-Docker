@@ -6,7 +6,6 @@ LABEL maintainer="lycheeorg"
 # Environment variables
 ENV PUID='1000'
 ENV PGID='1000'
-ENV USER='lychee'
 ENV PHP_TZ=UTC
 
 # Arguments
@@ -60,8 +59,6 @@ RUN \
     composer \
     ghostscript \
     unzip && \
-    addgroup --gid "$PGID" "$USER" && \
-    adduser --gecos '' --no-create-home --disabled-password --uid "$PUID" --gid "$PGID" "$USER" && \
     cd /var/www/html && \
     sed -i 's/<policy domain="coder" rights="none" pattern="PDF" \/>/<policy domain="coder" rights="read|write" pattern="PDF" \/>/g' /etc/ImageMagick-6/policy.xml && \
     if [ "$TARGET" = "release" ] ; then RELEASE_TAG="-b v$(curl -s https://raw.githubusercontent.com/LycheeOrg/Lychee/master/version.md)" ; \
@@ -83,6 +80,8 @@ RUN \
     rm    storage/framework/sessions/* 2> /dev/null || true && \
     rm    storage/framework/views/* 2> /dev/null || true && \
     rm    storage/logs/* 2> /dev/null || true && \
+    usermod -o -u "$PUID" "www-data" && \
+    groupmod -o -g "$PGID" "www-data" && \
     chown -R www-data:www-data /var/www/html/Lychee && \
     chmod -R g+ws storage/image-jobs || true && \
     chmod -R g+ws storage/livewire-tmp || true && \
