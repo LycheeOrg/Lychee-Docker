@@ -66,6 +66,14 @@ echo "**** Create the symbolic link for the /lychee-tmp folder ****"
 	rm -r /var/www/html/Lychee/storage/tmp && \
 	ln -s /lychee-tmp /var/www/html/Lychee/storage/tmp
 
+echo "**** Create user and use PUID/PGID ****"
+PUID=${PUID:-1000}
+PGID=${PGID:-1000}
+if [ ! "$(id -u "www-data")" -eq "$PUID" ]; then usermod -o -u "$PUID" "www-data" ; fi
+if [ ! "$(id -g "www-data")" -eq "$PGID" ]; then groupmod -o -g "$PGID" "www-data" ; fi
+echo -e " \tUser UID :\t$(id -u "www-data")"
+echo -e " \tUser GID :\t$(id -g "www-data")"
+
 cd /var/www/html/Lychee
 
 if [ "$DB_CONNECTION" = "sqlite" ] || [ -z "$DB_CONNECTION" ]
@@ -135,15 +143,6 @@ touch -a /conf/custom.js
 	rm /var/www/html/Lychee/public/dist/custom.js && \
 	ln -s /conf/custom.js /var/www/html/Lychee/public/dist/custom.js
 
-echo "**** Create user and use PUID/PGID ****"
-PUID=${PUID:-1000}
-PGID=${PGID:-1000}
-if [ ! "$(id -u "$USER")" -eq "$PUID" ]; then usermod -o -u "$PUID" "$USER" ; fi
-if [ ! "$(id -g "$USER")" -eq "$PGID" ]; then groupmod -o -g "$PGID" "$USER" ; fi
-echo -e " \tUser UID :\t$(id -u "$USER")"
-echo -e " \tUser GID :\t$(id -g "$USER")"
-usermod -a -G "$USER" www-data
-
 echo "**** Make sure Laravel's log exists ****" && \
 touch /logs/laravel.log
 
@@ -152,10 +151,8 @@ if [ -n "$SKIP_PERMISSIONS_CHECKS" ] && [ "${SKIP_PERMISSIONS_CHECKS,,}" = "yes"
 else
 	echo "**** Set Permissions ****"
 	# Set ownership of directories, then files and only when required. See LycheeOrg/Lychee-Docker#120
-	find /sym /uploads /logs /lychee-tmp -type d \( ! -user "$USER" -o ! -group "$USER" \) -exec chown -R "$USER":"$USER" \{\} \;
-	find /conf/.env /sym /uploads /logs /lychee-tmp \( ! -user "$USER" -o ! -group "$USER" \) -exec chown "$USER":"$USER" \{\} \;
-	# Laravel needs to be able to chmod user.css and custom.js for no good reason
-	find /conf/user.css /conf/custom.js /logs/laravel.log \( ! -user "www-data" -o ! -group "$USER" \) -exec chown www-data:"$USER" \{\} \;
+	find /var/www/html/Lychee /sym /uploads /logs /lychee-tmp -type d \( ! -user "www-data" -o ! -group "www-data" \) -exec chown -R "www-data":"www-data" \{\} \;
+	find /conf/.env /sym /uploads /logs /lychee-tmp /conf/user.css /conf/custom.js /logs/laravel.log \( ! -user "www-data" -o ! -group "www-data" \) -exec chown "www-data":"www-data" \{\} \;
 	find /sym /uploads /logs /lychee-tmp -type d \( ! -perm -ug+w -o ! -perm -ugo+rX -o ! -perm -g+s \) -exec chmod -R ug+w,ugo+rX,g+s \{\} \;
 	find /conf/user.css /conf/custom.js /conf/.env /sym /uploads /logs /lychee-tmp \( ! -perm -ug+w -o ! -perm -ugo+rX \) -exec chmod ug+w,ugo+rX \{\} \;
 fi
