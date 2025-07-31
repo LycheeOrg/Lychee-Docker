@@ -48,6 +48,7 @@ RUN \
     php8.4-bcmath \
     php8.4-intl \
     libimage-exiftool-perl \
+    supervisor \
     ffmpeg \
     git \
     jpegoptim \
@@ -111,6 +112,9 @@ COPY --from=static_builder --chown=www-data:www-data /app/public /var/www/html/L
 
 # Add custom Nginx configuration
 COPY default.conf /etc/nginx/nginx.conf
+
+# Custom supervisor configuration
+COPY laravel-worker.conf /etc/supervisor/conf.d/laravel-worker.conf
 
 EXPOSE 80
 VOLUME /conf /uploads /sym /logs /lychee-tmp

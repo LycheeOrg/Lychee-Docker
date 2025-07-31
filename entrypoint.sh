@@ -2,15 +2,22 @@
 
 set -e
 
-# Read Last commit hash from .git
-# This prevents installing git, and allows display of commit
-branch=$(ls /var/www/html/Lychee/.git/refs/heads)
-read -r longhash < /var/www/html/Lychee/.git/refs/heads/$branch
-shorthash=$(echo $longhash |cut -c1-7)
-lycheeversion=$(</var/www/html/Lychee/version.md)
-target=$(</var/www/html/Lychee/docker_target)
+###########################################
+#  Functions for Lychee Docker Entrypoint
+###########################################
 
-echo '
+initialize_lychee() {
+    # Read Last commit hash from .git
+    # This prevents installing git, and allows display of commit
+    local branch=$(ls /var/www/html/Lychee/.git/refs/heads)
+    local longhash
+    read -r longhash < /var/www/html/Lychee/.git/refs/heads/$branch
+    local shorthash=$(echo $longhash |cut -c1-7)
+    local lycheeversion=$(</var/www/html/Lychee/version.md)
+    # Define TARGET as global so it can be used elsewhere in the script
+    TARGET=$(</var/www/html/Lychee/docker_target)
+
+    echo '
 -------------------------------------
   _               _                
  | |   _   _  ___| |__   ___  ___  
@@ -20,92 +27,94 @@ echo '
        |___/                       
 
 -------------------------------------
-Lychee Version: '$lycheeversion' ('$target')
+Lychee Version: '$lycheeversion' ('$TARGET')
 Lychee Branch:  '$branch'
 Lychee Commit:  '$shorthash'
 https://github.com/LycheeOrg/Lychee/commit/'$longhash'
 -------------------------------------'
 
-if [ -n "$STARTUP_DELAY" ]
-	then echo "**** Delaying startup ($STARTUP_DELAY seconds)... ****"
-	sleep $STARTUP_DELAY
-fi
+    if [ -n "$STARTUP_DELAY" ]
+        then echo "**** Delaying startup ($STARTUP_DELAY seconds)... ****"
+        sleep $STARTUP_DELAY
+    fi
+}
 
+setup_folders() {
+    echo "**** Make sure the /conf /uploads /sym /logs /lychee-tmp folders exist ****"
+    [ ! -d /conf ]         && mkdir -p /conf
+    [ ! -d /uploads ]      && mkdir -p /uploads
+    [ ! -d /sym ]          && mkdir -p /sym
+    [ ! -d /logs ]         && mkdir -p /logs
+    [ ! -d /lychee-tmp ]   && mkdir -p /lychee-tmp
 
-echo "**** Make sure the /conf /uploads /sym /logs /lychee-tmp folders exist ****"
-[ ! -d /conf ]         && mkdir -p /conf
-[ ! -d /uploads ]      && mkdir -p /uploads
-[ ! -d /sym ]          && mkdir -p /sym
-[ ! -d /logs ]         && mkdir -p /logs
-[ ! -d /lychee-tmp ]   && mkdir -p /lychee-tmp
+    echo "**** Create the symbolic link for the /uploads folder ****"
+    [ ! -L /var/www/html/Lychee/public/uploads ] && \
+        cp -r /var/www/html/Lychee/public/uploads/* /uploads && \
+        rm -r /var/www/html/Lychee/public/uploads && \
+        ln -s /uploads /var/www/html/Lychee/public/uploads
 
-echo "**** Create the symbolic link for the /uploads folder ****"
-[ ! -L /var/www/html/Lychee/public/uploads ] && \
-	cp -r /var/www/html/Lychee/public/uploads/* /uploads && \
-	rm -r /var/www/html/Lychee/public/uploads && \
-	ln -s /uploads /var/www/html/Lychee/public/uploads
+    echo "**** Create the symbolic link for the /sym folder ****"
+    [ ! -L /var/www/html/Lychee/public/sym ] && \
+        touch /var/www/html/Lychee/public/sym/empty_file && \
+        cp -r /var/www/html/Lychee/public/sym/* /sym && \
+        rm -r /var/www/html/Lychee/public/sym && \
+        ln -s /sym /var/www/html/Lychee/public/sym
 
-echo "**** Create the symbolic link for the /sym folder ****"
-[ ! -L /var/www/html/Lychee/public/sym ] && \
-	touch /var/www/html/Lychee/public/sym/empty_file && \
-	cp -r /var/www/html/Lychee/public/sym/* /sym && \
-	rm -r /var/www/html/Lychee/public/sym && \
-	ln -s /sym /var/www/html/Lychee/public/sym
+    echo "**** Create the symbolic link for the /logs folder ****"
+    [ ! -L /var/www/html/Lychee/storage/logs ] && \
+        touch /var/www/html/Lychee/storage/logs/empty_file && \
+        cp -r /var/www/html/Lychee/storage/logs/* /logs && \
+        rm -r /var/www/html/Lychee/storage/logs && \
+        ln -s /logs /var/www/html/Lychee/storage/logs
 
-echo "**** Create the symbolic link for the /logs folder ****"
-[ ! -L /var/www/html/Lychee/storage/logs ] && \
-	touch /var/www/html/Lychee/storage/logs/empty_file && \
-	cp -r /var/www/html/Lychee/storage/logs/* /logs && \
-	rm -r /var/www/html/Lychee/storage/logs && \
-	ln -s /logs /var/www/html/Lychee/storage/logs
+    echo "**** Create the symbolic link for the /lychee-tmp folder ****"
+    [ ! -L /var/www/html/Lychee/storage/tmp ] && \
+        touch /var/www/html/Lychee/storage/tmp/empty_file && \
+        cp -r /var/www/html/Lychee/storage/tmp/* /lychee-tmp && \
+        rm -r /var/www/html/Lychee/storage/tmp && \
+        ln -s /lychee-tmp /var/www/html/Lychee/storage/tmp
 
-echo "**** Create the symbolic link for the /lychee-tmp folder ****"
-[ ! -L /var/www/html/Lychee/storage/tmp ] && \
-	touch /var/www/html/Lychee/storage/tmp/empty_file && \
-	cp -r /var/www/html/Lychee/storage/tmp/* /lychee-tmp && \
-	rm -r /var/www/html/Lychee/storage/tmp && \
-	ln -s /lychee-tmp /var/www/html/Lychee/storage/tmp
+    echo "**** Create user and use PUID/PGID ****"
+    PUID=${PUID:-1000}
+    PGID=${PGID:-1000}
+    if [ ! "$(id -u "www-data")" -eq "$PUID" ]; then usermod -o -u "$PUID" "www-data" ; fi
+    if [ ! "$(id -g "www-data")" -eq "$PGID" ]; then groupmod -o -g "$PGID" "www-data" ; fi
+    echo -e " \tUser UID :\t$(id -u "www-data")"
+    echo -e " \tUser GID :\t$(id -g "www-data")"
+}
 
-echo "**** Create user and use PUID/PGID ****"
-PUID=${PUID:-1000}
-PGID=${PGID:-1000}
-if [ ! "$(id -u "www-data")" -eq "$PUID" ]; then usermod -o -u "$PUID" "www-data" ; fi
-if [ ! "$(id -g "www-data")" -eq "$PGID" ]; then groupmod -o -g "$PGID" "www-data" ; fi
-echo -e " \tUser UID :\t$(id -u "www-data")"
-echo -e " \tUser GID :\t$(id -g "www-data")"
+setup_db_env() {
+    if [ "$DB_CONNECTION" = "sqlite" ] || [ -z "$DB_CONNECTION" ]
+        then if [ -n "$DB_DATABASE" ]
+            then if [ ! -e "$DB_DATABASE" ]
+                then echo "**** Specified sqlite database doesn't exist. Creating it ****"
+                echo "**** Please make sure your database is on a persistent volume ****"
+                touch "$DB_DATABASE"
+                chown www-data:www-data "$DB_DATABASE"
+            fi
+            chown www-data:www-data "$DB_DATABASE"
+        else DB_DATABASE="/var/www/html/Lychee/database/database.sqlite"
+            export DB_DATABASE
+            if [ ! -L database/database.sqlite ]
+                then [ ! -e /conf/database.sqlite ] && \
+                echo "**** Copy the default database to /conf ****" && \
+                cp database/database.sqlite /conf/database.sqlite
+                echo "**** Create the symbolic link for the database ****"
+                rm database/database.sqlite
+                ln -s /conf/database.sqlite database/database.sqlite
+                chown -h www-data:www-data /conf /conf/database.sqlite database/database.sqlite
+            fi
+        fi
+    fi
 
-cd /var/www/html/Lychee
-
-if [ "$DB_CONNECTION" = "sqlite" ] || [ -z "$DB_CONNECTION" ]
-	then if [ -n "$DB_DATABASE" ]
-		then if [ ! -e "$DB_DATABASE" ]
-			then echo "**** Specified sqlite database doesn't exist. Creating it ****"
-			echo "**** Please make sure your database is on a persistent volume ****"
-			touch "$DB_DATABASE"
-			chown www-data:www-data "$DB_DATABASE"
-		fi
-		chown www-data:www-data "$DB_DATABASE"
-	else DB_DATABASE="/var/www/html/Lychee/database/database.sqlite"
-		export DB_DATABASE
-		if [ ! -L database/database.sqlite ]
-			then [ ! -e /conf/database.sqlite ] && \
-			echo "**** Copy the default database to /conf ****" && \
-			cp database/database.sqlite /conf/database.sqlite
-			echo "**** Create the symbolic link for the database ****"
-			rm database/database.sqlite
-			ln -s /conf/database.sqlite database/database.sqlite
-			chown -h www-data:www-data /conf /conf/database.sqlite database/database.sqlite
-		fi
-	fi
-fi
-
-echo "**** Copy the .env to /conf ****" && \
-[ ! -e /conf/.env ] && \
-	sed 's|^#DB_DATABASE=$|DB_DATABASE='$DB_DATABASE'|' /var/www/html/Lychee/.env.example > /conf/.env
-[ ! -L /var/www/html/Lychee/.env ] && \
-	ln -s /conf/.env /var/www/html/Lychee/.env
-echo "**** Inject .env values ****" && \
-	/inject.sh
+    echo "**** Copy the .env to /conf ****" && \
+    [ ! -e /conf/.env ] && \
+        sed 's|^#DB_DATABASE=$|DB_DATABASE='$DB_DATABASE'|' /var/www/html/Lychee/.env.example > /conf/.env
+    [ ! -L /var/www/html/Lychee/.env ] && \
+        ln -s /conf/.env /var/www/html/Lychee/.env
+    echo "**** Inject .env values ****" && \
+        /inject.sh
+}
 
 create_admin_user() {
   if [ "$ADMIN_USER" != '' ]; then
@@ -121,51 +130,92 @@ create_admin_user() {
   fi
 }
 
-[ ! -e /tmp/first_run ] && \
-	echo "**** Generate the key (to make sure that cookies cannot be decrypted etc) ****" && \
-	./artisan key:generate -n && \
-	echo "**** Migrate the database ****" && \
-	./artisan migrate --force && \
-	create_admin_user && \
-	touch /tmp/first_run && \
-	[ $target == "nightly" ] && \
-	./artisan cache:clear
+first_run() {
+    if [ ! -e /tmp/first_run ]; then
+        echo "**** Generate the key (to make sure that cookies cannot be decrypted etc) ****"
+        ./artisan key:generate -n
+        echo "**** Migrate the database ****"
+        ./artisan migrate --force
+        create_admin_user
+        touch /tmp/first_run
+        [ $TARGET == "nightly" ] && ./artisan cache:clear
+    fi
+}
 
-echo "**** Make sure user.css exists and symlink it ****" && \
-touch -a /conf/user.css
-[ ! -L /var/www/html/Lychee/public/dist/user.css ] && \
-	rm /var/www/html/Lychee/public/dist/user.css && \
-	ln -s /conf/user.css /var/www/html/Lychee/public/dist/user.css
+files_check() {
+    echo "**** Make sure user.css exists and symlink it ****"
+    touch -a /conf/user.css
+    [ ! -L /var/www/html/Lychee/public/dist/user.css ] && \
+        rm /var/www/html/Lychee/public/dist/user.css && \
+        ln -s /conf/user.css /var/www/html/Lychee/public/dist/user.css
 
-echo "**** Make sure custom.js exists and symlink it ****" && \
-touch -a /conf/custom.js
-[ ! -L /var/www/html/Lychee/public/dist/custom.js ] && \
-	rm /var/www/html/Lychee/public/dist/custom.js && \
-	ln -s /conf/custom.js /var/www/html/Lychee/public/dist/custom.js
+    echo "**** Make sure custom.js exists and symlink it ****"
+    touch -a /conf/custom.js
+    [ ! -L /var/www/html/Lychee/public/dist/custom.js ] && \
+        rm /var/www/html/Lychee/public/dist/custom.js && \
+        ln -s /conf/custom.js /var/www/html/Lychee/public/dist/custom.js
 
-echo "**** Make sure Laravel's log exists ****" && \
-touch /logs/laravel.log
+    echo "**** Make sure Laravel's log exists ****"
+    touch /logs/laravel.log
+}
 
-if [ -n "$SKIP_PERMISSIONS_CHECKS" ] && [ "${SKIP_PERMISSIONS_CHECKS,,}" = "yes" ] ; then
-	echo "**** WARNING: Skipping permissions check ****"
-else
-	echo "**** Set Permissions ****"
-	# Set ownership of directories, then files and only when required. See LycheeOrg/Lychee-Docker#120
-	find /var/www/html/Lychee /sym /uploads /logs /lychee-tmp -type d \( ! -user "www-data" -o ! -group "www-data" \) -exec chown -R "www-data":"www-data" \{\} \;
-	find /conf/.env /sym /uploads /logs /lychee-tmp /conf/user.css /conf/custom.js /logs/laravel.log \( ! -user "www-data" -o ! -group "www-data" \) -exec chown "www-data":"www-data" \{\} \;
-	find /sym /uploads /logs /lychee-tmp -type d \( ! -perm -ug+w -o ! -perm -ugo+rX -o ! -perm -g+s \) -exec chmod -R ug+w,ugo+rX,g+s \{\} \;
-	find /conf/user.css /conf/custom.js /conf/.env /sym /uploads /logs /lychee-tmp \( ! -perm -ug+w -o ! -perm -ugo+rX \) -exec chmod ug+w,ugo+rX \{\} \;
-fi
+set_permissions() {
+    if [ -n "$SKIP_PERMISSIONS_CHECKS" ] && [ "${SKIP_PERMISSIONS_CHECKS,,}" = "yes" ] ; then
+        echo "**** WARNING: Skipping permissions check ****"
+    else
+        echo "**** Set Permissions ****"
+        # Set ownership of directories, then files and only when required. See LycheeOrg/Lychee-Docker#120
+        find /var/www/html/Lychee /sym /uploads /logs /lychee-tmp -type d \( ! -user "www-data" -o ! -group "www-data" \) -exec chown -R "www-data":"www-data" \{\} \;
+        find /conf/.env /sym /uploads /logs /lychee-tmp /conf/user.css /conf/custom.js /logs/laravel.log \( ! -user "www-data" -o ! -group "www-data" \) -exec chown "www-data":"www-data" \{\} \;
+        find /sym /uploads /logs /lychee-tmp -type d \( ! -perm -ug+w -o ! -perm -ugo+rX -o ! -perm -g+s \) -exec chmod -R ug+w,ugo+rX,g+s \{\} \;
+        find /conf/user.css /conf/custom.js /conf/.env /sym /uploads /logs /lychee-tmp \( ! -perm -ug+w -o ! -perm -ugo+rX \) -exec chmod ug+w,ugo+rX \{\} \;
+    fi
+}
+
+
+###########################################
+#  Main Entrypoint Script
+###########################################
+
+
+role=${CONTAINER_ROLE:-app}
+
+initialize_lychee
+
+setup_folders
+
+cd /var/www/html/Lychee
+
+setup_db_env
+
+first_run
+
+files_check
+
+set_permissions
 
 # Update CA Certificates if we're using armv7 because armv7 is weird (#76)
 if [[ $(uname -a) == *"armv7"* ]]; then
-  echo "**** Updating CA certificates ****"
-  update-ca-certificates -f
+	echo "**** Updating CA certificates ****"
+	update-ca-certificates -f
 fi
 
 echo "**** Start cron daemon ****"
 service cron start
 
-echo "**** Setup complete, starting the server. ****"
-php-fpm8.4
-exec $@
+
+if [ "$role" = "app" ]; then
+	echo "**** Setup complete, starting the server. ****"
+	php-fpm8.4
+	exec $@
+
+elif [ "$role" = "queue" ]; then
+
+    echo "Running the queue..."
+	/usr/bin/supervisord
+	supervisorctl start laravel-worker:*
+
+else
+    echo "Could not match the container role \"$role\""
+    exit 1
+fi
