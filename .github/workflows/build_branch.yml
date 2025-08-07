@@ -141,3 +141,5 @@ jobs:
         run: |
           crane auth login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }} index.docker.io
           crane tag lycheeorg/lychee:testing-${{ github.run_id }} ${{ github.event.inputs.branchname }}
+          crane auth login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ghcr.io
+          crane cp index.docker.io/lycheeorg/lychee:${{ github.event.inputs.branchname }} ghcr.io/lycheeorg/lychee:${{ github.event.inputs.branchname }}

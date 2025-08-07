@@ -202,3 +202,6 @@ jobs:
           crane auth login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }} index.docker.io
           crane tag lycheeorg/lychee:testing-${{ github.run_id }} alpha
           crane tag lycheeorg/lychee:testing-${{ github.run_id }}-devtools alpha-devtools
+          crane auth login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ghcr.io
+          crane cp index.docker.io/lycheeorg/lychee:alpha ghcr.io/lycheeorg/lychee:alpha
+          crane cp index.docker.io/lycheeorg/lychee:alpha-devtools ghcr.io/lycheeorg/lychee:alpha-devtools

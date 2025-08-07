@@ -1,7 +1,7 @@
 FROM debian:bookworm-slim AS base
 
-# Set version label
 LABEL maintainer="lycheeorg"
+LABEL org.opencontainers.image.source="https://github.com/LycheeOrg/Lychee"
 
 # Environment variables
 ENV PUID='1000'

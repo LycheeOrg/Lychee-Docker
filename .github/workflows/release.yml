@@ -176,3 +176,5 @@ jobs:
           crane tag lycheeorg/lychee:testing-${{ github.run_id }} latest
           crane cp lycheeorg/lychee:testing-${{ github.run_id }} lycheeorg/lychee-laravel:${{ github.event.inputs.tagname }}
           crane tag lycheeorg/lychee-laravel:${{ github.event.inputs.tagname }} latest
+          crane auth login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ghcr.io
+          crane cp index.docker.io/lycheeorg/lychee:latest ghcr.io/lycheeorg/lychee:latest

@@ -201,3 +201,5 @@ jobs:
           crane tag lycheeorg/lychee:testing-${{ github.run_id }} nightly
           crane cp lycheeorg/lychee:testing-${{ github.run_id }} lycheeorg/lychee-laravel:dev
           crane tag lycheeorg/lychee:testing-${{ github.run_id }}-devtools devtools
+          crane auth login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ghcr.io
+          crane cp index.docker.io/lycheeorg/lychee:nightly ghcr.io/lycheeorg/lychee:nightly
