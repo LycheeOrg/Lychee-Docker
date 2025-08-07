@@ -163,6 +163,8 @@ jobs:
   retag:
     needs: [default-env, sqlite, sqlite2, mysql, postgres, docker-compose]
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
     container:
       image: gcr.io/go-containerregistry/crane:debug
     steps:
