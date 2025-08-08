@@ -96,7 +96,7 @@ services:
       #- CACHE_DRIVER=file
       #- SESSION_DRIVER=file
       #- SESSION_LIFETIME=120
-      #- QUEUE_CONNECTION=sync
+      - QUEUE_CONNECTION=database
       #- SECURITY_HEADER_HSTS_ENABLE=false
       #- SECURITY_HEADER_CSP_CONNECT_SRC=
       #- SECURITY_HEADER_CSP_FRAME_ANCESTORS=
@@ -117,6 +117,59 @@ services:
       #- ADMIN_USER=admin
       #- ADMIN_PASSWORD=<ADMIN_PASSWORD>
       #- ADMIN_PASSWORD_FILE=<filename>
+      - CACHE_DRIVER=${CACHE_DRIVER:-redis}
+      - REDIS_URL=redis://${REDIS_USERNAME:-default}:${REDIS_PASSWORD:-}@${REDIS_HOST:-lychee_redis}:${REDIS_PORT:-6379}
+      - REDIS_HOST=${REDIS_HOST:-lychee_redis}
+      - REDIS_PORT=${REDIS_PORT:-6379}
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-}
+      - LOG_VIEWER_CACHE_DRIVER=${LOG_VIEWER_CACHE_DRIVER:-file}
+      - VITE_HTTP_PROXY_ENABLED=${VITE_HTTP_PROXY_ENABLED:-false}
+    restart: unless-stopped
+    depends_on:
+      - lychee_db
+
+  lychee_worker:
+    image: lycheeorg/lychee
+    container_name: lychee_worker
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - ./lychee/conf:/conf
+      - ./lychee/uploads:/uploads
+      - ./lychee/sym:/sym
+      - ./lychee/logs:/logs
+      - ./lychee/tmp:/lychee-tmp
+    env_file:
+      - path: ./.env
+        required: false
+    environment:
+      # queue will make sure that the entrypoint.sh script is starts the correct process.
+      - CONTAINER_ROLE=queue
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      # PHP timezone e.g. PHP_TZ=America/New_York
+      - PHP_TZ=${TIMEZONE:-UTC}
+      - TIMEZONE=${TIMEZONE:-UTC}
+      - DB_CONNECTION=mysql
+      - DB_HOST=lychee_db
+      - DB_PORT=${DB_PORT:-3306}
+      - DB_DATABASE=${DB_DATABASE:-lychee}
+      - DB_USERNAME=${DB_USERNAME:-lychee}
+      - DB_PASSWORD=${DB_PASSWORD}
+      #- DB_PASSWORD_FILE=<filename>
+      #- CACHE_DRIVER=file
+      - QUEUE_CONNECTION=database
+      #- MAIL_DRIVER=smtp
+      #- MAIL_HOST=smtp.mailtrap.io
+      #- MAIL_PORT=2525
+      #- MAIL_USERNAME=null
+      #- MAIL_PASSWORD=null
+      #- MAIL_PASSWORD_FILE=<filename>
+      #- MAIL_ENCRYPTION=null
+      #- MAIL_FROM_NAME=
+      #- MAIL_FROM_ADDRESS=
+      - SKIP_PERMISSIONS_CHECKS=${SKIP_PERMISSIONS_CHECKS:-false}
+      - STARTUP_DELAY=30
       - CACHE_DRIVER=${CACHE_DRIVER:-redis}
       - REDIS_URL=redis://${REDIS_USERNAME:-default}:${REDIS_PASSWORD:-}@${REDIS_HOST:-lychee_redis}:${REDIS_PORT:-6379}
       - REDIS_HOST=${REDIS_HOST:-lychee_redis}
