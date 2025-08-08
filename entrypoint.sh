@@ -200,21 +200,17 @@ if [[ $(uname -a) == *"armv7"* ]]; then
 	update-ca-certificates -f
 fi
 
-echo "**** Start cron daemon ****"
+echo "**** Start cron daemon & supervisor ****"
 service cron start
-
+supervisord
 
 if [ "$role" = "app" ]; then
 	echo "**** Setup complete, starting the server. ****"
 	php-fpm8.4
 	exec $@
-
 elif [ "$role" = "queue" ]; then
-
     echo "Running the queue..."
-	/usr/bin/supervisord
 	supervisorctl start laravel-worker:*
-
 else
     echo "Could not match the container role \"$role\""
     exit 1
