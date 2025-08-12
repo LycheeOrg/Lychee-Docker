@@ -304,6 +304,18 @@ if [ "$AUTHELIA_CLIENT_SECRET" != '' ]; then
 if [ "$AUTHELIA_REDIRECT_URI" != '' ]; then
     replace_or_insert "AUTHELIA_REDIRECT_URI" "$AUTHELIA_REDIRECT_URI"
  fi
+if [ "$AUTHENTIK_BASE_URL" != '' ]; then
+    replace_or_insert "AUTHENTIK_BASE_URL" "$AUTHENTIK_BASE_URL"
+ fi
+if [ "$AUTHENTIK_CLIENT_ID" != '' ]; then
+    replace_or_insert "AUTHENTIK_CLIENT_ID" "$AUTHENTIK_CLIENT_ID"
+ fi
+if [ "$AUTHENTIK_CLIENT_SECRET" != '' ]; then
+    replace_or_insert "AUTHENTIK_CLIENT_SECRET" "$AUTHENTIK_CLIENT_SECRET"
+ fi
+if [ "$AUTHENTIK_REDIRECT_URI" != '' ]; then
+    replace_or_insert "AUTHENTIK_REDIRECT_URI" "$AUTHENTIK_REDIRECT_URI"
+ fi
 if [ "$AWS_ACCESS_KEY_ID" != '' ]; then
     replace_or_insert "AWS_ACCESS_KEY_ID" "$AWS_ACCESS_KEY_ID"
  fi
