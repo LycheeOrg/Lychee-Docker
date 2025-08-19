@@ -77,10 +77,11 @@ services:
       #- APP_DEBUG=true
       #- APP_FORCE_HTTPS=false
       - APP_URL=${APP_URL:-http://localhost}
+      # If using Lychee in a sub folder, specify the path after the tld here.
+      # We do not recommend the use of APP_DIR and ASSET_URL.
       #- APP_DIR=
+      #- ASSET_URL=      
       #- DEBUGBAR_ENABLEd=false
-      #- VUEJS_ENABLED=true
-      #- LEGACY_API_ENABLED=false
       #- LEGACY_V4_REDIRECT=false
       #- DB_OLD_LYCHEE_PREFIX=''
       - DB_CONNECTION=mysql
@@ -124,6 +125,8 @@ services:
       - REDIS_PASSWORD=${REDIS_PASSWORD:-}
       - LOG_VIEWER_CACHE_DRIVER=${LOG_VIEWER_CACHE_DRIVER:-file}
       - VITE_HTTP_PROXY_ENABLED=${VITE_HTTP_PROXY_ENABLED:-false}
+      - DISABLE_BASIC_AUTH=${DISABLE_BASIC_AUTH:-false}
+      - DISABLE_WEBAUTHN=${DISABLE_WEBAUTHN:-false}
     restart: unless-stopped
     depends_on:
       - lychee_db
