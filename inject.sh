@@ -25,14 +25,11 @@ if [ "$APP_FORCE_HTTPS" != '' ]; then
 if [ "$APP_DIR" != '' ]; then
     replace_or_insert "APP_DIR" "$APP_DIR"
  fi
+if [ "$ASSET_URL" != '' ]; then
+    replace_or_insert "ASSET_URL" "$ASSET_URL"
+ fi
 if [ "$DEBUGBAR_ENABLED" != '' ]; then
     replace_or_insert "DEBUGBAR_ENABLED" "$DEBUGBAR_ENABLED"
- fi
-if [ "$LIVEWIRE_ENABLED" != '' ]; then
-    replace_or_insert "LIVEWIRE_ENABLED" "$LIVEWIRE_ENABLED"
- fi
-if [ "$VUEJS_ENABLED" != '' ]; then
-    replace_or_insert "VUEJS_ENABLED" "$VUEJS_ENABLED"
  fi
 if [ "$LEGACY_API_ENABLED" != '' ]; then
     replace_or_insert "LEGACY_API_ENABLED" "$LEGACY_API_ENABLED"
@@ -45,9 +42,6 @@ if [ "$S3_ENABLED" != '' ]; then
  fi
 if [ "$LEGACY_V4_REDIRECT" != '' ]; then
     replace_or_insert "LEGACY_V4_REDIRECT" "$LEGACY_V4_REDIRECT"
- fi
-if [ "$PHOTO_PIPES" != '' ]; then
-    replace_or_insert "PHOTO_PIPES" "$PHOTO_PIPES"
  fi
 if [ "$DB_OLD_LYCHEE_PREFIX" != '' ]; then
     replace_or_insert "DB_OLD_LYCHEE_PREFIX" "$DB_OLD_LYCHEE_PREFIX"
@@ -346,4 +340,10 @@ if [ "$PHP_TZ" != '' ]; then
  fi
 if [ "$VITE_HTTP_PROXY_ENABLED" != '' ]; then
     replace_or_insert "VITE_HTTP_PROXY_ENABLED" "$VITE_HTTP_PROXY_ENABLED"
+ fi
+if [ "$DISABLE_BASIC_AUTH" != '' ]; then
+    replace_or_insert "DISABLE_BASIC_AUTH" "$DISABLE_BASIC_AUTH"
+ fi
+if [ "$DISABLE_WEBAUTHN" != '' ]; then
+    replace_or_insert "DISABLE_WEBAUTHN" "$DISABLE_WEBAUTHN"
  fi
