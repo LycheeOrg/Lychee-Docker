@@ -174,9 +174,9 @@ jobs:
         name: Retag image
         run: |
           crane auth login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }} index.docker.io
-          crane tag lycheeorg/lychee:testing-${{ github.run_id }} ${{ github.event.inputs.tagname }}
-          crane tag lycheeorg/lychee:testing-${{ github.run_id }} latest
-          crane cp lycheeorg/lychee:testing-${{ github.run_id }} lycheeorg/lychee-laravel:${{ github.event.inputs.tagname }}
-          crane tag lycheeorg/lychee-laravel:${{ github.event.inputs.tagname }} latest
+          crane tag lycheeorg/lychee:testing-${{ github.run_id }} ${{ github.event.inputs.tagname }}-legacy
+          crane tag lycheeorg/lychee:testing-${{ github.run_id }} legacy
+          crane cp lycheeorg/lychee:testing-${{ github.run_id }} lycheeorg/lychee-laravel:${{ github.event.inputs.tagname }}-legacy
+          crane tag lycheeorg/lychee-laravel:${{ github.event.inputs.tagname }}-legacy legacy
           crane auth login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ghcr.io
-          crane cp index.docker.io/lycheeorg/lychee:latest ghcr.io/lycheeorg/lychee:latest
+          crane cp index.docker.io/lycheeorg/lychee:legacy ghcr.io/lycheeorg/lychee:legacy

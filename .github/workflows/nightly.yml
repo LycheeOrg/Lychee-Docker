@@ -1,8 +1,8 @@
 name: Nightly Build
 
 on:
-  schedule:
-    - cron: '46 18 * * *'
+  # schedule:
+  #   - cron: '46 18 * * *'
   workflow_dispatch:
 
 env:
