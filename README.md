@@ -48,7 +48,7 @@ This image features Lychee, nginx and PHP-FPM. The provided configuration (PHP, 
 
 The following tags are available :
 
-* `legacy`: Latest legacy stype (nginx + fpm) Lychee release
+* `legacy`: Latest legacy type (nginx + fpm) Lychee release
 * `v[NUMBER]-legacy`: Stable version tag for a Lychee release
 * ~~`nightly` (also `dev`): Current master branch tag (Lychee operates on a stable master, so this should usually be safe)~~
 * ~~`devtools`: As above, but includes development dependencies~~
