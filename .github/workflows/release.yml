@@ -177,6 +177,6 @@ jobs:
           crane tag lycheeorg/lychee:testing-${{ github.run_id }} ${{ github.event.inputs.tagname }}-legacy
           crane tag lycheeorg/lychee:testing-${{ github.run_id }} legacy
           crane cp lycheeorg/lychee:testing-${{ github.run_id }} lycheeorg/lychee-laravel:${{ github.event.inputs.tagname }}-legacy
-          crane tag lycheeorg/lychee-laravel:${{ github.event.inputs.tagname }} legacy
+          crane tag lycheeorg/lychee-laravel:${{ github.event.inputs.tagname }}-legacy legacy
           crane auth login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ghcr.io
           crane cp index.docker.io/lycheeorg/lychee:legacy ghcr.io/lycheeorg/lychee:legacy
