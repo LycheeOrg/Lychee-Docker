@@ -8,12 +8,32 @@
 ![Supports arm64/aarch64 Architecture][arm64-shield]
 ![Supports armv7 Architecture][armv7-shield]
 
+## IMPORTANT! This repository is deprecated
+
+This repository has been deprecated in favour of the updated Docker image on the original Lychee repository: [LycheeOrg/Lychee](https://github.com/LycheeOrg/Lychee).
+The dockerfile and related configurations have been moved there to streamline maintenance and updates.
+
+### Migration to the New Image
+
+**New tags (recommended):**
+* `latest`: Latest stable release powered by FrankenPHP
+* `v[NUMBER]`: Specific version tags (e.g., `v7.0.0`)
+* `edge`: Development/bleeding edge builds (latest master commit)
+
+**Legacy tags (deprecated):**
+* `legacy`: Latest legacy-style (nginx + FPM) Lychee release
+* `v[NUMBER]-legacy`: Stable version tags for legacy releases
+
+**Why upgrade?** The new Docker release is powered by FrankenPHP with Laravel Octane instead of the traditional nginx + PHP-FPM stack. This infrastructure keeps the framework in memory and reuses components across requests, eliminating the overhead of rebuilding the entire application on every page load. As a result, boot time drops from 40-60ms to just 4-6ms per request, with 3-4x better throughput and significantly reduced latency.
+
+**How to migrate:** Data migration is straightforward - simply update your docker-compose mount points to match the new image requirements. For detailed upgrade instructions, see the [official upgrade guide](https://lycheeorg.dev/docs/upgrade.html).
+
 ## Table of Contents
 <!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 - [Table of Contents](#table-of-contents)
 - [Image Content](#image-content)
 - [Setup](#setup)
-	- [Quick Start](#quick-start)
+	- [Quick Start (Legacy)](#quick-start-legacy)
 	- [Prerequisites](#prerequisites)
 	- [Run with Docker](#run-with-docker)
 	- [Run with Docker Compose](#run-with-docker-compose)
@@ -28,19 +48,21 @@ This image features Lychee, nginx and PHP-FPM. The provided configuration (PHP, 
 
 The following tags are available :
 
-* `latest`: Latest Lychee release
-* `v[NUMBER]`: Stable version tag for a Lychee release
-* `nightly` (also `dev`): Current master branch tag (Lychee operates on a stable master, so this should usually be safe)
-* `devtools`: As above, but includes development dependencies
-* `testing`: Tag for testing new branches and pull requests. Designed for internal use by LycheeOrg
-* `alpha`: Current alpha branch tag (The alpha branch contains bleeding edge changes that are not peer-reviewed)
-* `alpha-devtools`: As above, but includes development dependencies
+* `legacy`: Latest legacy stype (nginx + fpm) Lychee release
+* `v[NUMBER]-legacy`: Stable version tag for a Lychee release
+* ~~`nightly` (also `dev`): Current master branch tag (Lychee operates on a stable master, so this should usually be safe)~~
+* ~~`devtools`: As above, but includes development dependencies~~
+* ~~`testing`: Tag for testing new branches and pull requests. Designed for internal use by LycheeOrg~~
+* ~~`alpha`: Current alpha branch tag (The alpha branch contains bleeding edge changes that are not peer-reviewed)~~
+* ~~`alpha-devtools`: As above, but includes development dependencies~~
 
 ## Setup
 
-### Quick Start
+### Quick Start (Legacy)
 
-To use the built-in SQLite support, no external dependencies are required. At its simplest, `docker run -p 80 lycheeorg/lychee:dev` will start Lychee listening on a random port on the local host.
+**Note:** These instructions are for the legacy image. For the new FrankenPHP-based image, please refer to the [official documentation](https://lycheeorg.dev/docs/).
+
+To use the built-in SQLite support, no external dependencies are required. At its simplest, `docker run -p 80 lycheeorg/lychee:legacy` will start the legacy Lychee image listening on a random port on the local host.
 
 For more runtime options, look below in [Run with Docker](#run-with-docker) and [Available environment variables and defaults](#available-environment-variables-and-defaults).
 

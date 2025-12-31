@@ -1,8 +1,8 @@
 name: Nightly Alpha Build
 
 on:
-  schedule:
-    - cron: '46 20 * * *'
+  # schedule:
+  #   - cron: '46 20 * * *'
   workflow_dispatch:
 
 env:
